@@ -1,0 +1,16 @@
+syntax = "proto3";
+package nxtpop.airdrop.v1beta1;
+
+import "gogoproto/gogo.proto";
+import "cosmos/base/v1beta1/coin.proto";
+
+option go_package = "github.com/POPSmartContract/nxtpop-chain/x/airdrop/types";
+
+// AirdropAllocation defines the user's airdrop allocation.
+message AirdropAllocation {
+  string chain = 1;
+  string address = 2;
+  int64 amount = 3;
+  bool claimed = 4;
+  string reward_address = 5; // this reward address is set after claim
+}
