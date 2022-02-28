@@ -66,8 +66,8 @@ func NewRootCmd() (*cobra.Command, params.EncodingConfig) {
 				return err
 			}
 
-			customTemplate, customGaiaConfig := initAppConfig()
-			return server.InterceptConfigsPreRunHandler(cmd, customTemplate, customGaiaConfig)
+			customTemplate, customNxtPopConfig := initAppConfig()
+			return server.InterceptConfigsPreRunHandler(cmd, customTemplate, customNxtPopConfig)
 		},
 	}
 
@@ -87,11 +87,11 @@ func initAppConfig() (string, interface{}) {
 	srvCfg.StateSync.SnapshotInterval = 1000
 	srvCfg.StateSync.SnapshotKeepRecent = 10
 
-	GaiaAppCfg := CustomAppConfig{Config: *srvCfg}
+	appCfg := CustomAppConfig{Config: *srvCfg}
 
-	GaiaAppTemplate := serverconfig.DefaultConfigTemplate
+	appTemplate := serverconfig.DefaultConfigTemplate
 
-	return GaiaAppTemplate, GaiaAppCfg
+	return appTemplate, appCfg
 }
 
 func initRootCmd(rootCmd *cobra.Command, encodingConfig params.EncodingConfig) {
@@ -217,7 +217,7 @@ func (ac appCreator) newApp(
 		panic(err)
 	}
 
-	return nxtpop.NewGaiaApp(
+	return nxtpop.NewNxtPopApp(
 		logger, db, traceStore, true, skipUpgradeHeights,
 		cast.ToString(appOpts.Get(flags.FlagHome)),
 		cast.ToUint(appOpts.Get(server.FlagInvCheckPeriod)),
@@ -257,7 +257,7 @@ func (ac appCreator) appExport(
 		loadLatest = true
 	}
 
-	nxtpopApp := nxtpop.NewGaiaApp(
+	nxtpopApp := nxtpop.NewNxtPopApp(
 		logger,
 		db,
 		traceStore,

@@ -1,0 +1,12 @@
+syntax = "proto3";
+package nxtpop.airdrop.v1beta1;
+
+import "gogoproto/gogo.proto";
+import "google/protobuf/duration.proto";
+import "google/protobuf/timestamp.proto";
+
+option go_package = "github.com/POPSmartContract/nxtpop-chain/x/airdrop/types";
+
+// Params defines the module's parameters.
+message Params {
+}

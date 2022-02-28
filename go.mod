@@ -3,7 +3,7 @@ module github.com/POPSmartContract/nxtpop-chain
 go 1.17
 
 require (
-	github.com/cosmos/cosmos-sdk v0.44.6
+	github.com/cosmos/cosmos-sdk v0.45.1
 	github.com/cosmos/ibc-go/v2 v2.0.3
 	github.com/gorilla/mux v1.8.0
 	github.com/gravity-devs/liquidity v1.4.4

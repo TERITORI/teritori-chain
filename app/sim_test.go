@@ -26,7 +26,7 @@ func init() {
 }
 
 // Profile with:
-// /usr/local/go/bin/go test -benchmem -run=^$ github.com/cosmos/cosmos-sdk/GaiaApp -bench ^BenchmarkFullAppSimulation$ -Commit=true -cpuprofile cpu.out
+// /usr/local/go/bin/go test -benchmem -run=^$ github.com/cosmos/cosmos-sdk/NxtPopApp -bench ^BenchmarkFullAppSimulation$ -Commit=true -cpuprofile cpu.out
 func BenchmarkFullAppSimulation(b *testing.B) {
 	config, db, dir, logger, _, err := simapp.SetupSimulation("goleveldb-app-sim", "Simulation")
 	if err != nil {
@@ -41,7 +41,7 @@ func BenchmarkFullAppSimulation(b *testing.B) {
 		}
 	}()
 
-	app := nxtpop.NewGaiaApp(logger, db, nil, true, map[int64]bool{}, nxtpop.DefaultNodeHome, simapp.FlagPeriodValue, nxtpop.MakeEncodingConfig(), simapp.EmptyAppOptions{}, interBlockCacheOpt())
+	app := nxtpop.NewNxtPopApp(logger, db, nil, true, map[int64]bool{}, nxtpop.DefaultNodeHome, simapp.FlagPeriodValue, nxtpop.MakeEncodingConfig(), simapp.EmptyAppOptions{}, interBlockCacheOpt())
 
 	// Run randomized simulation:w
 	_, simParams, simErr := simulation.SimulateFromSeed(
@@ -106,7 +106,7 @@ func TestAppStateDeterminism(t *testing.T) {
 			}
 
 			db := dbm.NewMemDB()
-			app := nxtpop.NewGaiaApp(logger, db, nil, true, map[int64]bool{}, nxtpop.DefaultNodeHome, simapp.FlagPeriodValue, nxtpop.MakeEncodingConfig(), simapp.EmptyAppOptions{}, interBlockCacheOpt())
+			app := nxtpop.NewNxtPopApp(logger, db, nil, true, map[int64]bool{}, nxtpop.DefaultNodeHome, simapp.FlagPeriodValue, nxtpop.MakeEncodingConfig(), simapp.EmptyAppOptions{}, interBlockCacheOpt())
 
 			fmt.Printf(
 				"running non-determinism simulation; seed %d: %d/%d, attempt: %d/%d\n",
