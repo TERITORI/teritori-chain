@@ -3,6 +3,7 @@ package nxtpop.airdrop.v1beta1;
 
 import "gogoproto/gogo.proto";
 import "cosmos/base/v1beta1/coin.proto";
+import "cosmos_proto/cosmos.proto";
 
 option go_package = "github.com/POPSmartContract/nxtpop-chain/x/airdrop/types";
 
@@ -10,7 +11,12 @@ option go_package = "github.com/POPSmartContract/nxtpop-chain/x/airdrop/types";
 message AirdropAllocation {
   string chain = 1;
   string address = 2;
-  int64 amount = 3;
-  bool claimed = 4;
-  string reward_address = 5; // this reward address is set after claim
+  string amount = 3 [
+      (gogoproto.customtype) = "github.com/cosmos/cosmos-sdk/types.Int",
+      (gogoproto.nullable) = false
+  ];
+  string claimedAmount = 4 [
+      (gogoproto.customtype) = "github.com/cosmos/cosmos-sdk/types.Int",
+      (gogoproto.nullable) = false
+  ];
 }
