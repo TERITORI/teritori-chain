@@ -19,5 +19,7 @@ func (k Keeper) Allocation(c context.Context, req *types.QueryAllocationRequest)
 	ctx := sdk.UnwrapSDKContext(c)
 	_ = ctx
 
+	// TODO: call GetAllocation and return value
+
 	return &types.QueryAllocationResponse{}, nil
 }
