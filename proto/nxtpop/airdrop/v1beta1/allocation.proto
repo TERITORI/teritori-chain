@@ -14,7 +14,7 @@ message AirdropAllocation {
       (gogoproto.customtype) = "github.com/cosmos/cosmos-sdk/types.Int",
       (gogoproto.nullable) = false
   ];
-  string claimedAmount = 4 [
+  string claimed_amount = 4 [
       (gogoproto.customtype) = "github.com/cosmos/cosmos-sdk/types.Int",
       (gogoproto.nullable) = false
   ];

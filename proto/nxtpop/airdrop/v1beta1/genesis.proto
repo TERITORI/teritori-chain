@@ -12,5 +12,5 @@ option go_package = "github.com/POPSmartContract/nxtpop-chain/x/airdrop/types";
 
 // GenesisState defines the module's genesis state.
 message GenesisState {
-    repeated AirdropAllocation airdropAllocations = 1;
+    repeated AirdropAllocation allocations = 1;
 }
