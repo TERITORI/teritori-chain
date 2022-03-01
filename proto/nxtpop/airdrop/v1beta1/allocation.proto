@@ -1,0 +1,21 @@
+syntax = "proto3";
+package nxtpop.airdrop.v1beta1;
+
+import "gogoproto/gogo.proto";
+import "cosmos_proto/cosmos.proto";
+
+option go_package = "github.com/POPSmartContract/nxtpop-chain/x/airdrop/types";
+
+// AirdropAllocation defines the user's airdrop allocation.
+message AirdropAllocation {
+  string chain = 1;
+  string address = 2;
+  string amount = 3 [
+      (gogoproto.customtype) = "github.com/cosmos/cosmos-sdk/types.Int",
+      (gogoproto.nullable) = false
+  ];
+  string claimed_amount = 4 [
+      (gogoproto.customtype) = "github.com/cosmos/cosmos-sdk/types.Int",
+      (gogoproto.nullable) = false
+  ];
+}

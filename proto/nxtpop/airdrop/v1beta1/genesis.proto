@@ -6,10 +6,11 @@ import "cosmos/base/v1beta1/coin.proto";
 import "cosmos/bank/v1beta1/genesis.proto";
 import "google/protobuf/duration.proto";
 import "google/protobuf/timestamp.proto";
-import "nxtpop/airdrop/v1beta1/params.proto";
+import "nxtpop/airdrop/v1beta1/allocation.proto";
 
 option go_package = "github.com/POPSmartContract/nxtpop-chain/x/airdrop/types";
 
 // GenesisState defines the module's genesis state.
 message GenesisState {
+    repeated AirdropAllocation allocations = 1;
 }
