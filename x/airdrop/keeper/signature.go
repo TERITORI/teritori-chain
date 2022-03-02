@@ -12,12 +12,13 @@ func verifySignature(chain string, address string, rewardAddr string, signature 
 		// TODO: implement converter from terra address to nxtpop address - signature check is not needed
 		return true
 	case "osmosis":
-		// TODO: implement converter from terra address to nxtpop address - signature check is not needed
+		// TODO: implement converter from osmosis address to nxtpop address - signature check is not needed
 		return true
 	case "juno":
-		// TODO: implement converter from terra address to nxtpop address - signature check is not needed
+		// TODO: implement converter from juno address to nxtpop address - signature check is not needed
 		return true
 	case "cosmos":
+		// TODO: implement converter from cosmos address to nxtpop address - signature check is not needed
 		return true
 	default: // unsupported chain
 		return false
