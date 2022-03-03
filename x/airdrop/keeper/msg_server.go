@@ -23,14 +23,7 @@ var _ types.MsgServer = msgServer{}
 
 func (k msgServer) ClaimAllocation(goCtx context.Context, msg *types.MsgClaimAllocation) (*types.MsgClaimAllocationResponse, error) {
 	ctx := sdk.UnwrapSDKContext(goCtx)
-	_ = ctx
 
-	// TODO: check allocation exists for the address
-	// TODO: ensure allocation is not claimed already (Allocation.Amount - Allocation.ClaimedAmount) > 0
-	// TODO: ensure signature is correct based on chain and reward address - verifySignature()
-	// TODO: send tokens from airdrop module account to individual account
-	// TODO: update claimed amount and set the record on-chain
-	// TODO: emit event for native-chain-address, amount, reward_address
-
-	return &types.MsgClaimAllocationResponse{}, nil
+	err := k.keeper.ClaimAllocation(ctx, msg.Address, msg.RewardAddress, msg.Signature)
+	return &types.MsgClaimAllocationResponse{}, err
 }

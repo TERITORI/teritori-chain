@@ -43,3 +43,48 @@ func (k Keeper) DeleteAllocation(ctx sdk.Context, address string) {
 	prefixStore := prefix.NewStore(ctx.KVStore(k.storeKey), types.KeyPrefixAirdropAllocation)
 	prefixStore.Delete([]byte(address))
 }
+
+func (k Keeper) ClaimAllocation(ctx sdk.Context, address string, rewardAddress string, signature []byte) error {
+	// ensure allocation exists for the address
+	allocation := k.GetAllocation(ctx, address)
+	if allocation == nil {
+		return types.ErrAirdropAllocationDoesNotExists
+	}
+
+	// ensure allocation is not claimed already
+	unclaimed := allocation.Amount.Sub(allocation.ClaimedAmount)
+	if unclaimed.IsZero() {
+		return types.ErrAirdropAllocationAlreadyClaimed
+	}
+
+	// verify native chain account with signature
+	sigOk := verifySignature(allocation.Chain, allocation.Address, rewardAddress, signature)
+	if !sigOk {
+		return types.ErrNativeChainAccountSigVerificationFailure
+	}
+
+	// send coins from airdrop module account to beneficiary address
+	sdkAddr, err := sdk.AccAddressFromBech32(address)
+	if err != nil {
+		return err
+	}
+	err = k.bankKeeper.SendCoinsFromModuleToAccount(ctx, types.ModuleName, sdkAddr, sdk.Coins{sdk.NewCoin(k.stakingKeeper.BondDenom(ctx), unclaimed)})
+	if err != nil {
+		return err
+	}
+
+	// update claimed amount and set the record on-chain
+	allocation.ClaimedAmount = allocation.Amount
+	k.SetAllocation(ctx, *allocation)
+
+	ctx.EventManager().EmitEvent(
+		sdk.NewEvent(
+			types.EventTypeClaimAllocation,
+			sdk.NewAttribute(types.AttributeKeyAddress, address),
+			sdk.NewAttribute(types.AttributeKeyAmount, unclaimed.String()),
+			sdk.NewAttribute(types.AttributeKeyRewardAddress, rewardAddress),
+		),
+	)
+
+	return nil
+}
