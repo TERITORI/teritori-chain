@@ -1,10 +1,34 @@
 package keeper
 
-func verifySignature(chain string, address string, rewardAddr string, signature []byte) bool {
+import (
+	"encoding/json"
+
+	solana "github.com/gagliardetto/solana-go"
+)
+
+type SignMessage struct {
+	Chain      string `json:"string"`
+	Address    string `json:"address"`
+	RewardAddr string `json:"rewardAddr"`
+}
+
+func verifySignature(chain string, address string, rewardAddr string, signatureBytes []byte) bool {
+	signMsg := SignMessage{
+		Chain:      chain,
+		Address:    address,
+		RewardAddr: rewardAddr,
+	}
+	signByes, err := json.Marshal(signMsg)
+
+	if err != nil {
+		return false
+	}
+
 	switch chain {
 	case "solana":
-		// TODO: implement solana signature verification
-		return true
+		pubkey := solana.MustPublicKeyFromBase58(address)
+		signature := solana.SignatureFromBytes(signatureBytes)
+		return signature.Verify(pubkey, signByes)
 	case "evm":
 		// TODO: implement evm signature verification
 		return true
