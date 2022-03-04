@@ -7,12 +7,14 @@ import (
 	svrcmd "github.com/cosmos/cosmos-sdk/server/cmd"
 
 	app "github.com/POPSmartContract/nxtpop-chain/app"
+	appparams "github.com/POPSmartContract/nxtpop-chain/app/params"
 	"github.com/POPSmartContract/nxtpop-chain/cmd/nxtpopd/cmd"
 )
 
 func main() {
-	rootCmd, _ := cmd.NewRootCmd()
+	appparams.SetAddressPrefixes()
 
+	rootCmd, _ := cmd.NewRootCmd()
 	if err := svrcmd.Execute(rootCmd, app.DefaultNodeHome); err != nil {
 		switch e := err.(type) {
 		case server.ErrorCode:

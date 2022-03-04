@@ -3,6 +3,10 @@ package keeper
 import (
 	"encoding/json"
 
+	appparams "github.com/POPSmartContract/nxtpop-chain/app/params"
+	"github.com/cosmos/cosmos-sdk/types/bech32"
+	"github.com/ethereum/go-ethereum/common"
+	"github.com/ethereum/go-ethereum/crypto"
 	solana "github.com/gagliardetto/solana-go"
 )
 
@@ -18,7 +22,7 @@ func verifySignature(chain string, address string, rewardAddr string, signatureB
 		Address:    address,
 		RewardAddr: rewardAddr,
 	}
-	signByes, err := json.Marshal(signMsg)
+	signBytes, err := json.Marshal(signMsg)
 
 	if err != nil {
 		return false
@@ -28,22 +32,91 @@ func verifySignature(chain string, address string, rewardAddr string, signatureB
 	case "solana":
 		pubkey := solana.MustPublicKeyFromBase58(address)
 		signature := solana.SignatureFromBytes(signatureBytes)
-		return signature.Verify(pubkey, signByes)
+		return signature.Verify(pubkey, signBytes)
 	case "evm":
 		// TODO: implement evm signature verification
-		return true
+		// ethsecp256k1 "github.com/ethereum/go-ethereum/crypto/secp256k1"
+		// if !ethsecp256k1.VerifySignature(pubKey.Bytes(), sigHash, data.Signature[:len(data.Signature)-1]) {
+		// }
+
+		// "github.com/ethereum/go-ethereum/common"
+		// "github.com/ethereum/go-ethereum/crypto"
+		// code is derivated from github.com/ethereum/go-ethereum
+		// func assertSignature(addr common.Address, index uint64, hash [32]byte, r, s [32]byte, v uint8, expect common.Address) bool {
+		// 	buf := make([]byte, 8)
+		// 	binary.BigEndian.PutUint64(buf, index)
+		// 	data := append([]byte{0x19, 0x00}, append(addr.Bytes(), append(buf, hash[:]...)...)...)
+
+		// 	pubkey, err := crypto.Ecrecover(crypto.Keccak256(data), append(r[:], append(s[:], v-27)...))
+		// 	if err != nil {
+		// 		return false
+		// 	}
+		// 	var signer common.Address
+		// 	copy(signer[:], crypto.Keccak256(pubkey[1:])[12:])
+
+		// 	return bytes.Equal(signer.Bytes(), expect.Bytes())
+		// }
+
+		// TODO: should check this code's accuracy
+		// TODO: how to get r,s,v from signatureBytes?
+		var r, s [32]byte
+		var v uint8
+		ethpubkey, err := crypto.Ecrecover(crypto.Keccak256(signBytes), append(r[:], append(s[:], v-27)...))
+		if err != nil {
+			return false
+		}
+		var signer common.Address
+		copy(signer[:], crypto.Keccak256(ethpubkey[1:])[12:])
+
+		return signer.String() == address
 	case "terra":
-		// TODO: implement converter from terra address to nxtpop address - signature check is not needed
-		return true
+		_, bz, err := bech32.DecodeAndConvert(address)
+		if err != nil {
+			return false
+		}
+
+		bech32Addr, err := bech32.ConvertAndEncode(appparams.Bech32PrefixAccAddr, bz)
+		if err != nil {
+			return false
+		}
+
+		return bech32Addr == rewardAddr
 	case "osmosis":
-		// TODO: implement converter from osmosis address to nxtpop address - signature check is not needed
-		return true
+		_, bz, err := bech32.DecodeAndConvert(address)
+		if err != nil {
+			return false
+		}
+
+		bech32Addr, err := bech32.ConvertAndEncode(appparams.Bech32PrefixAccAddr, bz)
+		if err != nil {
+			return false
+		}
+
+		return bech32Addr == rewardAddr
 	case "juno":
-		// TODO: implement converter from juno address to nxtpop address - signature check is not needed
-		return true
+		_, bz, err := bech32.DecodeAndConvert(address)
+		if err != nil {
+			return false
+		}
+
+		bech32Addr, err := bech32.ConvertAndEncode(appparams.Bech32PrefixAccAddr, bz)
+		if err != nil {
+			return false
+		}
+
+		return bech32Addr == rewardAddr
 	case "cosmos":
-		// TODO: implement converter from cosmos address to nxtpop address - signature check is not needed
-		return true
+		_, bz, err := bech32.DecodeAndConvert(address)
+		if err != nil {
+			return false
+		}
+
+		bech32Addr, err := bech32.ConvertAndEncode(appparams.Bech32PrefixAccAddr, bz)
+		if err != nil {
+			return false
+		}
+
+		return bech32Addr == rewardAddr
 	default: // unsupported chain
 		return false
 	}
