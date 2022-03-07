@@ -29,7 +29,7 @@ func GetQueryCmd() *cobra.Command {
 
 func GetCmdQueryAllocation() *cobra.Command {
 	cmd := &cobra.Command{
-		Use:   "permissions [addr]",
+		Use:   "allocation [addr]",
 		Short: "Query allocations of an address",
 		RunE: func(cmd *cobra.Command, args []string) error {
 			clientCtx := client.GetClientContextFromCmd(cmd)

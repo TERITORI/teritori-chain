@@ -31,6 +31,7 @@ import (
 	authtx "github.com/cosmos/cosmos-sdk/x/auth/tx"
 	authtypes "github.com/cosmos/cosmos-sdk/x/auth/types"
 	"github.com/cosmos/cosmos-sdk/x/auth/vesting"
+	vestingtypes "github.com/cosmos/cosmos-sdk/x/auth/vesting/types"
 	"github.com/cosmos/cosmos-sdk/x/authz"
 	authzkeeper "github.com/cosmos/cosmos-sdk/x/authz/keeper"
 	authzmodule "github.com/cosmos/cosmos-sdk/x/authz/module"
@@ -465,6 +466,16 @@ func NewNxtPopApp(
 	// CanWithdrawInvariant invariant.
 	// NOTE: staking module is required if HistoricalEntries param > 0
 	app.mm.SetOrderBeginBlockers(
+		vestingtypes.ModuleName,
+		crisistypes.ModuleName,
+		authtypes.ModuleName,
+		paramstypes.ModuleName,
+		govtypes.ModuleName,
+		feegrant.ModuleName,
+		ibctransfertypes.ModuleName,
+		genutiltypes.ModuleName,
+		banktypes.ModuleName,
+		authz.ModuleName,
 		upgradetypes.ModuleName,
 		capabilitytypes.ModuleName,
 		minttypes.ModuleName,
@@ -477,6 +488,20 @@ func NewNxtPopApp(
 		routertypes.ModuleName,
 	)
 	app.mm.SetOrderEndBlockers(
+		distrtypes.ModuleName,
+		ibctransfertypes.ModuleName,
+		minttypes.ModuleName,
+		upgradetypes.ModuleName,
+		paramstypes.ModuleName,
+		genutiltypes.ModuleName,
+		vestingtypes.ModuleName,
+		capabilitytypes.ModuleName,
+		slashingtypes.ModuleName,
+		evidencetypes.ModuleName,
+		authtypes.ModuleName,
+		banktypes.ModuleName,
+		ibchost.ModuleName,
+		routertypes.ModuleName,
 		crisistypes.ModuleName,
 		govtypes.ModuleName,
 		stakingtypes.ModuleName,
@@ -491,6 +516,9 @@ func NewNxtPopApp(
 	// so that other modules that want to create or claim capabilities afterwards in InitChain
 	// can do so safely.
 	app.mm.SetOrderInitGenesis(
+		upgradetypes.ModuleName,
+		paramstypes.ModuleName,
+		vestingtypes.ModuleName,
 		capabilitytypes.ModuleName,
 		authtypes.ModuleName,
 		banktypes.ModuleName,
