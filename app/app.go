@@ -8,6 +8,7 @@ import (
 	"os"
 	"path/filepath"
 
+	airdrop "github.com/POPSmartContract/nxtpop-chain/x/airdrop"
 	"github.com/cosmos/cosmos-sdk/baseapp"
 	"github.com/cosmos/cosmos-sdk/client"
 	"github.com/cosmos/cosmos-sdk/client/grpc/tmservice"
@@ -118,6 +119,7 @@ var (
 	// non-dependant module elements, such as codec registration
 	// and genesis verification.
 	ModuleBasics = module.NewBasicManager(
+		airdrop.AppModuleBasic{},
 		auth.AppModuleBasic{},
 		genutil.AppModuleBasic{},
 		bank.AppModuleBasic{},
