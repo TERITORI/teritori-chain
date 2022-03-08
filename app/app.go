@@ -8,6 +8,9 @@ import (
 	"os"
 	"path/filepath"
 
+	airdrop "github.com/POPSmartContract/nxtpop-chain/x/airdrop"
+	airdropkeeper "github.com/POPSmartContract/nxtpop-chain/x/airdrop/keeper"
+	airdroptypes "github.com/POPSmartContract/nxtpop-chain/x/airdrop/types"
 	"github.com/cosmos/cosmos-sdk/baseapp"
 	"github.com/cosmos/cosmos-sdk/client"
 	"github.com/cosmos/cosmos-sdk/client/grpc/tmservice"
@@ -30,6 +33,7 @@ import (
 	authtx "github.com/cosmos/cosmos-sdk/x/auth/tx"
 	authtypes "github.com/cosmos/cosmos-sdk/x/auth/types"
 	"github.com/cosmos/cosmos-sdk/x/auth/vesting"
+	vestingtypes "github.com/cosmos/cosmos-sdk/x/auth/vesting/types"
 	"github.com/cosmos/cosmos-sdk/x/authz"
 	authzkeeper "github.com/cosmos/cosmos-sdk/x/authz/keeper"
 	authzmodule "github.com/cosmos/cosmos-sdk/x/authz/module"
@@ -118,6 +122,7 @@ var (
 	// non-dependant module elements, such as codec registration
 	// and genesis verification.
 	ModuleBasics = module.NewBasicManager(
+		airdrop.AppModuleBasic{},
 		auth.AppModuleBasic{},
 		genutil.AppModuleBasic{},
 		bank.AppModuleBasic{},
@@ -157,6 +162,7 @@ var (
 		govtypes.ModuleName:            {authtypes.Burner},
 		liquiditytypes.ModuleName:      {authtypes.Minter, authtypes.Burner},
 		ibctransfertypes.ModuleName:    {authtypes.Minter, authtypes.Burner},
+		airdroptypes.ModuleName:        nil,
 	}
 )
 
@@ -200,6 +206,7 @@ type NxtPopApp struct { // nolint: golint
 	AuthzKeeper      authzkeeper.Keeper
 	LiquidityKeeper  liquiditykeeper.Keeper
 	RouterKeeper     routerkeeper.Keeper
+	AirdropKeeper    airdropkeeper.Keeper
 
 	// make scoped keepers public for test purposes
 	ScopedIBCKeeper      capabilitykeeper.ScopedKeeper
@@ -250,6 +257,7 @@ func NewNxtPopApp(
 		govtypes.StoreKey, paramstypes.StoreKey, ibchost.StoreKey, upgradetypes.StoreKey,
 		evidencetypes.StoreKey, liquiditytypes.StoreKey, ibctransfertypes.StoreKey,
 		capabilitytypes.StoreKey, feegrant.StoreKey, authzkeeper.StoreKey, routertypes.StoreKey,
+		airdroptypes.StoreKey,
 	)
 	tkeys := sdk.NewTransientStoreKeys(paramstypes.TStoreKey)
 	memKeys := sdk.NewMemoryStoreKeys(capabilitytypes.MemStoreKey)
@@ -368,6 +376,8 @@ func NewNxtPopApp(
 		stakingtypes.NewMultiStakingHooks(app.DistrKeeper.Hooks(), app.SlashingKeeper.Hooks()),
 	)
 
+	app.AirdropKeeper = *airdropkeeper.NewKeeper(appCodec, keys[airdroptypes.StoreKey], app.BankKeeper, app.StakingKeeper)
+
 	app.IBCKeeper = ibckeeper.NewKeeper(
 		appCodec,
 		keys[ibchost.StoreKey],
@@ -437,6 +447,7 @@ func NewNxtPopApp(
 			app.BaseApp.DeliverTx,
 			encodingConfig.TxConfig,
 		),
+		airdrop.NewAppModule(appCodec, app.AirdropKeeper),
 		auth.NewAppModule(appCodec, app.AccountKeeper, nil),
 		vesting.NewAppModule(app.AccountKeeper, app.BankKeeper),
 		bank.NewAppModule(appCodec, app.BankKeeper, app.AccountKeeper),
@@ -463,6 +474,16 @@ func NewNxtPopApp(
 	// CanWithdrawInvariant invariant.
 	// NOTE: staking module is required if HistoricalEntries param > 0
 	app.mm.SetOrderBeginBlockers(
+		vestingtypes.ModuleName,
+		crisistypes.ModuleName,
+		authtypes.ModuleName,
+		paramstypes.ModuleName,
+		govtypes.ModuleName,
+		feegrant.ModuleName,
+		ibctransfertypes.ModuleName,
+		genutiltypes.ModuleName,
+		banktypes.ModuleName,
+		authz.ModuleName,
 		upgradetypes.ModuleName,
 		capabilitytypes.ModuleName,
 		minttypes.ModuleName,
@@ -473,14 +494,30 @@ func NewNxtPopApp(
 		liquiditytypes.ModuleName,
 		ibchost.ModuleName,
 		routertypes.ModuleName,
+		airdroptypes.ModuleName,
 	)
 	app.mm.SetOrderEndBlockers(
+		distrtypes.ModuleName,
+		ibctransfertypes.ModuleName,
+		minttypes.ModuleName,
+		upgradetypes.ModuleName,
+		paramstypes.ModuleName,
+		genutiltypes.ModuleName,
+		vestingtypes.ModuleName,
+		capabilitytypes.ModuleName,
+		slashingtypes.ModuleName,
+		evidencetypes.ModuleName,
+		authtypes.ModuleName,
+		banktypes.ModuleName,
+		ibchost.ModuleName,
+		routertypes.ModuleName,
 		crisistypes.ModuleName,
 		govtypes.ModuleName,
 		stakingtypes.ModuleName,
 		liquiditytypes.ModuleName,
 		feegrant.ModuleName,
 		authz.ModuleName,
+		airdroptypes.ModuleName,
 	)
 
 	// NOTE: The genutils module must occur after staking so that pools are
@@ -489,6 +526,9 @@ func NewNxtPopApp(
 	// so that other modules that want to create or claim capabilities afterwards in InitChain
 	// can do so safely.
 	app.mm.SetOrderInitGenesis(
+		upgradetypes.ModuleName,
+		paramstypes.ModuleName,
+		vestingtypes.ModuleName,
 		capabilitytypes.ModuleName,
 		authtypes.ModuleName,
 		banktypes.ModuleName,
@@ -506,6 +546,7 @@ func NewNxtPopApp(
 		feegrant.ModuleName,
 		authz.ModuleName,
 		routertypes.ModuleName,
+		airdroptypes.ModuleName,
 	)
 
 	app.mm.RegisterInvariants(&app.CrisisKeeper)
@@ -525,6 +566,7 @@ func NewNxtPopApp(
 		feegrantmodule.NewAppModule(appCodec, app.AccountKeeper, app.BankKeeper, app.FeeGrantKeeper, app.interfaceRegistry),
 		authzmodule.NewAppModule(appCodec, app.AuthzKeeper, app.AccountKeeper, app.BankKeeper, app.interfaceRegistry),
 		gov.NewAppModule(appCodec, app.GovKeeper, app.AccountKeeper, app.BankKeeper),
+		airdrop.NewAppModule(appCodec, app.AirdropKeeper),
 		mint.NewAppModule(appCodec, app.MintKeeper, app.AccountKeeper),
 		staking.NewAppModule(appCodec, app.StakingKeeper, app.AccountKeeper, app.BankKeeper),
 		distr.NewAppModule(appCodec, app.DistrKeeper, app.AccountKeeper, app.BankKeeper, app.StakingKeeper),
