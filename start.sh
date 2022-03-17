@@ -15,4 +15,5 @@ sed -i '' -e 's/enable = false/enable = true/g' $HOME/.nxtpopd/config/app.toml
 
 nxtpopd start --home=$HOME/.nxtpopd
 
-# nxtpopd tx bank send validator pop1pkmvlnstq8q7djns3w882pcu92xh4c9x8hpevr 10000000upop --keyring-backend=test --chain-id=testing --home=$HOME/.nxtpopd/ --yes
+# nxtpopd tx bank send validator pop18mu5hhgy64390q56msql8pfwps0uesn0gf0elf 10000000upop --keyring-backend=test --chain-id=testing --home=$HOME/.nxtpopd/ --yes --broadcast-mode=block
+# nxtpopd tx airdrop claim-allocation 0x9d967594Cc61453aFEfD657313e5F05be7c6F88F 0xb89733c05568385a861fa20f5c4abe53c23a13962515bf5510638b4e3947b1236963b53de549ae762bbd45427dbd3712ae7d169a935d21e44e7da86b1c552f471b --from=validator --keyring-backend=test --chain-id=testing --home=$HOME/.nxtpopd/ --yes  --broadcast-mode=block

@@ -16,7 +16,7 @@ type SignMessage struct {
 	RewardAddr string `json:"rewardAddr"`
 }
 
-func verifySignature(chain string, address string, rewardAddr string, signatureBytes []byte) bool {
+func verifySignature(chain string, address string, rewardAddr string, signatureBytes string) bool {
 	signMsg := SignMessage{
 		Chain:      chain,
 		Address:    address,
@@ -31,7 +31,10 @@ func verifySignature(chain string, address string, rewardAddr string, signatureB
 	switch chain {
 	case "solana":
 		pubkey := solana.MustPublicKeyFromBase58(address)
-		signature := solana.SignatureFromBytes(signatureBytes)
+		signature, err := solana.SignatureFromBase58(signatureBytes)
+		if err != nil {
+			return false
+		}
 		return signature.Verify(pubkey, signBytes)
 	case "evm":
 		// TODO: implement evm signature verification

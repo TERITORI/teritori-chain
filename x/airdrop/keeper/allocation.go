@@ -44,7 +44,7 @@ func (k Keeper) DeleteAllocation(ctx sdk.Context, address string) {
 	prefixStore.Delete([]byte(address))
 }
 
-func (k Keeper) ClaimAllocation(ctx sdk.Context, address string, rewardAddress string, signature []byte) error {
+func (k Keeper) ClaimAllocation(ctx sdk.Context, address string, rewardAddress string, signature string) error {
 	// ensure allocation exists for the address
 	allocation := k.GetAllocation(ctx, address)
 	if allocation == nil {
