@@ -19,7 +19,7 @@ message MsgClaimAllocation {
 
     string address = 1;
     string reward_address = 2;
-    bytes signature = 3;
+    string signature = 3;
 }
   
 // MsgClaimAllocationResponse defines the Msg/ClaimAllocation response type.

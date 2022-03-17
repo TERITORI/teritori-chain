@@ -11,7 +11,7 @@ var MsgTypeClaimAllocation = "claim_allocation"
 func NewMsgClaimAllocation(
 	address string,
 	rewardAddress sdk.AccAddress,
-	signature []byte,
+	signature string,
 ) *MsgClaimAllocation {
 	return &MsgClaimAllocation{
 		Address:       address,

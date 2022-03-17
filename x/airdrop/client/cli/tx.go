@@ -1,7 +1,6 @@
 package cli
 
 import (
-	b64 "encoding/base64"
 	"fmt"
 
 	"github.com/POPSmartContract/nxtpop-chain/x/airdrop/types"
@@ -37,15 +36,10 @@ func GetTxClaimAllocationCmd() *cobra.Command {
 		RunE: func(cmd *cobra.Command, args []string) error {
 			clientCtx, err := client.GetClientTxContext(cmd)
 
-			signature, err := b64.StdEncoding.DecodeString(args[1])
-			if err != nil {
-				return err
-			}
-
 			msg := types.NewMsgClaimAllocation(
 				args[0],
 				clientCtx.FromAddress,
-				signature,
+				args[1],
 			)
 
 			err = msg.ValidateBasic()
