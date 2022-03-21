@@ -7,6 +7,11 @@ import (
 	"github.com/cosmos/cosmos-sdk/types/msgservice"
 )
 
+func RegisterLegacyAminoCodec(cdc *codec.LegacyAmino) {
+	cdc.RegisterInterface(&MsgClaimAllocation{}, nil)
+	cdc.RegisterConcrete(&MsgClaimAllocation{}, "nxtpop/airdrop/ClaimAllocation", nil)
+}
+
 func RegisterInterfaces(registry types.InterfaceRegistry) {
 	registry.RegisterImplementations((*sdk.Msg)(nil),
 		&MsgClaimAllocation{},
