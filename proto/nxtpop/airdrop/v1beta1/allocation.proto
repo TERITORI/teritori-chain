@@ -11,11 +11,11 @@ message AirdropAllocation {
   string chain = 1;
   string address = 2;
   string amount = 3 [
-      (gogoproto.customtype) = "github.com/cosmos/cosmos-sdk/types.Int",
+      (gogoproto.customtype) = "github.com/cosmos/cosmos-sdk/types.Coin",
       (gogoproto.nullable) = false
   ];
   string claimed_amount = 4 [
-      (gogoproto.customtype) = "github.com/cosmos/cosmos-sdk/types.Int",
+      (gogoproto.customtype) = "github.com/cosmos/cosmos-sdk/types.Coin",
       (gogoproto.nullable) = false
   ];
 }
