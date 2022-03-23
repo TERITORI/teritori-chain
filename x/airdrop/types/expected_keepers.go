@@ -2,6 +2,7 @@ package types
 
 import (
 	sdk "github.com/cosmos/cosmos-sdk/types"
+	authtypes "github.com/cosmos/cosmos-sdk/x/auth/types"
 )
 
 type BankKeeper interface {
@@ -14,4 +15,8 @@ type BankKeeper interface {
 type StakingKeeper interface {
 	// BondDenom - Bondable coin denomination
 	BondDenom(sdk.Context) string
+}
+
+type AccountKeeper interface {
+	GetModuleAccount(ctx sdk.Context, moduleName string) authtypes.ModuleAccountI
 }

@@ -162,7 +162,7 @@ var (
 		govtypes.ModuleName:            {authtypes.Burner},
 		liquiditytypes.ModuleName:      {authtypes.Minter, authtypes.Burner},
 		ibctransfertypes.ModuleName:    {authtypes.Minter, authtypes.Burner},
-		airdroptypes.ModuleName:        nil,
+		airdroptypes.ModuleName:        {authtypes.Minter},
 	}
 )
 
@@ -376,7 +376,7 @@ func NewNxtPopApp(
 		stakingtypes.NewMultiStakingHooks(app.DistrKeeper.Hooks(), app.SlashingKeeper.Hooks()),
 	)
 
-	app.AirdropKeeper = *airdropkeeper.NewKeeper(appCodec, keys[airdroptypes.StoreKey], app.BankKeeper, app.StakingKeeper)
+	app.AirdropKeeper = *airdropkeeper.NewKeeper(appCodec, keys[airdroptypes.StoreKey], app.BankKeeper, app.StakingKeeper, app.AccountKeeper)
 
 	app.IBCKeeper = ibckeeper.NewKeeper(
 		appCodec,

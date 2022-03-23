@@ -16,15 +16,17 @@ type Keeper struct {
 	storeKey      sdk.StoreKey
 	bankKeeper    types.BankKeeper
 	stakingKeeper types.StakingKeeper
+	acountKeeper  types.AccountKeeper
 }
 
 // NewKeeper returns keeper
-func NewKeeper(cdc codec.Codec, storeKey sdk.StoreKey, bk types.BankKeeper, sk types.StakingKeeper) *Keeper {
+func NewKeeper(cdc codec.Codec, storeKey sdk.StoreKey, bk types.BankKeeper, sk types.StakingKeeper, ak types.AccountKeeper) *Keeper {
 	return &Keeper{
 		cdc:           cdc,
 		storeKey:      storeKey,
 		bankKeeper:    bk,
 		stakingKeeper: sk,
+		acountKeeper:  ak,
 	}
 }
 

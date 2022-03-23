@@ -64,11 +64,16 @@ func (k Keeper) ClaimAllocation(ctx sdk.Context, address string, rewardAddress s
 	}
 
 	// send coins from airdrop module account to beneficiary address
-	sdkAddr, err := sdk.AccAddressFromBech32(address)
+	sdkAddr, err := sdk.AccAddressFromBech32(rewardAddress)
 	if err != nil {
 		return err
 	}
-	err = k.bankKeeper.SendCoinsFromModuleToAccount(ctx, types.ModuleName, sdkAddr, sdk.Coins{sdk.NewCoin(k.stakingKeeper.BondDenom(ctx), unclaimed)})
+
+	err = k.bankKeeper.MintCoins(ctx, types.ModuleName, sdk.Coins{unclaimed})
+	if err != nil {
+		return err
+	}
+	err = k.bankKeeper.SendCoinsFromModuleToAccount(ctx, types.ModuleName, sdkAddr, sdk.Coins{unclaimed})
 	if err != nil {
 		return err
 	}
