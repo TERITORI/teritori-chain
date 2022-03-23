@@ -1,7 +1,9 @@
 package keeper
 
 import (
+	"encoding/hex"
 	"encoding/json"
+	"fmt"
 
 	appparams "github.com/POPSmartContract/nxtpop-chain/app/params"
 	"github.com/cosmos/cosmos-sdk/types/bech32"
@@ -11,18 +13,25 @@ import (
 )
 
 type SignMessage struct {
-	Chain      string `json:"string"`
+	Chain      string `json:"chain"`
 	Address    string `json:"address"`
 	RewardAddr string `json:"rewardAddr"`
 }
 
 func verifySignature(chain string, address string, rewardAddr string, signatureBytes string) bool {
+	fmt.Println("chain = ", chain)
+	fmt.Println("address = ", address)
+	fmt.Println("rewardAddr = ", rewardAddr)
+	fmt.Println("signatureBytes = ", signatureBytes)
+
 	signMsg := SignMessage{
 		Chain:      chain,
 		Address:    address,
 		RewardAddr: rewardAddr,
 	}
 	signBytes, err := json.Marshal(signMsg)
+	fmt.Println("signBytes = ", signBytes)
+	fmt.Println("signBytesString = ", string(signBytes))
 
 	if err != nil {
 		return false
@@ -31,10 +40,11 @@ func verifySignature(chain string, address string, rewardAddr string, signatureB
 	switch chain {
 	case "solana":
 		pubkey := solana.MustPublicKeyFromBase58(address)
-		signature, err := solana.SignatureFromBase58(signatureBytes)
+		signatureData, err := hex.DecodeString(signatureBytes[2:])
 		if err != nil {
 			return false
 		}
+		signature := solana.SignatureFromBytes(signatureData)
 		return signature.Verify(pubkey, signBytes)
 	case "evm":
 		// TODO: implement evm signature verification
