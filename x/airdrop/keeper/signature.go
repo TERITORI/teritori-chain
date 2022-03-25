@@ -3,11 +3,11 @@ package keeper
 import (
 	"encoding/hex"
 	"encoding/json"
-	"fmt"
 
 	appparams "github.com/POPSmartContract/nxtpop-chain/app/params"
 	"github.com/cosmos/cosmos-sdk/types/bech32"
-	"github.com/ethereum/go-ethereum/common"
+	"github.com/ethereum/go-ethereum/accounts"
+	"github.com/ethereum/go-ethereum/common/hexutil"
 	"github.com/ethereum/go-ethereum/crypto"
 	solana "github.com/gagliardetto/solana-go"
 )
@@ -19,19 +19,12 @@ type SignMessage struct {
 }
 
 func verifySignature(chain string, address string, rewardAddr string, signatureBytes string) bool {
-	fmt.Println("chain = ", chain)
-	fmt.Println("address = ", address)
-	fmt.Println("rewardAddr = ", rewardAddr)
-	fmt.Println("signatureBytes = ", signatureBytes)
-
 	signMsg := SignMessage{
 		Chain:      chain,
 		Address:    address,
 		RewardAddr: rewardAddr,
 	}
 	signBytes, err := json.Marshal(signMsg)
-	fmt.Println("signBytes = ", signBytes)
-	fmt.Println("signBytesString = ", string(signBytes))
 
 	if err != nil {
 		return false
@@ -47,41 +40,14 @@ func verifySignature(chain string, address string, rewardAddr string, signatureB
 		signature := solana.SignatureFromBytes(signatureData)
 		return signature.Verify(pubkey, signBytes)
 	case "evm":
-		// TODO: implement evm signature verification
-		// ethsecp256k1 "github.com/ethereum/go-ethereum/crypto/secp256k1"
-		// if !ethsecp256k1.VerifySignature(pubKey.Bytes(), sigHash, data.Signature[:len(data.Signature)-1]) {
-		// }
-
-		// "github.com/ethereum/go-ethereum/common"
-		// "github.com/ethereum/go-ethereum/crypto"
-		// code is derivated from github.com/ethereum/go-ethereum
-		// func assertSignature(addr common.Address, index uint64, hash [32]byte, r, s [32]byte, v uint8, expect common.Address) bool {
-		// 	buf := make([]byte, 8)
-		// 	binary.BigEndian.PutUint64(buf, index)
-		// 	data := append([]byte{0x19, 0x00}, append(addr.Bytes(), append(buf, hash[:]...)...)...)
-
-		// 	pubkey, err := crypto.Ecrecover(crypto.Keccak256(data), append(r[:], append(s[:], v-27)...))
-		// 	if err != nil {
-		// 		return false
-		// 	}
-		// 	var signer common.Address
-		// 	copy(signer[:], crypto.Keccak256(pubkey[1:])[12:])
-
-		// 	return bytes.Equal(signer.Bytes(), expect.Bytes())
-		// }
-
-		// TODO: should check this code's accuracy
-		// TODO: how to get r,s,v from signatureBytes?
-		var r, s [32]byte
-		var v uint8
-		ethpubkey, err := crypto.Ecrecover(crypto.Keccak256(signBytes), append(r[:], append(s[:], v-27)...))
+		signatureData := hexutil.MustDecode(signatureBytes)
+		signatureData[crypto.RecoveryIDOffset] -= 27 // Transform yellow paper V from 27/28 to 0/1
+		recovered, err := crypto.SigToPub(accounts.TextHash(signBytes), signatureData)
 		if err != nil {
 			return false
 		}
-		var signer common.Address
-		copy(signer[:], crypto.Keccak256(ethpubkey[1:])[12:])
-
-		return signer.String() == address
+		recoveredAddr := crypto.PubkeyToAddress(*recovered)
+		return recoveredAddr.String() == address
 	case "terra":
 		_, bz, err := bech32.DecodeAndConvert(address)
 		if err != nil {
