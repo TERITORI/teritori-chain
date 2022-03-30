@@ -44,7 +44,7 @@ func (k Keeper) DeleteAllocation(ctx sdk.Context, address string) {
 	prefixStore.Delete([]byte(address))
 }
 
-func (k Keeper) ClaimAllocation(ctx sdk.Context, address string, rewardAddress string, signature string) error {
+func (k Keeper) ClaimAllocation(ctx sdk.Context, address string, pubKey string, rewardAddress string, signature string) error {
 	// ensure allocation exists for the address
 	allocation := k.GetAllocation(ctx, address)
 	if allocation == nil {
@@ -58,7 +58,7 @@ func (k Keeper) ClaimAllocation(ctx sdk.Context, address string, rewardAddress s
 	}
 
 	// verify native chain account with signature
-	sigOk := verifySignature(allocation.Chain, allocation.Address, rewardAddress, signature)
+	sigOk := verifySignature(allocation.Chain, pubKey, allocation.Address, rewardAddress, signature)
 	if !sigOk {
 		return types.ErrNativeChainAccountSigVerificationFailure
 	}

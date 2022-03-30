@@ -18,8 +18,9 @@ message MsgClaimAllocation {
     option (gogoproto.goproto_getters) = false;
 
     string address = 1;
-    string reward_address = 2;
-    string signature = 3;
+    string pub_key = 2;
+    string reward_address = 3;
+    string signature = 4;
 }
   
 // MsgClaimAllocationResponse defines the Msg/ClaimAllocation response type.

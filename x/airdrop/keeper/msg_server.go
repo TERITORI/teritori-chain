@@ -24,6 +24,6 @@ var _ types.MsgServer = msgServer{}
 func (k msgServer) ClaimAllocation(goCtx context.Context, msg *types.MsgClaimAllocation) (*types.MsgClaimAllocationResponse, error) {
 	ctx := sdk.UnwrapSDKContext(goCtx)
 
-	err := k.keeper.ClaimAllocation(ctx, msg.Address, msg.RewardAddress, msg.Signature)
+	err := k.keeper.ClaimAllocation(ctx, msg.Address, msg.PubKey, msg.RewardAddress, msg.Signature)
 	return &types.MsgClaimAllocationResponse{}, err
 }

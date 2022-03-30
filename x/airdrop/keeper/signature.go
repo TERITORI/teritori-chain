@@ -5,6 +5,7 @@ import (
 	"encoding/json"
 
 	appparams "github.com/POPSmartContract/nxtpop-chain/app/params"
+	"github.com/cosmos/cosmos-sdk/crypto/keys/secp256k1"
 	"github.com/cosmos/cosmos-sdk/types/bech32"
 	"github.com/ethereum/go-ethereum/accounts"
 	"github.com/ethereum/go-ethereum/common/hexutil"
@@ -18,7 +19,7 @@ type SignMessage struct {
 	RewardAddr string `json:"rewardAddr"`
 }
 
-func verifySignature(chain string, address string, rewardAddr string, signatureBytes string) bool {
+func verifySignature(chain string, address string, pubKey string, rewardAddr string, signatureBytes string) bool {
 	signMsg := SignMessage{
 		Chain:      chain,
 		Address:    address,
@@ -49,17 +50,18 @@ func verifySignature(chain string, address string, rewardAddr string, signatureB
 		recoveredAddr := crypto.PubkeyToAddress(*recovered)
 		return recoveredAddr.String() == address
 	case "terra":
-		_, bz, err := bech32.DecodeAndConvert(address)
+		pubKeyBytes, _ := hex.DecodeString(pubKey[2:])
+		secp256k1PubKey := secp256k1.PubKey{Key: pubKeyBytes}
+		terraAddr, err := bech32.ConvertAndEncode("terra", secp256k1PubKey.Address())
 		if err != nil {
 			return false
 		}
-
-		bech32Addr, err := bech32.ConvertAndEncode(appparams.Bech32PrefixAccAddr, bz)
-		if err != nil {
+		if terraAddr != address {
 			return false
 		}
 
-		return bech32Addr == rewardAddr
+		signatureData := hexutil.MustDecode(signatureBytes)
+		return secp256k1PubKey.VerifySignature(signBytes, signatureData)
 	case "osmosis":
 		_, bz, err := bech32.DecodeAndConvert(address)
 		if err != nil {
