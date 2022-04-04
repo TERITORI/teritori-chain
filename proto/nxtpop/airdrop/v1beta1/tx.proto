@@ -3,14 +3,25 @@ package nxtpop.airdrop.v1beta1;
 
 import "gogoproto/gogo.proto";
 import "google/protobuf/any.proto";
+import "nxtpop/airdrop/v1beta1/allocation.proto";
 
 option go_package = "github.com/POPSmartContract/nxtpop-chain/x/airdrop/types";
 
 // Msg defines the staking Msg service.
 service Msg {
-    // ClaimAllocation defines a method to create new proposal given a content.
+    // ClaimAllocation defines a method to claim allocation
     rpc ClaimAllocation(MsgClaimAllocation) returns (MsgClaimAllocationResponse);
+    // SetAllocation defines a method to set allocation
+    rpc SetAllocation(MsgSetAllocation) returns (MsgSetAllocationResponse);
 }
+
+// MsgSetAllocation defines an sdk.Msg type that set airdrop allocation
+message MsgSetAllocation {
+    string sender = 1;
+    AirdropAllocation allocation = 2 [(gogoproto.nullable) = false];
+}
+// MsgSetAllocationResponse defines the Msg/SetAllocation response type.
+message MsgSetAllocationResponse {}
 
 // MsgClaimAllocation defines an sdk.Msg type that claims airdrop allocation
 message MsgClaimAllocation {

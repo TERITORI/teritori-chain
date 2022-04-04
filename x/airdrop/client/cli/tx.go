@@ -7,6 +7,7 @@ import (
 	"github.com/cosmos/cosmos-sdk/client"
 	"github.com/cosmos/cosmos-sdk/client/flags"
 	"github.com/cosmos/cosmos-sdk/client/tx"
+	sdk "github.com/cosmos/cosmos-sdk/types"
 	"github.com/spf13/cobra"
 )
 
@@ -22,6 +23,7 @@ func GetTxCmd() *cobra.Command {
 
 	txCmd.AddCommand(
 		GetTxClaimAllocationCmd(),
+		GetTxSetAllocationCmd(),
 	)
 
 	return txCmd
@@ -40,6 +42,50 @@ func GetTxClaimAllocationCmd() *cobra.Command {
 				args[0],
 				clientCtx.FromAddress,
 				args[1],
+			)
+
+			err = msg.ValidateBasic()
+			if err != nil {
+				return err
+			}
+
+			return tx.GenerateOrBroadcastTxCLI(clientCtx, cmd.Flags(), msg)
+		},
+	}
+
+	flags.AddTxFlagsToCmd(cmd)
+	_ = cmd.MarkFlagRequired(flags.FlagFrom)
+
+	return cmd
+}
+
+// GetTxSetAllocationCmd implement cli command for MsgSetAllocation
+func GetTxSetAllocationCmd() *cobra.Command {
+	cmd := &cobra.Command{
+		Use:   "set-allocation [chain] [native_chain_address] [amount] [claimed_amount]",
+		Short: "Set allocation",
+		Args:  cobra.ExactArgs(4),
+		RunE: func(cmd *cobra.Command, args []string) error {
+			clientCtx, err := client.GetClientTxContext(cmd)
+
+			amount, err := sdk.ParseCoinNormalized(args[2])
+			if err != nil {
+				return err
+			}
+
+			claimedAmount, err := sdk.ParseCoinNormalized(args[3])
+			if err != nil {
+				return err
+			}
+
+			msg := types.NewMsgSetAllocation(
+				clientCtx.FromAddress.String(),
+				types.AirdropAllocation{
+					Chain:         args[0],
+					Address:       args[1],
+					Amount:        amount,
+					ClaimedAmount: claimedAmount,
+				},
 			)
 
 			err = msg.ValidateBasic()

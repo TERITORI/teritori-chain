@@ -27,3 +27,10 @@ func (k msgServer) ClaimAllocation(goCtx context.Context, msg *types.MsgClaimAll
 	err := k.keeper.ClaimAllocation(ctx, msg.Address, msg.PubKey, msg.RewardAddress, msg.Signature)
 	return &types.MsgClaimAllocationResponse{}, err
 }
+
+func (k msgServer) SetAllocation(goCtx context.Context, msg *types.MsgSetAllocation) (*types.MsgSetAllocationResponse, error) {
+	ctx := sdk.UnwrapSDKContext(goCtx)
+
+	k.keeper.SetAllocation(ctx, msg.Allocation)
+	return &types.MsgSetAllocationResponse{}, nil
+}
