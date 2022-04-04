@@ -8,7 +8,7 @@ func DefaultGenesis() *GenesisState {
 		Allocations: []*AirdropAllocation{
 			{
 				Chain:         "evm",
-				Address:       "--",
+				Address:       "0x--",
 				Amount:        types.NewCoin("upop", types.NewIntWithDecimal(100, 6)),
 				ClaimedAmount: types.NewCoin("upop", types.NewIntWithDecimal(0, 6)),
 			},
@@ -20,7 +20,25 @@ func DefaultGenesis() *GenesisState {
 			},
 			{
 				Chain:         "terra",
-				Address:       "--",
+				Address:       "terra--",
+				Amount:        types.NewCoin("upop", types.NewIntWithDecimal(100, 6)),
+				ClaimedAmount: types.NewCoin("upop", types.NewIntWithDecimal(0, 10)),
+			},
+			{
+				Chain:         "cosmos",
+				Address:       "cosmos--",
+				Amount:        types.NewCoin("upop", types.NewIntWithDecimal(100, 6)),
+				ClaimedAmount: types.NewCoin("upop", types.NewIntWithDecimal(0, 10)),
+			},
+			{
+				Chain:         "juno",
+				Address:       "juno--",
+				Amount:        types.NewCoin("upop", types.NewIntWithDecimal(100, 6)),
+				ClaimedAmount: types.NewCoin("upop", types.NewIntWithDecimal(0, 10)),
+			},
+			{
+				Chain:         "osmosis",
+				Address:       "osmo--",
 				Amount:        types.NewCoin("upop", types.NewIntWithDecimal(100, 6)),
 				ClaimedAmount: types.NewCoin("upop", types.NewIntWithDecimal(0, 10)),
 			},

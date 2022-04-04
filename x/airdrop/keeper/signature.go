@@ -50,7 +50,7 @@ func verifySignature(chain string, address string, pubKey string, rewardAddr str
 		recoveredAddr := crypto.PubkeyToAddress(*recovered)
 		return recoveredAddr.String() == address
 	case "terra":
-		pubKeyBytes, _ := hex.DecodeString(pubKey[2:])
+		pubKeyBytes := hexutil.MustDecode(pubKey)
 		secp256k1PubKey := secp256k1.PubKey{Key: pubKeyBytes}
 		terraAddr, err := bech32.ConvertAndEncode("terra", secp256k1PubKey.Address())
 		if err != nil {
