@@ -12,6 +12,7 @@ nxtpopd collect-gentxs --home=$HOME/.nxtpopd
 
 sed -i '' -e 's/enabled-unsafe-cors = false/enabled-unsafe-cors = true/g' $HOME/.nxtpopd/config/app.toml 
 sed -i '' -e 's/enable = false/enable = true/g' $HOME/.nxtpopd/config/app.toml 
+sed -i '' -e 's/cors_allowed_origins = []/cors_allowed_origins = ["*"]/g' $HOME/.nxtpopd/config/config.toml 
 
 nxtpopd start --home=$HOME/.nxtpopd
 
