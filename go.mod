@@ -4,7 +4,7 @@ go 1.17
 
 require (
 	github.com/CosmWasm/wasmd v0.25.0
-	github.com/cosmos/cosmos-sdk v0.45.1
+	github.com/cosmos/cosmos-sdk v0.45.4
 	github.com/cosmos/ibc-go/v2 v2.2.0
 	github.com/ethereum/go-ethereum v1.10.16
 	github.com/gagliardetto/solana-go v1.2.0
@@ -13,16 +13,17 @@ require (
 	github.com/gorilla/mux v1.8.0
 	github.com/gravity-devs/liquidity v1.4.4
 	github.com/grpc-ecosystem/grpc-gateway v1.16.0
+	github.com/prometheus/client_golang v1.12.1
 	github.com/rakyll/statik v0.1.7
 	github.com/regen-network/cosmos-proto v0.3.1
 	github.com/spf13/cast v1.4.1
-	github.com/spf13/cobra v1.3.0
+	github.com/spf13/cobra v1.4.0
 	github.com/strangelove-ventures/packet-forward-middleware v1.0.1
 	github.com/stretchr/testify v1.7.1
-	github.com/tendermint/tendermint v0.34.16
+	github.com/tendermint/tendermint v0.34.19
 	github.com/tendermint/tm-db v0.6.7
-	google.golang.org/genproto v0.0.0-20211208223120-3a66f561d7aa
-	google.golang.org/grpc v1.44.0
+	google.golang.org/genproto v0.0.0-20211223182754-3ac035c7e7cb
+	google.golang.org/grpc v1.45.0
 	google.golang.org/protobuf v1.27.1
 )
 
@@ -112,7 +113,6 @@ require (
 	github.com/petermattis/goid v0.0.0-20180202154549-b0b1615b78e5 // indirect
 	github.com/pkg/errors v0.9.1 // indirect
 	github.com/pmezard/go-difflib v1.0.0 // indirect
-	github.com/prometheus/client_golang v1.12.1 // indirect
 	github.com/prometheus/client_model v0.2.0 // indirect
 	github.com/prometheus/common v0.32.1 // indirect
 	github.com/prometheus/procfs v0.7.3 // indirect
