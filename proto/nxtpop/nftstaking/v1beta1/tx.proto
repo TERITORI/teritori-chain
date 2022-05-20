@@ -1,0 +1,19 @@
+syntax = "proto3";
+package nxtpop.nftstaking.v1beta1;
+
+import "gogoproto/gogo.proto";
+import "google/protobuf/timestamp.proto";
+import "nxtpop/nftstaking/v1beta1/nftstaking.proto";
+
+option go_package = "github.com/POPSmartContract/nxtpop-chain/x/nftstaking/types";
+
+// Msg defines the ubi Msg service.
+service Msg {
+  rpc RegisterNftStaking(MsgRegisterNftStaking) returns (MsgRegisterNftStakingResponse);
+}
+
+message MsgRegisterNftStaking {
+  string sender = 1;
+  nxtpop.nftstaking.v1beta1.NftStaking nft_staking = 2 [ (gogoproto.nullable) = false ];
+}
+message MsgRegisterNftStakingResponse {}
