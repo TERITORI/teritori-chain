@@ -5,13 +5,13 @@ import (
 )
 
 const (
-	HumanCoinUnit = "pop"
-	BaseCoinUnit  = "upop"
+	HumanCoinUnit = "TORI"
+	BaseCoinUnit  = "utori"
 
 	DefaultBondDenom = BaseCoinUnit
 
 	// Bech32PrefixAccAddr defines the Bech32 prefix of an account's address
-	Bech32PrefixAccAddr = "pop"
+	Bech32PrefixAccAddr = "tori"
 )
 
 var (
