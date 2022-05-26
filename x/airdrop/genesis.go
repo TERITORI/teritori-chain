@@ -3,8 +3,8 @@ package airdrop
 import (
 	sdk "github.com/cosmos/cosmos-sdk/types"
 
-	"github.com/POPSmartContract/nxtpop-chain/x/airdrop/keeper"
-	"github.com/POPSmartContract/nxtpop-chain/x/airdrop/types"
+	"github.com/NXTPOP/teritori-chain/x/airdrop/keeper"
+	"github.com/NXTPOP/teritori-chain/x/airdrop/types"
 )
 
 // InitGenesis initializes the capability module's state from a provided genesis

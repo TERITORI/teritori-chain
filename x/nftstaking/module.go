@@ -7,9 +7,9 @@ import (
 
 	"github.com/grpc-ecosystem/grpc-gateway/runtime"
 
-	"github.com/POPSmartContract/nxtpop-chain/x/nftstaking/client/cli"
-	"github.com/POPSmartContract/nxtpop-chain/x/nftstaking/keeper"
-	"github.com/POPSmartContract/nxtpop-chain/x/nftstaking/types"
+	"github.com/NXTPOP/teritori-chain/x/nftstaking/client/cli"
+	"github.com/NXTPOP/teritori-chain/x/nftstaking/keeper"
+	"github.com/NXTPOP/teritori-chain/x/nftstaking/types"
 
 	"github.com/cosmos/cosmos-sdk/client"
 	"github.com/cosmos/cosmos-sdk/codec"

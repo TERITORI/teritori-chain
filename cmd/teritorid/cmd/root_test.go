@@ -5,8 +5,8 @@ import (
 
 	svrcmd "github.com/cosmos/cosmos-sdk/server/cmd"
 
-	app "github.com/POPSmartContract/nxtpop-chain/app"
-	"github.com/POPSmartContract/nxtpop-chain/cmd/nxtpopd/cmd"
+	app "github.com/NXTPOP/teritori-chain/app"
+	"github.com/NXTPOP/teritori-chain/cmd/teritorid/cmd"
 	"github.com/stretchr/testify/require"
 )
 

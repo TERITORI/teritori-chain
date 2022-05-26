@@ -1,10 +1,10 @@
 syntax = "proto3";
-package nxtpop.airdrop.v1beta1;
+package teritori.airdrop.v1beta1;
 
 import "gogoproto/gogo.proto";
 import "cosmos_proto/cosmos.proto";
 
-option go_package = "github.com/POPSmartContract/nxtpop-chain/x/airdrop/types";
+option go_package = "github.com/NXTPOP/teritori-chain/x/airdrop/types";
 
 // AirdropAllocation defines the user's airdrop allocation.
 message AirdropAllocation {

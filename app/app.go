@@ -1,4 +1,4 @@
-package nxtpop
+package teritori
 
 import (
 	"fmt"
@@ -9,12 +9,12 @@ import (
 	"path/filepath"
 	"strings"
 
-	airdrop "github.com/POPSmartContract/nxtpop-chain/x/airdrop"
-	airdropkeeper "github.com/POPSmartContract/nxtpop-chain/x/airdrop/keeper"
-	airdroptypes "github.com/POPSmartContract/nxtpop-chain/x/airdrop/types"
-	nftstaking "github.com/POPSmartContract/nxtpop-chain/x/nftstaking"
-	nftstakingkeeper "github.com/POPSmartContract/nxtpop-chain/x/nftstaking/keeper"
-	nftstakingtypes "github.com/POPSmartContract/nxtpop-chain/x/nftstaking/types"
+	airdrop "github.com/NXTPOP/teritori-chain/x/airdrop"
+	airdropkeeper "github.com/NXTPOP/teritori-chain/x/airdrop/keeper"
+	airdroptypes "github.com/NXTPOP/teritori-chain/x/airdrop/types"
+	nftstaking "github.com/NXTPOP/teritori-chain/x/nftstaking"
+	nftstakingkeeper "github.com/NXTPOP/teritori-chain/x/nftstaking/keeper"
+	nftstakingtypes "github.com/NXTPOP/teritori-chain/x/nftstaking/types"
 	"github.com/cosmos/cosmos-sdk/baseapp"
 	"github.com/cosmos/cosmos-sdk/client"
 	"github.com/cosmos/cosmos-sdk/client/grpc/tmservice"
@@ -107,7 +107,7 @@ import (
 	tmos "github.com/tendermint/tendermint/libs/os"
 	dbm "github.com/tendermint/tm-db"
 
-	nxtpopappparams "github.com/POPSmartContract/nxtpop-chain/app/params"
+	teritoriappparams "github.com/NXTPOP/teritori-chain/app/params"
 	"github.com/strangelove-ventures/packet-forward-middleware/router"
 	routerkeeper "github.com/strangelove-ventures/packet-forward-middleware/router/keeper"
 	routertypes "github.com/strangelove-ventures/packet-forward-middleware/router/types"
@@ -297,7 +297,7 @@ func init() {
 		stdlog.Println("Failed to get home dir %2", err)
 	}
 
-	DefaultNodeHome = filepath.Join(userHomeDir, ".nxtpop")
+	DefaultNodeHome = filepath.Join(userHomeDir, ".teritorid")
 }
 
 // NewNxtPopApp returns a reference to an initialized NxtPop.
@@ -308,7 +308,7 @@ func NewNxtPopApp(
 	skipUpgradeHeights map[int64]bool,
 	homePath string,
 	invCheckPeriod uint,
-	encodingConfig nxtpopappparams.EncodingConfig,
+	encodingConfig teritoriappparams.EncodingConfig,
 	appOpts servertypes.AppOptions,
 	baseAppOptions ...func(*baseapp.BaseApp),
 ) *NxtPopApp {

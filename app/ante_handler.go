@@ -1,4 +1,4 @@
-package nxtpop
+package teritori
 
 import (
 	"github.com/cosmos/cosmos-sdk/codec"

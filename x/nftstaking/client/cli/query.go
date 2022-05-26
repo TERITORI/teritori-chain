@@ -8,7 +8,7 @@ import (
 	"github.com/cosmos/cosmos-sdk/client"
 	"github.com/cosmos/cosmos-sdk/client/flags"
 
-	"github.com/POPSmartContract/nxtpop-chain/x/nftstaking/types"
+	"github.com/NXTPOP/teritori-chain/x/nftstaking/types"
 )
 
 func NewQueryCmd() *cobra.Command {

@@ -9,7 +9,7 @@ import (
 )
 
 func RegisterLegacyAminoCodec(cdc *codec.LegacyAmino) {
-	cdc.RegisterConcrete(&MsgRegisterNftStaking{}, "nxtpop/nftstaking/RegisterNftStaking", nil)
+	cdc.RegisterConcrete(&MsgRegisterNftStaking{}, "teritori/nftstaking/RegisterNftStaking", nil)
 }
 
 func RegisterInterfaces(registry types.InterfaceRegistry) {

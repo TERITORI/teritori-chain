@@ -1,4 +1,4 @@
-module github.com/POPSmartContract/nxtpop-chain
+module github.com/NXTPOP/teritori-chain
 
 go 1.17
 

@@ -1,11 +1,11 @@
 syntax = "proto3";
-package nxtpop.nftstaking.v1beta1;
+package teritori.nftstaking.v1beta1;
 
 import "gogoproto/gogo.proto";
 import "google/protobuf/timestamp.proto";
-import "nxtpop/nftstaking/v1beta1/nftstaking.proto";
+import "teritori/nftstaking/v1beta1/nftstaking.proto";
 
-option go_package = "github.com/POPSmartContract/nxtpop-chain/x/nftstaking/types";
+option go_package = "github.com/NXTPOP/teritori-chain/x/nftstaking/types";
 
 // Msg defines the ubi Msg service.
 service Msg {
@@ -14,6 +14,6 @@ service Msg {
 
 message MsgRegisterNftStaking {
   string sender = 1;
-  nxtpop.nftstaking.v1beta1.NftStaking nft_staking = 2 [ (gogoproto.nullable) = false ];
+  teritori.nftstaking.v1beta1.NftStaking nft_staking = 2 [ (gogoproto.nullable) = false ];
 }
 message MsgRegisterNftStakingResponse {}

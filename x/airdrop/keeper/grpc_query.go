@@ -3,7 +3,7 @@ package keeper
 import (
 	"context"
 
-	"github.com/POPSmartContract/nxtpop-chain/x/airdrop/types"
+	"github.com/NXTPOP/teritori-chain/x/airdrop/types"
 	sdk "github.com/cosmos/cosmos-sdk/types"
 	"google.golang.org/grpc/codes"
 	"google.golang.org/grpc/status"

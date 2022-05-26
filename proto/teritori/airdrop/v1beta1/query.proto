@@ -1,18 +1,18 @@
 syntax = "proto3";
-package nxtpop.airdrop.v1beta1;
+package teritori.airdrop.v1beta1;
 
 import "gogoproto/gogo.proto";
 import "google/api/annotations.proto";
 import "cosmos/base/v1beta1/coin.proto";
-import "nxtpop/airdrop/v1beta1/allocation.proto";
+import "teritori/airdrop/v1beta1/allocation.proto";
 
-option go_package = "github.com/POPSmartContract/nxtpop-chain/x/airdrop/types";
+option go_package = "github.com/NXTPOP/teritori-chain/x/airdrop/types";
 
 // Query defines the gRPC querier service.
 service Query {
   rpc Allocation(QueryAllocationRequest) returns (QueryAllocationResponse) {
     option (google.api.http).get =
-        "/nxtpop/airdrop/v1beta1/allocation/{address}";
+        "/teritori/airdrop/v1beta1/allocation/{address}";
   }
 }
 
