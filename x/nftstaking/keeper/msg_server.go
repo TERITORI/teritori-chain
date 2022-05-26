@@ -3,7 +3,7 @@ package keeper
 import (
 	"context"
 
-	"github.com/POPSmartContract/nxtpop-chain/x/nftstaking/types"
+	"github.com/NXTPOP/teritori-chain/x/nftstaking/types"
 	sdk "github.com/cosmos/cosmos-sdk/types"
 )
 

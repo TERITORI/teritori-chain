@@ -3,7 +3,7 @@ package cli
 import (
 	"fmt"
 
-	"github.com/POPSmartContract/nxtpop-chain/x/airdrop/types"
+	"github.com/NXTPOP/teritori-chain/x/airdrop/types"
 	"github.com/cosmos/cosmos-sdk/client"
 	"github.com/cosmos/cosmos-sdk/client/flags"
 	"github.com/cosmos/cosmos-sdk/client/tx"

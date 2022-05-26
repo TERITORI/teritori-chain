@@ -2,5 +2,5 @@ package helpers
 
 // SimAppChainID hardcoded chainID for simulation
 const (
-	SimAppChainID = "nxtpop-app"
+	SimAppChainID = "teritori-app"
 )

@@ -4,7 +4,7 @@ import (
 	"encoding/hex"
 	"encoding/json"
 
-	appparams "github.com/POPSmartContract/nxtpop-chain/app/params"
+	appparams "github.com/NXTPOP/teritori-chain/app/params"
 	"github.com/cosmos/cosmos-sdk/crypto/keys/secp256k1"
 	"github.com/cosmos/cosmos-sdk/types/bech32"
 	"github.com/ethereum/go-ethereum/accounts"

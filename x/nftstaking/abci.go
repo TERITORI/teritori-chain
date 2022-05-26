@@ -1,7 +1,7 @@
 package nftstaking
 
 import (
-	"github.com/POPSmartContract/nxtpop-chain/x/nftstaking/keeper"
+	"github.com/NXTPOP/teritori-chain/x/nftstaking/keeper"
 	sdk "github.com/cosmos/cosmos-sdk/types"
 )
 

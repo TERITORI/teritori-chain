@@ -1,7 +1,7 @@
 package keeper
 
 import (
-	"github.com/POPSmartContract/nxtpop-chain/x/nftstaking/types"
+	"github.com/NXTPOP/teritori-chain/x/nftstaking/types"
 	"github.com/cosmos/cosmos-sdk/codec"
 	sdk "github.com/cosmos/cosmos-sdk/types"
 )
@@ -24,5 +24,5 @@ func NewKeeper(storeKey sdk.StoreKey, cdc codec.BinaryCodec, bk types.BankKeeper
 
 // BondDenom returns the denom that is basically used for fee payment
 func (k Keeper) BondDenom(ctx sdk.Context) string {
-	return "upop"
+	return "utori"
 }

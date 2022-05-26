@@ -1,7 +1,7 @@
-package nxtpop
+package teritori
 
 import (
-	"github.com/POPSmartContract/nxtpop-chain/app/params"
+	"github.com/NXTPOP/teritori-chain/app/params"
 
 	"github.com/cosmos/cosmos-sdk/std"
 )
