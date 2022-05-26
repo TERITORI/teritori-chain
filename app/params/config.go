@@ -6,7 +6,7 @@ import (
 
 const (
 	HumanCoinUnit = "pop"
-	BaseCoinUnit  = "upop"
+	BaseCoinUnit  = "utori"
 
 	DefaultBondDenom = BaseCoinUnit
 
