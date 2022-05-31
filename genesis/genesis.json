@@ -14,7 +14,9 @@
       "max_bytes": "1048576"
     },
     "validator": {
-      "pub_key_types": ["ed25519"]
+      "pub_key_types": [
+        "ed25519"
+      ]
     },
     "version": {}
   },
@@ -24,7 +26,7 @@
       "allocations": [
         {
           "chain": "evm",
-          "address": "0x441D470F996D049B698A442e6DDb9dC3cb78AB68",
+          "address": "0x--",
           "amount": {
             "denom": "utori",
             "amount": "100000000"
@@ -36,7 +38,7 @@
         },
         {
           "chain": "solana",
-          "address": "BW5D1Dv7pydTYZ8rSByEqNXYVRnGpm4qcEhkfHEGqBM",
+          "address": "--",
           "amount": {
             "denom": "utori",
             "amount": "100000000"
@@ -48,7 +50,7 @@
         },
         {
           "chain": "terra",
-          "address": "terra1zetfrggd7lnml4j0wxe68gycmax4tsl28uhese",
+          "address": "terra--",
           "amount": {
             "denom": "utori",
             "amount": "100000000"
@@ -60,19 +62,7 @@
         },
         {
           "chain": "cosmos",
-          "address": "cosmos19ftk3lkfupgtnh38d7enc8c6jp7aljj3s0p6gt",
-          "amount": {
-            "denom": "utori",
-            "amount": "100000000"
-          },
-          "claimed_amount": {
-            "denom": "utori",
-            "amount": "0"
-          }
-        },
-        {
-          "chain": "osmosis",
-          "address": "osmo19ftk3lkfupgtnh38d7enc8c6jp7aljj3c5j27e",
+          "address": "cosmos--",
           "amount": {
             "denom": "utori",
             "amount": "100000000"
@@ -84,7 +74,19 @@
         },
         {
           "chain": "juno",
-          "address": "juno19ftk3lkfupgtnh38d7enc8c6jp7aljj3xazp0h",
+          "address": "juno--",
+          "amount": {
+            "denom": "utori",
+            "amount": "100000000"
+          },
+          "claimed_amount": {
+            "denom": "utori",
+            "amount": "0"
+          }
+        },
+        {
+          "chain": "osmosis",
+          "address": "osmo--",
           "amount": {
             "denom": "utori",
             "amount": "100000000"
@@ -533,7 +535,10 @@
         "clients_consensus": [],
         "clients_metadata": [],
         "params": {
-          "allowed_clients": ["06-solomachine", "07-tendermint"]
+          "allowed_clients": [
+            "06-solomachine",
+            "07-tendermint"
+          ]
         },
         "create_localhost": false,
         "next_client_sequence": "0"

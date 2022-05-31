@@ -50,17 +50,32 @@ Update `<repo>/genesis/genesis.json` to latest one generated
 
 ### Create zip file for output and setup 4 nodes
 
-```
+```sh
 ssh root@176.9.19.162
 ssh root@176.9.149.15
 ssh root@5.9.40.222
 ssh root@78.46.106.69
 
+# copy zip via scp into servers
+scp ./testnet.zip root@176.9.19.162:~/testnet.zip
+scp ./testnet.zip root@176.9.149.15:~/testnet.zip
+scp ./testnet.zip root@5.9.40.222:~/testnet.zip
+scp ./testnet.zip root@78.46.106.69:~/testnet.zip
+
+# kill previous processes if required
+ps -e | grep nxtpopd
+kill -9 78428
+rm -rf nodehome/
+rm -rf testnet
+rm -rf testnet_bkup2.zip
+rm -rf nxtpop-chain/
+
 sudo apt-get install unzip
 unzip testnet.zip
 
-curl -OL https://golang.org/dl/go1.16.7.linux-amd64.tar.gz
-sudo tar -C /usr/local -xvf go1.16.7.linux-amd64.tar.gz
+rm -rf /usr/local/go
+curl -LO https://go.dev/dl/go1.18.2.linux-amd64.tar.gz
+sudo tar -C /usr/local -xzf go1.18.2.linux-amd64.tar.gz
 sudo nano ~/.profile
 
 export GOPATH=$HOME/go
