@@ -1,0 +1,22 @@
+syntax = "proto3";
+package teritori.nftstaking.v1beta1;
+
+import "cosmos/base/query/v1beta1/pagination.proto";
+import "gogoproto/gogo.proto";
+import "google/api/annotations.proto";
+import "teritori/nftstaking/v1beta1/nftstaking.proto";
+
+option go_package = "github.com/NXTPOP/teritori-chain/x/nftstaking/types";
+
+// Query defines the gRPC querier service
+service Query {
+  rpc QueryNftStakings(QueryNftStakingsRequest) returns (QueryNftStakingsResponse) {
+    option (google.api.http).get = "/teritori/nftstaking/v1beta1/nftstakings";
+  }
+}
+
+message QueryNftStakingsRequest {}
+message QueryNftStakingsResponse {
+  repeated teritori.nftstaking.v1beta1.NftStaking nftstakings = 1
+      [ (gogoproto.nullable) = false ];
+}

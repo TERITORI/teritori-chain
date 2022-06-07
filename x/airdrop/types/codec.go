@@ -9,7 +9,7 @@ import (
 )
 
 func RegisterLegacyAminoCodec(cdc *codec.LegacyAmino) {
-	cdc.RegisterConcrete(&MsgClaimAllocation{}, "nxtpop/airdrop/ClaimAllocation", nil)
+	cdc.RegisterConcrete(&MsgClaimAllocation{}, "teritori/airdrop/ClaimAllocation", nil)
 }
 
 func RegisterInterfaces(registry types.InterfaceRegistry) {

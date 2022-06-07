@@ -1,4 +1,4 @@
-package nxtpop_test
+package teritori_test
 
 import (
 	"encoding/json"
@@ -6,9 +6,9 @@ import (
 	"os"
 	"testing"
 
-	nxtpop "github.com/POPSmartContract/nxtpop-chain/app"
+	teritori "github.com/NXTPOP/teritori-chain/app"
 
-	"github.com/POPSmartContract/nxtpop-chain/app/helpers"
+	"github.com/NXTPOP/teritori-chain/app/helpers"
 	"github.com/stretchr/testify/require"
 	"github.com/tendermint/tendermint/libs/log"
 	"github.com/tendermint/tendermint/libs/rand"
@@ -41,7 +41,7 @@ func BenchmarkFullAppSimulation(b *testing.B) {
 		}
 	}()
 
-	app := nxtpop.NewNxtPopApp(logger, db, nil, true, map[int64]bool{}, nxtpop.DefaultNodeHome, simapp.FlagPeriodValue, nxtpop.MakeEncodingConfig(), simapp.EmptyAppOptions{}, interBlockCacheOpt())
+	app := teritori.NewNxtPopApp(logger, db, nil, true, map[int64]bool{}, teritori.DefaultNodeHome, simapp.FlagPeriodValue, teritori.MakeEncodingConfig(), simapp.EmptyAppOptions{}, interBlockCacheOpt())
 
 	// Run randomized simulation:w
 	_, simParams, simErr := simulation.SimulateFromSeed(
@@ -106,7 +106,7 @@ func TestAppStateDeterminism(t *testing.T) {
 			}
 
 			db := dbm.NewMemDB()
-			app := nxtpop.NewNxtPopApp(logger, db, nil, true, map[int64]bool{}, nxtpop.DefaultNodeHome, simapp.FlagPeriodValue, nxtpop.MakeEncodingConfig(), simapp.EmptyAppOptions{}, interBlockCacheOpt())
+			app := teritori.NewNxtPopApp(logger, db, nil, true, map[int64]bool{}, teritori.DefaultNodeHome, simapp.FlagPeriodValue, teritori.MakeEncodingConfig(), simapp.EmptyAppOptions{}, interBlockCacheOpt())
 
 			fmt.Printf(
 				"running non-determinism simulation; seed %d: %d/%d, attempt: %d/%d\n",

@@ -1,4 +1,4 @@
-package nxtpop
+package teritori
 
 import (
 	"encoding/json"

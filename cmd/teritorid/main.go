@@ -6,9 +6,9 @@ import (
 	"github.com/cosmos/cosmos-sdk/server"
 	svrcmd "github.com/cosmos/cosmos-sdk/server/cmd"
 
-	app "github.com/POPSmartContract/nxtpop-chain/app"
-	appparams "github.com/POPSmartContract/nxtpop-chain/app/params"
-	"github.com/POPSmartContract/nxtpop-chain/cmd/nxtpopd/cmd"
+	app "github.com/NXTPOP/teritori-chain/app"
+	appparams "github.com/NXTPOP/teritori-chain/app/params"
+	"github.com/NXTPOP/teritori-chain/cmd/teritorid/cmd"
 )
 
 func main() {

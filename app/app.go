@@ -1,4 +1,4 @@
-package nxtpop
+package teritori
 
 import (
 	"fmt"
@@ -9,9 +9,12 @@ import (
 	"path/filepath"
 	"strings"
 
-	airdrop "github.com/POPSmartContract/nxtpop-chain/x/airdrop"
-	airdropkeeper "github.com/POPSmartContract/nxtpop-chain/x/airdrop/keeper"
-	airdroptypes "github.com/POPSmartContract/nxtpop-chain/x/airdrop/types"
+	airdrop "github.com/NXTPOP/teritori-chain/x/airdrop"
+	airdropkeeper "github.com/NXTPOP/teritori-chain/x/airdrop/keeper"
+	airdroptypes "github.com/NXTPOP/teritori-chain/x/airdrop/types"
+	nftstaking "github.com/NXTPOP/teritori-chain/x/nftstaking"
+	nftstakingkeeper "github.com/NXTPOP/teritori-chain/x/nftstaking/keeper"
+	nftstakingtypes "github.com/NXTPOP/teritori-chain/x/nftstaking/types"
 	"github.com/cosmos/cosmos-sdk/baseapp"
 	"github.com/cosmos/cosmos-sdk/client"
 	"github.com/cosmos/cosmos-sdk/client/grpc/tmservice"
@@ -107,7 +110,7 @@ import (
 	tmos "github.com/tendermint/tendermint/libs/os"
 	dbm "github.com/tendermint/tm-db"
 
-	nxtpopappparams "github.com/POPSmartContract/nxtpop-chain/app/params"
+	teritoriappparams "github.com/NXTPOP/teritori-chain/app/params"
 	"github.com/strangelove-ventures/packet-forward-middleware/v2/router"
 	routerkeeper "github.com/strangelove-ventures/packet-forward-middleware/v2/router/keeper"
 	routertypes "github.com/strangelove-ventures/packet-forward-middleware/v2/router/types"
@@ -186,6 +189,7 @@ var (
 	// and genesis verification.
 	ModuleBasics = module.NewBasicManager(
 		airdrop.AppModuleBasic{},
+		nftstaking.AppModuleBasic{},
 		auth.AppModuleBasic{},
 		genutil.AppModuleBasic{},
 		bank.AppModuleBasic{},
@@ -229,6 +233,7 @@ var (
 		liquiditytypes.ModuleName:      {authtypes.Minter, authtypes.Burner},
 		ibctransfertypes.ModuleName:    {authtypes.Minter, authtypes.Burner},
 		airdroptypes.ModuleName:        {authtypes.Minter},
+		nftstakingtypes.ModuleName:     {authtypes.Minter},
 	}
 )
 
@@ -274,6 +279,7 @@ type NxtPopApp struct { // nolint: golint
 	LiquidityKeeper  liquiditykeeper.Keeper
 	RouterKeeper     routerkeeper.Keeper
 	AirdropKeeper    airdropkeeper.Keeper
+	NftStakingKeeper nftstakingkeeper.Keeper
 
 	// make scoped keepers public for test purposes
 	ScopedIBCKeeper      capabilitykeeper.ScopedKeeper
@@ -297,7 +303,7 @@ func init() {
 		stdlog.Println("Failed to get home dir %2", err)
 	}
 
-	DefaultNodeHome = filepath.Join(userHomeDir, ".nxtpop")
+	DefaultNodeHome = filepath.Join(userHomeDir, ".teritorid")
 }
 
 // NewNxtPopApp returns a reference to an initialized NxtPop.
@@ -308,7 +314,7 @@ func NewNxtPopApp(
 	skipUpgradeHeights map[int64]bool,
 	homePath string,
 	invCheckPeriod uint,
-	encodingConfig nxtpopappparams.EncodingConfig,
+	encodingConfig teritoriappparams.EncodingConfig,
 	appOpts servertypes.AppOptions,
 	baseAppOptions ...func(*baseapp.BaseApp),
 ) *NxtPopApp {
@@ -330,6 +336,7 @@ func NewNxtPopApp(
 		capabilitytypes.StoreKey, feegrant.StoreKey, authzkeeper.StoreKey, routertypes.StoreKey,
 		icahosttypes.StoreKey,
 		airdroptypes.StoreKey,
+		nftstakingtypes.ModuleName,
 		wasm.StoreKey,
 	)
 	tkeys := sdk.NewTransientStoreKeys(paramstypes.TStoreKey)
@@ -452,6 +459,8 @@ func NewNxtPopApp(
 	)
 
 	app.AirdropKeeper = *airdropkeeper.NewKeeper(appCodec, keys[airdroptypes.StoreKey], app.BankKeeper, app.StakingKeeper, app.AccountKeeper)
+
+	app.NftStakingKeeper = nftstakingkeeper.NewKeeper(keys[nftstakingtypes.StoreKey], appCodec, app.BankKeeper)
 
 	app.IBCKeeper = ibckeeper.NewKeeper(
 		appCodec,
@@ -577,6 +586,7 @@ func NewNxtPopApp(
 			encodingConfig.TxConfig,
 		),
 		airdrop.NewAppModule(appCodec, app.AirdropKeeper),
+		nftstaking.NewAppModule(appCodec, app.NftStakingKeeper),
 		auth.NewAppModule(appCodec, app.AccountKeeper, nil),
 		vesting.NewAppModule(app.AccountKeeper, app.BankKeeper),
 		bank.NewAppModule(appCodec, app.BankKeeper, app.AccountKeeper),
@@ -627,6 +637,7 @@ func NewNxtPopApp(
 		icatypes.ModuleName,
 		routertypes.ModuleName,
 		airdroptypes.ModuleName,
+		nftstakingtypes.ModuleName,
 		wasm.ModuleName,
 	)
 	app.mm.SetOrderEndBlockers(
@@ -652,6 +663,7 @@ func NewNxtPopApp(
 		feegrant.ModuleName,
 		authz.ModuleName,
 		airdroptypes.ModuleName,
+		nftstakingtypes.ModuleName,
 		wasm.ModuleName,
 	)
 
@@ -683,6 +695,7 @@ func NewNxtPopApp(
 		authz.ModuleName,
 		routertypes.ModuleName,
 		airdroptypes.ModuleName,
+		nftstakingtypes.ModuleName,
 		wasm.ModuleName,
 	)
 
@@ -704,6 +717,7 @@ func NewNxtPopApp(
 		authzmodule.NewAppModule(appCodec, app.AuthzKeeper, app.AccountKeeper, app.BankKeeper, app.interfaceRegistry),
 		gov.NewAppModule(appCodec, app.GovKeeper, app.AccountKeeper, app.BankKeeper),
 		airdrop.NewAppModule(appCodec, app.AirdropKeeper),
+		nftstaking.NewAppModule(appCodec, app.NftStakingKeeper),
 		mint.NewAppModule(appCodec, app.MintKeeper, app.AccountKeeper),
 		staking.NewAppModule(appCodec, app.StakingKeeper, app.AccountKeeper, app.BankKeeper),
 		distr.NewAppModule(appCodec, app.DistrKeeper, app.AccountKeeper, app.BankKeeper, app.StakingKeeper),

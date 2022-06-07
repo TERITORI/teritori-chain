@@ -1,0 +1,11 @@
+syntax = "proto3";
+package teritori.nftstaking.v1beta1;
+
+option go_package = "github.com/NXTPOP/teritori-chain/x/nftstaking/types";
+
+message NftStaking {
+  string nft_identifier = 1;
+  string nft_metadata = 2;
+  string reward_address = 3;
+  uint64 reward_weight = 4;
+}

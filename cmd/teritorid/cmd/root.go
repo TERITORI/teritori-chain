@@ -30,14 +30,14 @@ import (
 	"github.com/tendermint/tendermint/libs/log"
 	dbm "github.com/tendermint/tm-db"
 
-	nxtpop "github.com/POPSmartContract/nxtpop-chain/app"
-	"github.com/POPSmartContract/nxtpop-chain/app/params"
+	teritori "github.com/NXTPOP/teritori-chain/app"
+	"github.com/NXTPOP/teritori-chain/app/params"
 )
 
 // NewRootCmd creates a new root command for simd. It is called once in the
 // main function.
 func NewRootCmd() (*cobra.Command, params.EncodingConfig) {
-	encodingConfig := nxtpop.MakeEncodingConfig()
+	encodingConfig := teritori.MakeEncodingConfig()
 	initClientCtx := client.Context{}.
 		WithCodec(encodingConfig.Marshaler).
 		WithInterfaceRegistry(encodingConfig.InterfaceRegistry).
@@ -45,11 +45,11 @@ func NewRootCmd() (*cobra.Command, params.EncodingConfig) {
 		WithLegacyAmino(encodingConfig.Amino).
 		WithInput(os.Stdin).
 		WithAccountRetriever(types.AccountRetriever{}).
-		WithHomeDir(nxtpop.DefaultNodeHome).
+		WithHomeDir(teritori.DefaultNodeHome).
 		WithViper("")
 
 	rootCmd := &cobra.Command{
-		Use:   "nxtpopd",
+		Use:   "teritorid",
 		Short: "Stargate Cosmos Hub App",
 		PersistentPreRunE: func(cmd *cobra.Command, _ []string) error {
 			initClientCtx, err := client.ReadPersistentCommandFlags(initClientCtx, cmd.Flags())
@@ -100,13 +100,13 @@ func initRootCmd(rootCmd *cobra.Command, encodingConfig params.EncodingConfig) {
 	cfg.Seal()
 
 	rootCmd.AddCommand(
-		genutilcli.InitCmd(nxtpop.ModuleBasics, nxtpop.DefaultNodeHome),
-		genutilcli.CollectGenTxsCmd(banktypes.GenesisBalancesIterator{}, nxtpop.DefaultNodeHome),
-		genutilcli.GenTxCmd(nxtpop.ModuleBasics, encodingConfig.TxConfig, banktypes.GenesisBalancesIterator{}, nxtpop.DefaultNodeHome),
-		genutilcli.ValidateGenesisCmd(nxtpop.ModuleBasics),
-		AddGenesisAccountCmd(nxtpop.DefaultNodeHome),
+		genutilcli.InitCmd(teritori.ModuleBasics, teritori.DefaultNodeHome),
+		genutilcli.CollectGenTxsCmd(banktypes.GenesisBalancesIterator{}, teritori.DefaultNodeHome),
+		genutilcli.GenTxCmd(teritori.ModuleBasics, encodingConfig.TxConfig, banktypes.GenesisBalancesIterator{}, teritori.DefaultNodeHome),
+		genutilcli.ValidateGenesisCmd(teritori.ModuleBasics),
+		AddGenesisAccountCmd(teritori.DefaultNodeHome),
 		tmcli.NewCompletionCmd(rootCmd, true),
-		testnetCmd(nxtpop.ModuleBasics, banktypes.GenesisBalancesIterator{}),
+		testnetCmd(teritori.ModuleBasics, banktypes.GenesisBalancesIterator{}),
 		debug.Cmd(),
 		config.Cmd(),
 	)
@@ -114,14 +114,14 @@ func initRootCmd(rootCmd *cobra.Command, encodingConfig params.EncodingConfig) {
 	ac := appCreator{
 		encCfg: encodingConfig,
 	}
-	server.AddCommands(rootCmd, nxtpop.DefaultNodeHome, ac.newApp, ac.appExport, addModuleInitFlags)
+	server.AddCommands(rootCmd, teritori.DefaultNodeHome, ac.newApp, ac.appExport, addModuleInitFlags)
 
 	// add keybase, auxiliary RPC, query, and tx child commands
 	rootCmd.AddCommand(
 		rpc.StatusCommand(),
 		queryCommand(),
 		txCommand(),
-		keys.Commands(nxtpop.DefaultNodeHome),
+		keys.Commands(teritori.DefaultNodeHome),
 	)
 }
 
@@ -147,7 +147,7 @@ func queryCommand() *cobra.Command {
 		authcmd.QueryTxCmd(),
 	)
 
-	nxtpop.ModuleBasics.AddQueryCommands(cmd)
+	teritori.ModuleBasics.AddQueryCommands(cmd)
 	cmd.PersistentFlags().String(flags.FlagChainID, "", "The network chain ID")
 
 	return cmd
@@ -174,7 +174,7 @@ func txCommand() *cobra.Command {
 		authcmd.GetDecodeCommand(),
 	)
 
-	nxtpop.ModuleBasics.AddTxCommands(cmd)
+	teritori.ModuleBasics.AddTxCommands(cmd)
 	cmd.PersistentFlags().String(flags.FlagChainID, "", "The network chain ID")
 
 	return cmd
@@ -217,7 +217,7 @@ func (ac appCreator) newApp(
 		panic(err)
 	}
 
-	return nxtpop.NewNxtPopApp(
+	return teritori.NewNxtPopApp(
 		logger, db, traceStore, true, skipUpgradeHeights,
 		cast.ToString(appOpts.Get(flags.FlagHome)),
 		cast.ToUint(appOpts.Get(server.FlagInvCheckPeriod)),
@@ -257,7 +257,7 @@ func (ac appCreator) appExport(
 		loadLatest = true
 	}
 
-	nxtpopApp := nxtpop.NewNxtPopApp(
+	teritoriApp := teritori.NewNxtPopApp(
 		logger,
 		db,
 		traceStore,
@@ -270,10 +270,10 @@ func (ac appCreator) appExport(
 	)
 
 	if height != -1 {
-		if err := nxtpopApp.LoadHeight(height); err != nil {
+		if err := teritoriApp.LoadHeight(height); err != nil {
 			return servertypes.ExportedApp{}, err
 		}
 	}
 
-	return nxtpopApp.ExportAppStateAndValidators(forZeroHeight, jailAllowedAddrs)
+	return teritoriApp.ExportAppStateAndValidators(forZeroHeight, jailAllowedAddrs)
 }

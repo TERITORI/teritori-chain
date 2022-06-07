@@ -6,9 +6,9 @@ import (
 	"fmt"
 	"math/rand"
 
-	"github.com/POPSmartContract/nxtpop-chain/x/airdrop/client/cli"
-	"github.com/POPSmartContract/nxtpop-chain/x/airdrop/keeper"
-	"github.com/POPSmartContract/nxtpop-chain/x/airdrop/types"
+	"github.com/NXTPOP/teritori-chain/x/airdrop/client/cli"
+	"github.com/NXTPOP/teritori-chain/x/airdrop/keeper"
+	"github.com/NXTPOP/teritori-chain/x/airdrop/types"
 	"github.com/cosmos/cosmos-sdk/client"
 	"github.com/cosmos/cosmos-sdk/codec"
 	cdctypes "github.com/cosmos/cosmos-sdk/codec/types"

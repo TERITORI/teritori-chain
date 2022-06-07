@@ -1,58 +1,58 @@
-version: '3'
+version: "3"
 
 services:
-  nxtpopdnode0:
-    container_name: nxtpopdnode0
-    image: 'tendermint/nxtpopdnode'
+  teritoridnode0:
+    container_name: teritoridnode0
+    image: "tendermint/teritoridnode"
     ports:
-      - '26656-26657:26656-26657'
+      - "26656-26657:26656-26657"
     environment:
       - ID=0
-      - LOG=${LOG:-nxtpopd.log}
+      - LOG=${LOG:-teritorid.log}
     volumes:
-      - ./build:/nxtpopd:Z
+      - ./build:/teritorid:Z
     networks:
       localnet:
         ipv4_address: 192.168.10.2
 
-  nxtpopdnode1:
-    container_name: nxtpopdnode1
-    image: 'tendermint/nxtpopdnode'
+  teritoridnode1:
+    container_name: teritoridnode1
+    image: "tendermint/teritoridnode"
     ports:
-      - '26659-26660:26656-26657'
+      - "26659-26660:26656-26657"
     environment:
       - ID=1
-      - LOG=${LOG:-nxtpopd.log}
+      - LOG=${LOG:-teritorid.log}
     volumes:
-      - ./build:/nxtpopd:Z
+      - ./build:/teritorid:Z
     networks:
       localnet:
         ipv4_address: 192.168.10.3
 
-  nxtpopdnode2:
-    container_name: nxtpopdnode2
-    image: 'tendermint/nxtpopdnode'
+  teritoridnode2:
+    container_name: teritoridnode2
+    image: "tendermint/teritoridnode"
     environment:
       - ID=2
-      - LOG=${LOG:-nxtpopd.log}
+      - LOG=${LOG:-teritorid.log}
     ports:
-      - '26661-26662:26656-26657'
+      - "26661-26662:26656-26657"
     volumes:
-      - ./build:/nxtpopd:Z
+      - ./build:/teritorid:Z
     networks:
       localnet:
         ipv4_address: 192.168.10.4
 
-  nxtpopdnode3:
-    container_name: nxtpopdnode3
-    image: 'tendermint/nxtpopdnode'
+  teritoridnode3:
+    container_name: teritoridnode3
+    image: "tendermint/teritoridnode"
     environment:
       - ID=3
-      - LOG=${LOG:-nxtpopd.log}
+      - LOG=${LOG:-teritorid.log}
     ports:
-      - '26663-26664:26656-26657'
+      - "26663-26664:26656-26657"
     volumes:
-      - ./build:/nxtpopd:Z
+      - ./build:/teritorid:Z
     networks:
       localnet:
         ipv4_address: 192.168.10.5
