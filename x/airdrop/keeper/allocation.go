@@ -58,7 +58,7 @@ func (k Keeper) ClaimAllocation(ctx sdk.Context, address string, pubKey string, 
 	}
 
 	// verify native chain account with signature
-	sigOk := verifySignature(allocation.Chain, allocation.Address, pubKey, rewardAddress, signature)
+	sigOk := VerifySignature(allocation.Chain, allocation.Address, pubKey, rewardAddress, signature)
 	if !sigOk {
 		return types.ErrNativeChainAccountSigVerificationFailure
 	}

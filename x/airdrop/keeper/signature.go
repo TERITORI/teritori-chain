@@ -19,7 +19,7 @@ type SignMessage struct {
 	RewardAddr string `json:"rewardAddr"`
 }
 
-func verifySignature(chain string, address string, pubKey string, rewardAddr string, signatureBytes string) bool {
+func VerifySignature(chain string, address string, pubKey string, rewardAddr string, signatureBytes string) bool {
 	signMsg := SignMessage{
 		Chain:      chain,
 		Address:    address,
