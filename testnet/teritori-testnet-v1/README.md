@@ -1,3 +1,5 @@
+# [DEPRECIATED]
+
 ## Setup your machine
 
 If you already have go 1.18+ and packages up to date, you can skip this part and jump to the second section: [Setup the chain](https://github.com/TERITORI/teritori-chain/edit/main/testnet/testnet-teritori-v1/README.md#setup-the-chain)  
