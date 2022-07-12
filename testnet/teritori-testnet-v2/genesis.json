@@ -1,0 +1,654 @@
+{
+    "genesis_time": "2022-07-12T15:00:48.39317Z",
+    "chain_id": "teritori-testnet-v2",
+    "initial_height": "1",
+    "consensus_params": {
+      "block": {
+        "max_bytes": "22020096",
+        "max_gas": "-1",
+        "time_iota_ms": "1000"
+      },
+      "evidence": {
+        "max_age_num_blocks": "100000",
+        "max_age_duration": "172800000000000",
+        "max_bytes": "1048576"
+      },
+      "validator": {
+        "pub_key_types": [
+          "ed25519"
+        ]
+      },
+      "version": {}
+    },
+    "app_hash": "",
+    "app_state": {
+      "airdrop": {
+        "allocations": [
+          {
+            "chain": "evm",
+            "address": "0x--",
+            "amount": {
+              "denom": "utori",
+              "amount": "100000000"
+            },
+            "claimed_amount": {
+              "denom": "utori",
+              "amount": "0"
+            }
+          },
+          {
+            "chain": "solana",
+            "address": "--",
+            "amount": {
+              "denom": "utori",
+              "amount": "100000000"
+            },
+            "claimed_amount": {
+              "denom": "utori",
+              "amount": "0"
+            }
+          },
+          {
+            "chain": "terra",
+            "address": "terra--",
+            "amount": {
+              "denom": "utori",
+              "amount": "100000000"
+            },
+            "claimed_amount": {
+              "denom": "utori",
+              "amount": "0"
+            }
+          },
+          {
+            "chain": "cosmos",
+            "address": "cosmos--",
+            "amount": {
+              "denom": "utori",
+              "amount": "100000000"
+            },
+            "claimed_amount": {
+              "denom": "utori",
+              "amount": "0"
+            }
+          },
+          {
+            "chain": "juno",
+            "address": "juno--",
+            "amount": {
+              "denom": "utori",
+              "amount": "100000000"
+            },
+            "claimed_amount": {
+              "denom": "utori",
+              "amount": "0"
+            }
+          },
+          {
+            "chain": "osmosis",
+            "address": "osmo--",
+            "amount": {
+              "denom": "utori",
+              "amount": "100000000"
+            },
+            "claimed_amount": {
+              "denom": "utori",
+              "amount": "0"
+            }
+          }
+        ]
+      },
+      "auth": {
+        "params": {
+          "max_memo_characters": "256",
+          "tx_sig_limit": "7",
+          "tx_size_cost_per_byte": "10",
+          "sig_verify_cost_ed25519": "590",
+          "sig_verify_cost_secp256k1": "1000"
+        },
+        "accounts": [
+          {
+            "@type": "/cosmos.auth.v1beta1.BaseAccount",
+            "address": "tori1dg7v87zz84qeddycdwzmj22ffxazg08njkky37",
+            "pub_key": null,
+            "account_number": "0",
+            "sequence": "0"
+          },
+          {
+            "@type": "/cosmos.auth.v1beta1.BaseAccount",
+            "address": "tori16cj75mkppfuqgdyc33h9xe2hqhyhpx6p44zvjy",
+            "pub_key": null,
+            "account_number": "0",
+            "sequence": "0"
+          },
+          {
+            "@type": "/cosmos.auth.v1beta1.BaseAccount",
+            "address": "tori1w6rpfs7z6kpy90l5raqddwrcjhgphvrqr546g2",
+            "pub_key": null,
+            "account_number": "0",
+            "sequence": "0"
+          },
+          {
+            "@type": "/cosmos.auth.v1beta1.BaseAccount",
+            "address": "tori1hk7nyn7xkd64d2h4pl47fst8lyvx75m4a48amy",
+            "pub_key": null,
+            "account_number": "0",
+            "sequence": "0"
+          }
+        ]
+      },
+      "authz": {
+        "authorization": []
+      },
+      "bank": {
+        "params": {
+          "send_enabled": [],
+          "default_send_enabled": true
+        },
+        "balances": [
+          {
+            "address": "tori1dg7v87zz84qeddycdwzmj22ffxazg08njkky37",
+            "coins": [
+              {
+                "denom": "utori",
+                "amount": "50000000000000000"
+              }
+            ]
+          },
+          {
+            "address": "tori1w6rpfs7z6kpy90l5raqddwrcjhgphvrqr546g2",
+            "coins": [
+              {
+                "denom": "utori",
+                "amount": "50000000000000000"
+              }
+            ]
+          },
+          {
+            "address": "tori1hk7nyn7xkd64d2h4pl47fst8lyvx75m4a48amy",
+            "coins": [
+              {
+                "denom": "utori",
+                "amount": "50000000000000000"
+              }
+            ]
+          },
+          {
+            "address": "tori16cj75mkppfuqgdyc33h9xe2hqhyhpx6p44zvjy",
+            "coins": [
+              {
+                "denom": "utori",
+                "amount": "50000000000000000"
+              }
+            ]
+          }
+        ],
+        "supply": [
+          {
+            "denom": "utori",
+            "amount": "200000000000000000"
+          }
+        ],
+        "denom_metadata": []
+      },
+      "capability": {
+        "index": "1",
+        "owners": []
+      },
+      "crisis": {
+        "constant_fee": {
+          "denom": "utori",
+          "amount": "1000"
+        }
+      },
+      "distribution": {
+        "params": {
+          "community_tax": "0.020000000000000000",
+          "base_proposer_reward": "0.010000000000000000",
+          "bonus_proposer_reward": "0.040000000000000000",
+          "withdraw_addr_enabled": true
+        },
+        "fee_pool": {
+          "community_pool": []
+        },
+        "delegator_withdraw_infos": [],
+        "previous_proposer": "",
+        "outstanding_rewards": [],
+        "validator_accumulated_commissions": [],
+        "validator_historical_rewards": [],
+        "validator_current_rewards": [],
+        "delegator_starting_infos": [],
+        "validator_slash_events": []
+      },
+      "evidence": {
+        "evidence": []
+      },
+      "feegrant": {
+        "allowances": []
+      },
+      "genutil": {
+        "gen_txs": [
+          {
+            "body": {
+              "messages": [
+                {
+                  "@type": "/cosmos.staking.v1beta1.MsgCreateValidator",
+                  "description": {
+                    "moniker": "node0",
+                    "identity": "",
+                    "website": "",
+                    "security_contact": "",
+                    "details": ""
+                  },
+                  "commission": {
+                    "rate": "1.000000000000000000",
+                    "max_rate": "1.000000000000000000",
+                    "max_change_rate": "1.000000000000000000"
+                  },
+                  "min_self_delegation": "1",
+                  "delegator_address": "tori1dg7v87zz84qeddycdwzmj22ffxazg08njkky37",
+                  "validator_address": "torivaloper1dg7v87zz84qeddycdwzmj22ffxazg08nhy4mrn",
+                  "pubkey": {
+                    "@type": "/cosmos.crypto.ed25519.PubKey",
+                    "key": "rK2etyFS0gHo1bSam2CxiWZ+rH27LdFiAluk0x0qc3A="
+                  },
+                  "value": {
+                    "denom": "utori",
+                    "amount": "100000000"
+                  }
+                }
+              ],
+              "memo": "2371b28f366a61637ac76c2577264f79f0965447@192.168.10.2:26656",
+              "timeout_height": "0",
+              "extension_options": [],
+              "non_critical_extension_options": []
+            },
+            "auth_info": {
+              "signer_infos": [
+                {
+                  "public_key": {
+                    "@type": "/cosmos.crypto.secp256k1.PubKey",
+                    "key": "A9LI4nImpZoxih3d7+LqIwssXY0iL7t7xXheuVpykyUY"
+                  },
+                  "mode_info": {
+                    "single": {
+                      "mode": "SIGN_MODE_DIRECT"
+                    }
+                  },
+                  "sequence": "0"
+                }
+              ],
+              "fee": {
+                "amount": [],
+                "gas_limit": "0",
+                "payer": "",
+                "granter": ""
+              }
+            },
+            "signatures": [
+              "JoPU/ZusuQeTVIhF8PJQ3yUcJwa8xb4/w1aocv2zeSYzvxkYqR3vmN62PzK6bxTO8u6HoDBWB+Hg9RMm2VzfSg=="
+            ]
+          },
+          {
+            "body": {
+              "messages": [
+                {
+                  "@type": "/cosmos.staking.v1beta1.MsgCreateValidator",
+                  "description": {
+                    "moniker": "node1",
+                    "identity": "",
+                    "website": "",
+                    "security_contact": "",
+                    "details": ""
+                  },
+                  "commission": {
+                    "rate": "1.000000000000000000",
+                    "max_rate": "1.000000000000000000",
+                    "max_change_rate": "1.000000000000000000"
+                  },
+                  "min_self_delegation": "1",
+                  "delegator_address": "tori16cj75mkppfuqgdyc33h9xe2hqhyhpx6p44zvjy",
+                  "validator_address": "torivaloper16cj75mkppfuqgdyc33h9xe2hqhyhpx6ps8pnqf",
+                  "pubkey": {
+                    "@type": "/cosmos.crypto.ed25519.PubKey",
+                    "key": "7i/BrTNXxNd8xNN5SdpnYHtsGJRrD5wNkIrXdd4RzOU="
+                  },
+                  "value": {
+                    "denom": "utori",
+                    "amount": "100000000"
+                  }
+                }
+              ],
+              "memo": "0b42fd287d3bb0a20230e30d54b4b8facc412c53@192.168.10.3:26656",
+              "timeout_height": "0",
+              "extension_options": [],
+              "non_critical_extension_options": []
+            },
+            "auth_info": {
+              "signer_infos": [
+                {
+                  "public_key": {
+                    "@type": "/cosmos.crypto.secp256k1.PubKey",
+                    "key": "Agkn29aE1E2IhJJmhuzxadWIH/rYYhvPyNwMjv3cR2cY"
+                  },
+                  "mode_info": {
+                    "single": {
+                      "mode": "SIGN_MODE_DIRECT"
+                    }
+                  },
+                  "sequence": "0"
+                }
+              ],
+              "fee": {
+                "amount": [],
+                "gas_limit": "0",
+                "payer": "",
+                "granter": ""
+              }
+            },
+            "signatures": [
+              "yXbnHVvJOcCAdHEcb+Q+400IShwLoYbfnmbePgrw9q9JSfuxj8dVx1sUR5+jO+gWpGoXo2ZYv2T0E+DUpvupFQ=="
+            ]
+          },
+          {
+            "body": {
+              "messages": [
+                {
+                  "@type": "/cosmos.staking.v1beta1.MsgCreateValidator",
+                  "description": {
+                    "moniker": "node2",
+                    "identity": "",
+                    "website": "",
+                    "security_contact": "",
+                    "details": ""
+                  },
+                  "commission": {
+                    "rate": "1.000000000000000000",
+                    "max_rate": "1.000000000000000000",
+                    "max_change_rate": "1.000000000000000000"
+                  },
+                  "min_self_delegation": "1",
+                  "delegator_address": "tori1w6rpfs7z6kpy90l5raqddwrcjhgphvrqr546g2",
+                  "validator_address": "torivaloper1w6rpfs7z6kpy90l5raqddwrcjhgphvrqxxk968",
+                  "pubkey": {
+                    "@type": "/cosmos.crypto.ed25519.PubKey",
+                    "key": "YLjSXm4DImV3lBmiwF/gl/IdfpB2iQXoo1RRbk7Aq1U="
+                  },
+                  "value": {
+                    "denom": "utori",
+                    "amount": "100000000"
+                  }
+                }
+              ],
+              "memo": "2f394edda96be07bf92b0b503d8be13d1b9cc39f@192.168.10.4:26656",
+              "timeout_height": "0",
+              "extension_options": [],
+              "non_critical_extension_options": []
+            },
+            "auth_info": {
+              "signer_infos": [
+                {
+                  "public_key": {
+                    "@type": "/cosmos.crypto.secp256k1.PubKey",
+                    "key": "Ak28BRxcoZUYdQDq9RtJxAgIpWazBVd33m0P14qH5AlJ"
+                  },
+                  "mode_info": {
+                    "single": {
+                      "mode": "SIGN_MODE_DIRECT"
+                    }
+                  },
+                  "sequence": "0"
+                }
+              ],
+              "fee": {
+                "amount": [],
+                "gas_limit": "0",
+                "payer": "",
+                "granter": ""
+              }
+            },
+            "signatures": [
+              "x/goG7jeeNs5un8vq/mkEefwHVaancWFL6H3Jaea9qwN3WBthK5IApm5ovo7h791hSZM6GyrSdx3mjlBSgAyJg=="
+            ]
+          },
+          {
+            "body": {
+              "messages": [
+                {
+                  "@type": "/cosmos.staking.v1beta1.MsgCreateValidator",
+                  "description": {
+                    "moniker": "node3",
+                    "identity": "",
+                    "website": "",
+                    "security_contact": "",
+                    "details": ""
+                  },
+                  "commission": {
+                    "rate": "1.000000000000000000",
+                    "max_rate": "1.000000000000000000",
+                    "max_change_rate": "1.000000000000000000"
+                  },
+                  "min_self_delegation": "1",
+                  "delegator_address": "tori1hk7nyn7xkd64d2h4pl47fst8lyvx75m4a48amy",
+                  "validator_address": "torivaloper1hk7nyn7xkd64d2h4pl47fst8lyvx75m4c8yzff",
+                  "pubkey": {
+                    "@type": "/cosmos.crypto.ed25519.PubKey",
+                    "key": "x0uHYf8RT8jH9CldgIQKdKAK7Yp0gQ4BWGwJH+DSxJ8="
+                  },
+                  "value": {
+                    "denom": "utori",
+                    "amount": "100000000"
+                  }
+                }
+              ],
+              "memo": "8ce81af6b4acee9688b9b3895fc936370321c0a3@192.168.10.5:26656",
+              "timeout_height": "0",
+              "extension_options": [],
+              "non_critical_extension_options": []
+            },
+            "auth_info": {
+              "signer_infos": [
+                {
+                  "public_key": {
+                    "@type": "/cosmos.crypto.secp256k1.PubKey",
+                    "key": "A8KLLQJMUnlNnt8l9NMFRd5nV0avJKYYaSgx0c3s8k4f"
+                  },
+                  "mode_info": {
+                    "single": {
+                      "mode": "SIGN_MODE_DIRECT"
+                    }
+                  },
+                  "sequence": "0"
+                }
+              ],
+              "fee": {
+                "amount": [],
+                "gas_limit": "0",
+                "payer": "",
+                "granter": ""
+              }
+            },
+            "signatures": [
+              "hJ7e/wxrqM/4Hy7fl4QwWj2O/jmMjgI6+9vZMtbErul6Gug+t6O3bXxsKU/BsQj7F6qvj4lOwZ61PWNcByb1pA=="
+            ]
+          }
+        ]
+      },
+      "gov": {
+        "starting_proposal_id": "1",
+        "deposits": [],
+        "votes": [],
+        "proposals": [],
+        "deposit_params": {
+          "min_deposit": [
+            {
+              "denom": "utori",
+              "amount": "10000000"
+            }
+          ],
+          "max_deposit_period": "172800s"
+        },
+        "voting_params": {
+          "voting_period": "172800s"
+        },
+        "tally_params": {
+          "quorum": "0.334000000000000000",
+          "threshold": "0.500000000000000000",
+          "veto_threshold": "0.334000000000000000"
+        }
+      },
+      "ibc": {
+        "client_genesis": {
+          "clients": [],
+          "clients_consensus": [],
+          "clients_metadata": [],
+          "params": {
+            "allowed_clients": [
+              "06-solomachine",
+              "07-tendermint"
+            ]
+          },
+          "create_localhost": false,
+          "next_client_sequence": "0"
+        },
+        "connection_genesis": {
+          "connections": [],
+          "client_connection_paths": [],
+          "next_connection_sequence": "0",
+          "params": {
+            "max_expected_time_per_block": "30000000000"
+          }
+        },
+        "channel_genesis": {
+          "channels": [],
+          "acknowledgements": [],
+          "commitments": [],
+          "receipts": [],
+          "send_sequences": [],
+          "recv_sequences": [],
+          "ack_sequences": [],
+          "next_channel_sequence": "0"
+        }
+      },
+      "interchainaccounts": {
+        "controller_genesis_state": {
+          "active_channels": [],
+          "interchain_accounts": [],
+          "ports": [],
+          "params": {
+            "controller_enabled": true
+          }
+        },
+        "host_genesis_state": {
+          "active_channels": [],
+          "interchain_accounts": [],
+          "port": "icahost",
+          "params": {
+            "host_enabled": true,
+            "allow_messages": []
+          }
+        }
+      },
+      "liquidity": {
+        "params": {
+          "pool_types": [
+            {
+              "id": 1,
+              "name": "StandardLiquidityPool",
+              "min_reserve_coin_num": 2,
+              "max_reserve_coin_num": 2,
+              "description": "Standard liquidity pool with pool price function X/Y, ESPM constraint, and two kinds of reserve coins"
+            }
+          ],
+          "min_init_deposit_amount": "1000000",
+          "init_pool_coin_mint_amount": "1000000",
+          "max_reserve_coin_amount": "0",
+          "pool_creation_fee": [
+            {
+              "denom": "utori",
+              "amount": "40000000"
+            }
+          ],
+          "swap_fee_rate": "0.003000000000000000",
+          "withdraw_fee_rate": "0.000000000000000000",
+          "max_order_amount_ratio": "0.100000000000000000",
+          "unit_batch_height": 1,
+          "circuit_breaker_enabled": false
+        },
+        "pool_records": []
+      },
+      "mint": {
+        "minter": {
+          "inflation": "0.130000000000000000",
+          "annual_provisions": "0.000000000000000000"
+        },
+        "params": {
+          "mint_denom": "utori",
+          "inflation_rate_change": "0.130000000000000000",
+          "inflation_max": "0.200000000000000000",
+          "inflation_min": "0.070000000000000000",
+          "goal_bonded": "0.670000000000000000",
+          "blocks_per_year": "6311520"
+        }
+      },
+      "nftstaking": {
+        "nft_stakings": []
+      },
+      "packetfowardmiddleware": {
+        "params": {
+          "fee_percentage": "0.000000000000000000"
+        }
+      },
+      "params": null,
+      "slashing": {
+        "params": {
+          "signed_blocks_window": "100",
+          "min_signed_per_window": "0.500000000000000000",
+          "downtime_jail_duration": "600s",
+          "slash_fraction_double_sign": "0.050000000000000000",
+          "slash_fraction_downtime": "0.010000000000000000"
+        },
+        "signing_infos": [],
+        "missed_blocks": []
+      },
+      "staking": {
+        "params": {
+          "unbonding_time": "1814400s",
+          "max_validators": 100,
+          "max_entries": 7,
+          "historical_entries": 10000,
+          "bond_denom": "utori"
+        },
+        "last_total_power": "0",
+        "last_validator_powers": [],
+        "validators": [],
+        "delegations": [],
+        "unbonding_delegations": [],
+        "redelegations": [],
+        "exported": false
+      },
+      "transfer": {
+        "port_id": "transfer",
+        "denom_traces": [],
+        "params": {
+          "send_enabled": true,
+          "receive_enabled": true
+        }
+      },
+      "upgrade": {},
+      "vesting": {},
+      "wasm": {
+        "params": {
+          "code_upload_access": {
+            "permission": "Everybody",
+            "address": ""
+          },
+          "instantiate_default_permission": "Everybody"
+        },
+        "codes": [],
+        "contracts": [],
+        "sequences": [],
+        "gen_msgs": []
+      }
+    }
+  }
