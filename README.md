@@ -1,12 +1,12 @@
-# Welcome to the Teritori repository chain(s)  
+# Teritori  
+[![Discord](https://badgen.net/badge/icon/discord?icon=discord&label)](https://discord.gg/teritori)
 
-<Add description of teritori>  
-This repository will help you launch a testnet or mainnet node and retrieve all the depreciated versions of them.  
+Teritori is a Cosmos SDK based blockchain here to enhance Web3 individuals, communities & builders experience through an all-in-one hub of dApps.  
 
 # Testnet  
 
 ## All the testnet chains:  
-[teritori-testnet-v1](https://github.com/TERITORI/teritori-chain/testnet/teritori-testnet-v1)  
+[teritori-testnet-v1](https://github.com/TERITORI/teritori-chain/tree/main/testnet/teritori-testnet-v1)  
 
 # Mainnet  
 
