@@ -19,7 +19,7 @@ make test
 ### Bootstrap genesis and configurations
 
 ```
-teritorid testnet --v 4 --output-dir ./output --starting-ip-address 192.168.10.2 --chain-id=teritori-testnet-v1 --keyring-backend=test
+teritorid testnet --v 4 --output-dir ./output --starting-ip-address 192.168.10.2 --chain-id=teritori-testnet-v2 --keyring-backend=test
 ```
 
 ### Replace configuration files
@@ -43,6 +43,8 @@ cors_allowed_origins = ["*"]
 ```
 enabled-unsafe-cors = true
 ```
+
+### Update all "stake" denom on genesis to "utori"
 
 ### Update public genesis
 
