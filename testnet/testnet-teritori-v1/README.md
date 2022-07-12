@@ -60,6 +60,15 @@ teritorid start
 
 Wait for the chain to synchronize with the current block...  
 
+## Setup your account  
+
+Create an account:  
+```shell 
+teritorid keys add <YOUR_KEY>
+ ```  
+ 
+ You can also you `--recover` flag to use an already existed key (but we recommend for security reason to use one key per chain to avoid total loss of funds in case one key is missing)  
+ 
 Create your validator:  
 ```shell 
 teritorid tx staking create-validator \
