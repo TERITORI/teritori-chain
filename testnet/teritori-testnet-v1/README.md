@@ -18,7 +18,7 @@ Install Go 1.18+:
 wget -c https://go.dev/dl/go1.18.3.linux-amd64.tar.gz && rm -rf /usr/local/go && tar -C /usr/local -xzf go1.18.3.linux-amd64.tar.gz && rm -rf go1.18.3.linux-amd64.tar.gz
 ``` 
 
-Setup your environnement:  
+Setup your environnement (you can skip this part if you already had go installed before):  
 ```shell
 echo 'export GOROOT=/usr/local/go' >> $HOME/.bash_profile
 echo 'export GOPATH=$HOME/go' >> $HOME/.bash_profile
@@ -55,6 +55,11 @@ Add peers in the config file:
 `sed -i.bak "s/persistent_peers =.*/persistent_peers = "0dde2ae55624d822eeea57d1b5e1223b6019a531@176.9.149.15:26656,4d2ea61e6195ee4e449c1e6132cabce98f7d94e1@5.9.40.222:26656,bceb776975aab62bcfd501969c0e1a2734ed7c2e@176.9.19.162:26656"/" $HOME/.teritorid/config/config.toml`
 ```  
 
+Download the genesis file:  
+```shell
+wget -O ~/.teritorid/config/genesis.json https://raw.githubusercontent.com/TERITORI/teritori-chain/main/testnet/teritori-testnet-v1/genesis.json
+```  
+
 Launch the node:
 ```shell
 teritorid start
@@ -70,8 +75,18 @@ teritorid keys add <YOUR_KEY>
  ```  
  
  You can also you `--recover` flag to use an already existed key (but we recommend for security reason to use one key per chain to avoid total loss of funds in case one key is missing)  
- 
-Create your validator:  
+
+Join our [Discord](https://discord.gg/teritori) and request fund on the `Faucet` channel using this command:  
+```shell
+$request <YOUR_TERITORI_ADDRESS>
+```  
+
+You can check if you have received fund once your node will be synched using this CLI command:
+```shell
+teritorid query bank balances <YOUR_TERITORI_ADDRESS> --chain-id teritori-testnet-v1
+```  
+
+Once the fund are received, you can create your validator:  
 ```shell 
 teritorid tx staking create-validator \
  --commission-max-change-rate=0.01 \
