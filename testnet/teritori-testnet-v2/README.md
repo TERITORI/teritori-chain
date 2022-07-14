@@ -1,6 +1,22 @@
+
+## Server Configuration 
+Here is the configuration of the server we are using.
+No. of CPUs: 2
+Memory: 2GB
+Disk: 80GB SSD
+OS: Ubuntu 18.04 LTS
+
+Allow all incoming connections from TCP port 26656 and 26657
+Notes on the configurations.
+1. Multicore is important, regardless the less CPU time usage
+2. teritorid uses less than 1GB memory and 2GB should be enough for now.
+Once your new server is running, login to the server and upgrade your packages.
+
+
+
 ## Setup your machine
 
-If you already have go 1.18+ and packages up to date, you can skip this part and jump to the second section: [Setup the chain](https://github.com/TERITORI/teritori-chain/edit/main/testnet/testnet-teritori-v1/README.md#setup-the-chain)  
+If you already have go 1.18+ and packages up to date, you can skip this part and jump to the second section: [Setup the chain](#setup-the-chain)  
 Make sure your machine is up to date:  
 ```shell
 apt update && apt upgrade -y 
