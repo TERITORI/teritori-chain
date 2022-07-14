@@ -163,7 +163,8 @@ cp $HOME/go/bin/teritorid $DAEMON_HOME/cosmovisor/genesis/bin
 ```shell
 tee <<EOF >/dev/null /etc/systemd/system/teritorid.service
 [Unit]
-Description=Juno Daemon (cosmovisor)
+Description=Teritori Daemon (cosmovisor)
+
 After=network-online.target
 
 [Service]
