@@ -52,7 +52,7 @@ teritorid init <YOUR_MONIKER> --chain-id teritori-testnet-v1
 
 Add peers in the config file:
 ```shell
-`sed -i.bak "s/persistent_peers =.*/persistent_peers = "0dde2ae55624d822eeea57d1b5e1223b6019a531@176.9.149.15:26656,4d2ea61e6195ee4e449c1e6132cabce98f7d94e1@5.9.40.222:26656,bceb776975aab62bcfd501969c0e1a2734ed7c2e@176.9.19.162:26656"/" $HOME/.teritorid/config/config.toml`
+sed -i.bak 's/persistent_peers =.*/persistent_peers = "0dde2ae55624d822eeea57d1b5e1223b6019a531@176.9.149.15:26656,4d2ea61e6195ee4e449c1e6132cabce98f7d94e1@5.9.40.222:26656,bceb776975aab62bcfd501969c0e1a2734ed7c2e@176.9.19.162:26656"/' $HOME/.teritorid/config/config.toml
 ```  
 
 Download the genesis file:  
