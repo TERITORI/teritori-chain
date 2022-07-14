@@ -1,12 +1,15 @@
 
+
 ## Server Configuration 
-Here is the configuration of the server we are using.
-No. of CPUs: 2
-Memory: 2GB
-Disk: 80GB SSD
-OS: Ubuntu 18.04 LTS
+
+Here is the configuration of the server we are using:
+- No. of CPUs: 2
+- Memory: 2GB
+- Disk: 80GB SSD
+- OS: Ubuntu 18.04 LTS
 
 Allow all incoming connections from TCP port 26656 and 26657
+
 Notes on the configurations.
 1. Multicore is important, regardless the less CPU time usage
 2. teritorid uses less than 1GB memory and 2GB should be enough for now.
@@ -48,7 +51,7 @@ go version
 
 ## Setup the chain  
 
-Clone the Teritori repository and install the v1 of testnet:  
+Clone the Teritori repository and install the v2 of testnet:  
 ```shell
 git clone https://github.com/TERITORI/teritori-chain && cd teritori-chain && git checkout teritori-testnet-v2 && make install
 ```  
@@ -118,3 +121,8 @@ teritorid tx staking create-validator \
  --min-self-delegation=1000000 \
  --from=<YOUR_KEY>
  ```  
+
+
+FAQ: Coming soon.
+
+Join us on Discord for Testnet v2 Village discussions.
