@@ -217,7 +217,7 @@ func (ac appCreator) newApp(
 		panic(err)
 	}
 
-	return teritori.NewNxtPopApp(
+	return teritori.NewTeritoriApp(
 		logger, db, traceStore, true, skipUpgradeHeights,
 		cast.ToString(appOpts.Get(flags.FlagHome)),
 		cast.ToUint(appOpts.Get(server.FlagInvCheckPeriod)),
@@ -257,7 +257,7 @@ func (ac appCreator) appExport(
 		loadLatest = true
 	}
 
-	teritoriApp := teritori.NewNxtPopApp(
+	teritoriApp := teritori.NewTeritoriApp(
 		logger,
 		db,
 		traceStore,
