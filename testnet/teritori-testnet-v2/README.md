@@ -110,7 +110,7 @@ After=network-online.target
 
 [Service]
 User=$USER
-ExecStart=/home/$USER/go/bin/teritorid start
+ExecStart=$(which teritorid) start
 Restart=on-failure
 RestartSec=3
 LimitNOFILE=4096
