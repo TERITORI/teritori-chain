@@ -110,7 +110,7 @@ After=network-online.target
 
 [Service]
 User=$USER
-ExecStart=/home/$USER/go/bin/teritorid start
+ExecStart=$(which teritorid) start
 Restart=on-failure
 RestartSec=3
 LimitNOFILE=4096
@@ -169,7 +169,7 @@ After=network-online.target
 
 [Service]
 User=$USER
-ExecStart=/home/$USER/go/bin/cosmovisor start
+ExecStart=$(which cosmovisor) start
 Restart=always
 RestartSec=3
 LimitNOFILE=4096
@@ -185,9 +185,9 @@ EOF
 ```  
 
 ```shell
-systemctl enable teritorid
-systemctl daemon-reload
-systemctl restart teritorid
+systemctl enable teritorid && \
+systemctl daemon-reload && \
+systemctl restart teritorid 
 ```  
 
 To check the logs:  
