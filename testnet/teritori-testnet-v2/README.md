@@ -1,5 +1,10 @@
 # [ACTIVE]
 
+3 steps to launch your validator : 
+1. Setup your machine
+2. Launch the node (3 different ways)
+3. Setup your account
+
 ## Server Configuration 
 
 Here is the configuration of the server we are using:
@@ -18,6 +23,8 @@ Once your new server is running, login to the server and upgrade your packages.
 
 
 ## Setup your machine
+
+Info : Commands that start with echo are to be copied and pasted as is into the terminal
 
 If you already have go 1.18+ and packages up to date, you can skip this part and jump to the second section: [Setup the chain](#setup-the-chain)  
 Make sure your machine is up to date:  
@@ -63,6 +70,9 @@ teritorid version
 ```  
 
 Init the chain:
+
+Info : <YOUR_MONIKER> is the name for your node
+
 ```shell
 teritorid init <YOUR_MONIKER> --chain-id teritori-testnet-v2
 ```  
@@ -198,6 +208,8 @@ journalctl -u teritorid.service -f -n 100
 Wait for the chain to synchronize with the current block... you can do the next step during this time  
 
 ## Setup your account  
+
+Info : <YOUR_KEY> is the name for your key, you can use the same name as your validator
 
 Create an account:  
 ```shell 
