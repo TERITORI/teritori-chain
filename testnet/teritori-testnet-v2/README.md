@@ -93,7 +93,7 @@ screen -S teritori
 ulimit -n 4096
 teritorid start
 ```  
-You can escape the screen pressing `CTRL + AD` and enter it again using:
+You can escape the screen pressing `CTRL + AD` or taping exit on Mac and enter it again using:
 ```shell
 screen -r teritori
 ``` 
