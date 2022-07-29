@@ -5,7 +5,7 @@ import (
 
 	sdkerrors "github.com/cosmos/cosmos-sdk/types/errors"
 	"github.com/cosmos/cosmos-sdk/x/auth/ante"
-	vestingtypes "github.com/cosmos/cosmos-sdk/x/auth/vesting/types"
+	vesting "github.com/cosmos/cosmos-sdk/x/auth/vesting/exported"
 	stakingtypes "github.com/cosmos/cosmos-sdk/x/staking/types"
 )
 
@@ -28,7 +28,11 @@ func (vtd VestingTransactionDecorator) AnteHandle(ctx sdk.Context, tx sdk.Tx, si
 			continue
 		}
 
-		sender := sdk.MustAccAddressFromBech32(delegateMsg.DelegatorAddress)
+		sender, err := sdk.AccAddressFromBech32(delegateMsg.DelegatorAddress)
+		if err != nil {
+			return ctx, err
+		}
+
 		acc := vtd.ak.GetAccount(ctx, sender)
 		if acc == nil {
 			return ctx, sdkerrors.Wrapf(sdkerrors.ErrUnknownAddress,
@@ -36,7 +40,7 @@ func (vtd VestingTransactionDecorator) AnteHandle(ctx sdk.Context, tx sdk.Tx, si
 		}
 
 		// Check if vesting account
-		_, isVesting := acc.(*vestingtypes.BaseVestingAccount)
+		_, isVesting := acc.(vesting.VestingAccount)
 		if !isVesting {
 			return next(ctx, tx, simulate)
 		}
