@@ -5,8 +5,11 @@ option go_package = "github.com/NXTPOP/teritori-chain/x/nftstaking/types";
 
 import "gogoproto/gogo.proto";
 import "teritori/nftstaking/v1beta1/nftstaking.proto";
+import "teritori/nftstaking/v1beta1/access.proto";
 
 message GenesisState {
   repeated teritori.nftstaking.v1beta1.NftStaking nft_stakings = 1
+      [ (gogoproto.nullable) = false ];
+  repeated teritori.nftstaking.v1beta1.Access access_infos = 2
       [ (gogoproto.nullable) = false ];
 }

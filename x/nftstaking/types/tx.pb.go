@@ -117,9 +117,99 @@ func (m *MsgRegisterNftStakingResponse) XXX_DiscardUnknown() {
 
 var xxx_messageInfo_MsgRegisterNftStakingResponse proto.InternalMessageInfo
 
+type MsgSetAccessInfo struct {
+	Sender     string `protobuf:"bytes,1,opt,name=sender,proto3" json:"sender,omitempty"`
+	AccessInfo Access `protobuf:"bytes,2,opt,name=access_info,json=accessInfo,proto3" json:"access_info"`
+}
+
+func (m *MsgSetAccessInfo) Reset()         { *m = MsgSetAccessInfo{} }
+func (m *MsgSetAccessInfo) String() string { return proto.CompactTextString(m) }
+func (*MsgSetAccessInfo) ProtoMessage()    {}
+func (*MsgSetAccessInfo) Descriptor() ([]byte, []int) {
+	return fileDescriptor_c008a8627382d71b, []int{2}
+}
+func (m *MsgSetAccessInfo) XXX_Unmarshal(b []byte) error {
+	return m.Unmarshal(b)
+}
+func (m *MsgSetAccessInfo) XXX_Marshal(b []byte, deterministic bool) ([]byte, error) {
+	if deterministic {
+		return xxx_messageInfo_MsgSetAccessInfo.Marshal(b, m, deterministic)
+	} else {
+		b = b[:cap(b)]
+		n, err := m.MarshalToSizedBuffer(b)
+		if err != nil {
+			return nil, err
+		}
+		return b[:n], nil
+	}
+}
+func (m *MsgSetAccessInfo) XXX_Merge(src proto.Message) {
+	xxx_messageInfo_MsgSetAccessInfo.Merge(m, src)
+}
+func (m *MsgSetAccessInfo) XXX_Size() int {
+	return m.Size()
+}
+func (m *MsgSetAccessInfo) XXX_DiscardUnknown() {
+	xxx_messageInfo_MsgSetAccessInfo.DiscardUnknown(m)
+}
+
+var xxx_messageInfo_MsgSetAccessInfo proto.InternalMessageInfo
+
+func (m *MsgSetAccessInfo) GetSender() string {
+	if m != nil {
+		return m.Sender
+	}
+	return ""
+}
+
+func (m *MsgSetAccessInfo) GetAccessInfo() Access {
+	if m != nil {
+		return m.AccessInfo
+	}
+	return Access{}
+}
+
+type MsgSetAccessInfoResponse struct {
+}
+
+func (m *MsgSetAccessInfoResponse) Reset()         { *m = MsgSetAccessInfoResponse{} }
+func (m *MsgSetAccessInfoResponse) String() string { return proto.CompactTextString(m) }
+func (*MsgSetAccessInfoResponse) ProtoMessage()    {}
+func (*MsgSetAccessInfoResponse) Descriptor() ([]byte, []int) {
+	return fileDescriptor_c008a8627382d71b, []int{3}
+}
+func (m *MsgSetAccessInfoResponse) XXX_Unmarshal(b []byte) error {
+	return m.Unmarshal(b)
+}
+func (m *MsgSetAccessInfoResponse) XXX_Marshal(b []byte, deterministic bool) ([]byte, error) {
+	if deterministic {
+		return xxx_messageInfo_MsgSetAccessInfoResponse.Marshal(b, m, deterministic)
+	} else {
+		b = b[:cap(b)]
+		n, err := m.MarshalToSizedBuffer(b)
+		if err != nil {
+			return nil, err
+		}
+		return b[:n], nil
+	}
+}
+func (m *MsgSetAccessInfoResponse) XXX_Merge(src proto.Message) {
+	xxx_messageInfo_MsgSetAccessInfoResponse.Merge(m, src)
+}
+func (m *MsgSetAccessInfoResponse) XXX_Size() int {
+	return m.Size()
+}
+func (m *MsgSetAccessInfoResponse) XXX_DiscardUnknown() {
+	xxx_messageInfo_MsgSetAccessInfoResponse.DiscardUnknown(m)
+}
+
+var xxx_messageInfo_MsgSetAccessInfoResponse proto.InternalMessageInfo
+
 func init() {
 	proto.RegisterType((*MsgRegisterNftStaking)(nil), "teritori.nftstaking.v1beta1.MsgRegisterNftStaking")
 	proto.RegisterType((*MsgRegisterNftStakingResponse)(nil), "teritori.nftstaking.v1beta1.MsgRegisterNftStakingResponse")
+	proto.RegisterType((*MsgSetAccessInfo)(nil), "teritori.nftstaking.v1beta1.MsgSetAccessInfo")
+	proto.RegisterType((*MsgSetAccessInfoResponse)(nil), "teritori.nftstaking.v1beta1.MsgSetAccessInfoResponse")
 }
 
 func init() {
@@ -127,27 +217,31 @@ func init() {
 }
 
 var fileDescriptor_c008a8627382d71b = []byte{
-	// 306 bytes of a gzipped FileDescriptorProto
-	0x1f, 0x8b, 0x08, 0x00, 0x00, 0x00, 0x00, 0x00, 0x02, 0xff, 0x94, 0x91, 0xb1, 0x4b, 0xc3, 0x40,
-	0x18, 0xc5, 0x73, 0x2a, 0x05, 0xaf, 0x5b, 0x50, 0x29, 0x15, 0xaf, 0xa5, 0x08, 0x76, 0xd0, 0x3b,
-	0xda, 0x6e, 0x8e, 0xdd, 0x13, 0x4b, 0x74, 0x10, 0x17, 0x49, 0xea, 0xe5, 0x7a, 0x68, 0xee, 0x42,
-	0xee, 0xab, 0xd4, 0xc9, 0xc5, 0xd1, 0xc1, 0x3f, 0xab, 0x63, 0x47, 0x27, 0x91, 0xe4, 0x1f, 0x11,
-	0xd3, 0xc4, 0x76, 0x08, 0x01, 0xb7, 0xfb, 0xee, 0x7e, 0xdf, 0x7b, 0xef, 0x78, 0xf8, 0x14, 0x78,
-	0x22, 0x41, 0x27, 0x92, 0xa9, 0x10, 0x0c, 0xf8, 0x8f, 0x52, 0x09, 0xf6, 0x3c, 0x08, 0x38, 0xf8,
-	0x03, 0x06, 0x0b, 0x1a, 0x27, 0x1a, 0xb4, 0x7d, 0x5c, 0x52, 0x74, 0x43, 0xd1, 0x82, 0x6a, 0x1f,
-	0x08, 0x2d, 0x74, 0xce, 0xb1, 0xdf, 0xd3, 0x7a, 0xa5, 0xdd, 0x11, 0x5a, 0x8b, 0x27, 0xce, 0xf2,
-	0x29, 0x98, 0x87, 0x0c, 0x64, 0xc4, 0x0d, 0xf8, 0x51, 0x5c, 0x00, 0xe7, 0x75, 0xce, 0x5b, 0x36,
-	0x39, 0xdd, 0x7b, 0xc5, 0x87, 0x8e, 0x11, 0x1e, 0x17, 0xd2, 0x00, 0x4f, 0xdc, 0x10, 0xae, 0xd7,
-	0xcf, 0xf6, 0x11, 0x6e, 0x18, 0xae, 0x1e, 0x78, 0xd2, 0x42, 0x5d, 0xd4, 0xdf, 0xf7, 0x8a, 0xc9,
-	0x76, 0x71, 0x53, 0x85, 0x70, 0x5f, 0xa8, 0xb4, 0x76, 0xba, 0xa8, 0xdf, 0x1c, 0x9e, 0xd1, 0x9a,
-	0x8f, 0xd0, 0x8d, 0xea, 0x78, 0x6f, 0xf9, 0xd5, 0xb1, 0x3c, 0xac, 0xfe, 0x6e, 0x7a, 0x1d, 0x7c,
-	0x52, 0x19, 0xc0, 0xe3, 0x26, 0xd6, 0xca, 0xf0, 0xe1, 0x3b, 0xc2, 0xbb, 0x8e, 0x11, 0xf6, 0x1b,
-	0xc2, 0x76, 0x45, 0xce, 0x61, 0xad, 0x75, 0xa5, 0x74, 0xfb, 0xf2, 0xff, 0x3b, 0x65, 0x9c, 0xb1,
-	0xb3, 0x4c, 0x09, 0x5a, 0xa5, 0x04, 0x7d, 0xa7, 0x04, 0x7d, 0x64, 0xc4, 0x5a, 0x65, 0xc4, 0xfa,
-	0xcc, 0x88, 0x75, 0x37, 0x12, 0x12, 0x66, 0xf3, 0x80, 0x4e, 0x75, 0xc4, 0xdc, 0xdb, 0x9b, 0xc9,
-	0xd5, 0x84, 0x95, 0x36, 0x17, 0xd3, 0x99, 0x2f, 0x15, 0x5b, 0x6c, 0x57, 0x02, 0x2f, 0x31, 0x37,
-	0x41, 0x23, 0xaf, 0x61, 0xf4, 0x13, 0x00, 0x00, 0xff, 0xff, 0x1a, 0xdb, 0x09, 0x30, 0x30, 0x02,
-	0x00, 0x00,
+	// 384 bytes of a gzipped FileDescriptorProto
+	0x1f, 0x8b, 0x08, 0x00, 0x00, 0x00, 0x00, 0x00, 0x02, 0xff, 0x94, 0x92, 0x4d, 0x4b, 0xe3, 0x40,
+	0x18, 0xc7, 0x93, 0xee, 0x52, 0xd8, 0x29, 0x0b, 0x4b, 0xd8, 0x5d, 0x4a, 0x96, 0x4d, 0x4b, 0x14,
+	0xec, 0xc1, 0x66, 0x68, 0x8b, 0x17, 0x6f, 0xf6, 0xa6, 0x90, 0x5a, 0x52, 0x0f, 0xe2, 0xa5, 0x24,
+	0x71, 0x32, 0x1d, 0xb4, 0x33, 0x21, 0xf3, 0xb4, 0xd4, 0x93, 0x07, 0xfd, 0x00, 0x7e, 0xac, 0x1e,
+	0x7b, 0xf4, 0x24, 0xd2, 0x7e, 0x11, 0x31, 0x2f, 0x7d, 0x91, 0x1a, 0xe9, 0x2d, 0x13, 0x7e, 0xf3,
+	0xff, 0xff, 0x9e, 0xe1, 0x41, 0xfb, 0x40, 0x22, 0x06, 0x22, 0x62, 0x98, 0x07, 0x20, 0xc1, 0xbd,
+	0x61, 0x9c, 0xe2, 0x71, 0xc3, 0x23, 0xe0, 0x36, 0x30, 0x4c, 0xac, 0x30, 0x12, 0x20, 0xb4, 0x7f,
+	0x19, 0x65, 0xad, 0x28, 0x2b, 0xa5, 0xf4, 0xdf, 0x54, 0x50, 0x11, 0x73, 0xf8, 0xfd, 0x2b, 0xb9,
+	0xa2, 0x57, 0xa8, 0x10, 0xf4, 0x96, 0xe0, 0xf8, 0xe4, 0x8d, 0x02, 0x0c, 0x6c, 0x48, 0x24, 0xb8,
+	0xc3, 0x30, 0x05, 0x0e, 0xf3, 0x9a, 0xd7, 0x6a, 0x12, 0xba, 0x96, 0x47, 0xbb, 0xbe, 0x4f, 0xa4,
+	0x4c, 0x48, 0xf3, 0x1e, 0xfd, 0xb1, 0x25, 0x75, 0x08, 0x65, 0x12, 0x48, 0xd4, 0x09, 0xa0, 0x97,
+	0xd0, 0xda, 0x5f, 0x54, 0x94, 0x84, 0x5f, 0x93, 0xa8, 0xac, 0x56, 0xd5, 0xda, 0x0f, 0x27, 0x3d,
+	0x69, 0x1d, 0x54, 0xe2, 0x01, 0xf4, 0xd3, 0xd0, 0x72, 0xa1, 0xaa, 0xd6, 0x4a, 0xcd, 0x03, 0x2b,
+	0x67, 0x64, 0x6b, 0x95, 0xda, 0xfe, 0x3e, 0x7d, 0xa9, 0x28, 0x0e, 0xe2, 0xcb, 0x3f, 0x66, 0x05,
+	0xfd, 0xdf, 0x2a, 0xe0, 0x10, 0x19, 0x0a, 0x2e, 0x89, 0x39, 0x46, 0xbf, 0x6c, 0x49, 0x7b, 0x04,
+	0x4e, 0x62, 0xef, 0x53, 0x1e, 0x88, 0x4f, 0xe5, 0xce, 0x50, 0x29, 0x99, 0xae, 0xcf, 0x78, 0x20,
+	0x52, 0xb9, 0xbd, 0x5c, 0xb9, 0x24, 0x35, 0x13, 0x73, 0x97, 0x1d, 0xa6, 0x8e, 0xca, 0x1f, 0x7b,
+	0x33, 0xa7, 0xe6, 0x43, 0x01, 0x7d, 0xb3, 0x25, 0xd5, 0x1e, 0x55, 0xa4, 0x6d, 0x79, 0xbb, 0x66,
+	0x6e, 0xe3, 0xd6, 0x71, 0xf5, 0xe3, 0xdd, 0xef, 0x64, 0x3a, 0xda, 0x08, 0xfd, 0xdc, 0x7c, 0x9f,
+	0xfa, 0x57, 0x61, 0x1b, 0xb8, 0x7e, 0xb4, 0x13, 0x9e, 0xd5, 0xb6, 0xed, 0xe9, 0xdc, 0x50, 0x67,
+	0x73, 0x43, 0x7d, 0x9d, 0x1b, 0xea, 0xd3, 0xc2, 0x50, 0x66, 0x0b, 0x43, 0x79, 0x5e, 0x18, 0xca,
+	0x55, 0x8b, 0x32, 0x18, 0x8c, 0x3c, 0xcb, 0x17, 0x43, 0xdc, 0xb9, 0xbc, 0xe8, 0x9e, 0x77, 0x71,
+	0xd6, 0x50, 0xf7, 0x07, 0x2e, 0xe3, 0x78, 0xb2, 0xbe, 0x99, 0x70, 0x17, 0x12, 0xe9, 0x15, 0xe3,
+	0x8d, 0x6c, 0xbd, 0x05, 0x00, 0x00, 0xff, 0xff, 0x36, 0x99, 0xb1, 0x83, 0x65, 0x03, 0x00, 0x00,
 }
 
 // Reference imports to suppress errors if they are not otherwise used.
@@ -163,6 +257,7 @@ const _ = grpc.SupportPackageIsVersion4
 // For semantics around ctx use and closing/ending streaming RPCs, please refer to https://godoc.org/google.golang.org/grpc#ClientConn.NewStream.
 type MsgClient interface {
 	RegisterNftStaking(ctx context.Context, in *MsgRegisterNftStaking, opts ...grpc.CallOption) (*MsgRegisterNftStakingResponse, error)
+	SetAccessInfo(ctx context.Context, in *MsgSetAccessInfo, opts ...grpc.CallOption) (*MsgSetAccessInfoResponse, error)
 }
 
 type msgClient struct {
@@ -182,9 +277,19 @@ func (c *msgClient) RegisterNftStaking(ctx context.Context, in *MsgRegisterNftSt
 	return out, nil
 }
 
+func (c *msgClient) SetAccessInfo(ctx context.Context, in *MsgSetAccessInfo, opts ...grpc.CallOption) (*MsgSetAccessInfoResponse, error) {
+	out := new(MsgSetAccessInfoResponse)
+	err := c.cc.Invoke(ctx, "/teritori.nftstaking.v1beta1.Msg/SetAccessInfo", in, out, opts...)
+	if err != nil {
+		return nil, err
+	}
+	return out, nil
+}
+
 // MsgServer is the server API for Msg service.
 type MsgServer interface {
 	RegisterNftStaking(context.Context, *MsgRegisterNftStaking) (*MsgRegisterNftStakingResponse, error)
+	SetAccessInfo(context.Context, *MsgSetAccessInfo) (*MsgSetAccessInfoResponse, error)
 }
 
 // UnimplementedMsgServer can be embedded to have forward compatible implementations.
@@ -193,6 +298,9 @@ type UnimplementedMsgServer struct {
 
 func (*UnimplementedMsgServer) RegisterNftStaking(ctx context.Context, req *MsgRegisterNftStaking) (*MsgRegisterNftStakingResponse, error) {
 	return nil, status.Errorf(codes.Unimplemented, "method RegisterNftStaking not implemented")
+}
+func (*UnimplementedMsgServer) SetAccessInfo(ctx context.Context, req *MsgSetAccessInfo) (*MsgSetAccessInfoResponse, error) {
+	return nil, status.Errorf(codes.Unimplemented, "method SetAccessInfo not implemented")
 }
 
 func RegisterMsgServer(s grpc1.Server, srv MsgServer) {
@@ -217,6 +325,24 @@ func _Msg_RegisterNftStaking_Handler(srv interface{}, ctx context.Context, dec f
 	return interceptor(ctx, in, info, handler)
 }
 
+func _Msg_SetAccessInfo_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
+	in := new(MsgSetAccessInfo)
+	if err := dec(in); err != nil {
+		return nil, err
+	}
+	if interceptor == nil {
+		return srv.(MsgServer).SetAccessInfo(ctx, in)
+	}
+	info := &grpc.UnaryServerInfo{
+		Server:     srv,
+		FullMethod: "/teritori.nftstaking.v1beta1.Msg/SetAccessInfo",
+	}
+	handler := func(ctx context.Context, req interface{}) (interface{}, error) {
+		return srv.(MsgServer).SetAccessInfo(ctx, req.(*MsgSetAccessInfo))
+	}
+	return interceptor(ctx, in, info, handler)
+}
+
 var _Msg_serviceDesc = grpc.ServiceDesc{
 	ServiceName: "teritori.nftstaking.v1beta1.Msg",
 	HandlerType: (*MsgServer)(nil),
@@ -224,6 +350,10 @@ var _Msg_serviceDesc = grpc.ServiceDesc{
 		{
 			MethodName: "RegisterNftStaking",
 			Handler:    _Msg_RegisterNftStaking_Handler,
+		},
+		{
+			MethodName: "SetAccessInfo",
+			Handler:    _Msg_SetAccessInfo_Handler,
 		},
 	},
 	Streams:  []grpc.StreamDesc{},
@@ -293,6 +423,69 @@ func (m *MsgRegisterNftStakingResponse) MarshalToSizedBuffer(dAtA []byte) (int, 
 	return len(dAtA) - i, nil
 }
 
+func (m *MsgSetAccessInfo) Marshal() (dAtA []byte, err error) {
+	size := m.Size()
+	dAtA = make([]byte, size)
+	n, err := m.MarshalToSizedBuffer(dAtA[:size])
+	if err != nil {
+		return nil, err
+	}
+	return dAtA[:n], nil
+}
+
+func (m *MsgSetAccessInfo) MarshalTo(dAtA []byte) (int, error) {
+	size := m.Size()
+	return m.MarshalToSizedBuffer(dAtA[:size])
+}
+
+func (m *MsgSetAccessInfo) MarshalToSizedBuffer(dAtA []byte) (int, error) {
+	i := len(dAtA)
+	_ = i
+	var l int
+	_ = l
+	{
+		size, err := m.AccessInfo.MarshalToSizedBuffer(dAtA[:i])
+		if err != nil {
+			return 0, err
+		}
+		i -= size
+		i = encodeVarintTx(dAtA, i, uint64(size))
+	}
+	i--
+	dAtA[i] = 0x12
+	if len(m.Sender) > 0 {
+		i -= len(m.Sender)
+		copy(dAtA[i:], m.Sender)
+		i = encodeVarintTx(dAtA, i, uint64(len(m.Sender)))
+		i--
+		dAtA[i] = 0xa
+	}
+	return len(dAtA) - i, nil
+}
+
+func (m *MsgSetAccessInfoResponse) Marshal() (dAtA []byte, err error) {
+	size := m.Size()
+	dAtA = make([]byte, size)
+	n, err := m.MarshalToSizedBuffer(dAtA[:size])
+	if err != nil {
+		return nil, err
+	}
+	return dAtA[:n], nil
+}
+
+func (m *MsgSetAccessInfoResponse) MarshalTo(dAtA []byte) (int, error) {
+	size := m.Size()
+	return m.MarshalToSizedBuffer(dAtA[:size])
+}
+
+func (m *MsgSetAccessInfoResponse) MarshalToSizedBuffer(dAtA []byte) (int, error) {
+	i := len(dAtA)
+	_ = i
+	var l int
+	_ = l
+	return len(dAtA) - i, nil
+}
+
 func encodeVarintTx(dAtA []byte, offset int, v uint64) int {
 	offset -= sovTx(v)
 	base := offset
@@ -320,6 +513,30 @@ func (m *MsgRegisterNftStaking) Size() (n int) {
 }
 
 func (m *MsgRegisterNftStakingResponse) Size() (n int) {
+	if m == nil {
+		return 0
+	}
+	var l int
+	_ = l
+	return n
+}
+
+func (m *MsgSetAccessInfo) Size() (n int) {
+	if m == nil {
+		return 0
+	}
+	var l int
+	_ = l
+	l = len(m.Sender)
+	if l > 0 {
+		n += 1 + l + sovTx(uint64(l))
+	}
+	l = m.AccessInfo.Size()
+	n += 1 + l + sovTx(uint64(l))
+	return n
+}
+
+func (m *MsgSetAccessInfoResponse) Size() (n int) {
 	if m == nil {
 		return 0
 	}
@@ -476,6 +693,171 @@ func (m *MsgRegisterNftStakingResponse) Unmarshal(dAtA []byte) error {
 		}
 		if fieldNum <= 0 {
 			return fmt.Errorf("proto: MsgRegisterNftStakingResponse: illegal tag %d (wire type %d)", fieldNum, wire)
+		}
+		switch fieldNum {
+		default:
+			iNdEx = preIndex
+			skippy, err := skipTx(dAtA[iNdEx:])
+			if err != nil {
+				return err
+			}
+			if (skippy < 0) || (iNdEx+skippy) < 0 {
+				return ErrInvalidLengthTx
+			}
+			if (iNdEx + skippy) > l {
+				return io.ErrUnexpectedEOF
+			}
+			iNdEx += skippy
+		}
+	}
+
+	if iNdEx > l {
+		return io.ErrUnexpectedEOF
+	}
+	return nil
+}
+func (m *MsgSetAccessInfo) Unmarshal(dAtA []byte) error {
+	l := len(dAtA)
+	iNdEx := 0
+	for iNdEx < l {
+		preIndex := iNdEx
+		var wire uint64
+		for shift := uint(0); ; shift += 7 {
+			if shift >= 64 {
+				return ErrIntOverflowTx
+			}
+			if iNdEx >= l {
+				return io.ErrUnexpectedEOF
+			}
+			b := dAtA[iNdEx]
+			iNdEx++
+			wire |= uint64(b&0x7F) << shift
+			if b < 0x80 {
+				break
+			}
+		}
+		fieldNum := int32(wire >> 3)
+		wireType := int(wire & 0x7)
+		if wireType == 4 {
+			return fmt.Errorf("proto: MsgSetAccessInfo: wiretype end group for non-group")
+		}
+		if fieldNum <= 0 {
+			return fmt.Errorf("proto: MsgSetAccessInfo: illegal tag %d (wire type %d)", fieldNum, wire)
+		}
+		switch fieldNum {
+		case 1:
+			if wireType != 2 {
+				return fmt.Errorf("proto: wrong wireType = %d for field Sender", wireType)
+			}
+			var stringLen uint64
+			for shift := uint(0); ; shift += 7 {
+				if shift >= 64 {
+					return ErrIntOverflowTx
+				}
+				if iNdEx >= l {
+					return io.ErrUnexpectedEOF
+				}
+				b := dAtA[iNdEx]
+				iNdEx++
+				stringLen |= uint64(b&0x7F) << shift
+				if b < 0x80 {
+					break
+				}
+			}
+			intStringLen := int(stringLen)
+			if intStringLen < 0 {
+				return ErrInvalidLengthTx
+			}
+			postIndex := iNdEx + intStringLen
+			if postIndex < 0 {
+				return ErrInvalidLengthTx
+			}
+			if postIndex > l {
+				return io.ErrUnexpectedEOF
+			}
+			m.Sender = string(dAtA[iNdEx:postIndex])
+			iNdEx = postIndex
+		case 2:
+			if wireType != 2 {
+				return fmt.Errorf("proto: wrong wireType = %d for field AccessInfo", wireType)
+			}
+			var msglen int
+			for shift := uint(0); ; shift += 7 {
+				if shift >= 64 {
+					return ErrIntOverflowTx
+				}
+				if iNdEx >= l {
+					return io.ErrUnexpectedEOF
+				}
+				b := dAtA[iNdEx]
+				iNdEx++
+				msglen |= int(b&0x7F) << shift
+				if b < 0x80 {
+					break
+				}
+			}
+			if msglen < 0 {
+				return ErrInvalidLengthTx
+			}
+			postIndex := iNdEx + msglen
+			if postIndex < 0 {
+				return ErrInvalidLengthTx
+			}
+			if postIndex > l {
+				return io.ErrUnexpectedEOF
+			}
+			if err := m.AccessInfo.Unmarshal(dAtA[iNdEx:postIndex]); err != nil {
+				return err
+			}
+			iNdEx = postIndex
+		default:
+			iNdEx = preIndex
+			skippy, err := skipTx(dAtA[iNdEx:])
+			if err != nil {
+				return err
+			}
+			if (skippy < 0) || (iNdEx+skippy) < 0 {
+				return ErrInvalidLengthTx
+			}
+			if (iNdEx + skippy) > l {
+				return io.ErrUnexpectedEOF
+			}
+			iNdEx += skippy
+		}
+	}
+
+	if iNdEx > l {
+		return io.ErrUnexpectedEOF
+	}
+	return nil
+}
+func (m *MsgSetAccessInfoResponse) Unmarshal(dAtA []byte) error {
+	l := len(dAtA)
+	iNdEx := 0
+	for iNdEx < l {
+		preIndex := iNdEx
+		var wire uint64
+		for shift := uint(0); ; shift += 7 {
+			if shift >= 64 {
+				return ErrIntOverflowTx
+			}
+			if iNdEx >= l {
+				return io.ErrUnexpectedEOF
+			}
+			b := dAtA[iNdEx]
+			iNdEx++
+			wire |= uint64(b&0x7F) << shift
+			if b < 0x80 {
+				break
+			}
+		}
+		fieldNum := int32(wire >> 3)
+		wireType := int(wire & 0x7)
+		if wireType == 4 {
+			return fmt.Errorf("proto: MsgSetAccessInfoResponse: wiretype end group for non-group")
+		}
+		if fieldNum <= 0 {
+			return fmt.Errorf("proto: MsgSetAccessInfoResponse: illegal tag %d (wire type %d)", fieldNum, wire)
 		}
 		switch fieldNum {
 		default:
