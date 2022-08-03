@@ -10,4 +10,5 @@ var (
 	StoreKey     = ModuleName
 
 	PrefixKeyNftStaking = []byte{0x0}
+	PrefixKeyAccessInfo = []byte{0x1}
 )

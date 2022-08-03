@@ -24,3 +24,19 @@ func (q Querier) QueryNftStakings(goCtx context.Context, request *types.QueryNft
 		Nftstakings: q.keeper.GetAllNftStakings(ctx),
 	}, nil
 }
+
+func (q Querier) QueryAccessInfos(goCtx context.Context, request *types.QueryAccessInfosRequest) (*types.QueryAccessInfosResponse, error) {
+	ctx := sdk.UnwrapSDKContext(goCtx)
+
+	return &types.QueryAccessInfosResponse{
+		AccessInfos: q.keeper.GetAllAccessInfos(ctx),
+	}, nil
+}
+
+func (q Querier) QueryAccessInfo(goCtx context.Context, request *types.QueryAccessInfoRequest) (*types.QueryAccessInfoResponse, error) {
+	ctx := sdk.UnwrapSDKContext(goCtx)
+
+	return &types.QueryAccessInfoResponse{
+		AccessInfo: q.keeper.GetAccessInfo(ctx, request.Address),
+	}, nil
+}

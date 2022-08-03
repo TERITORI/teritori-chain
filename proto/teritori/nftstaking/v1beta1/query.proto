@@ -5,6 +5,7 @@ import "cosmos/base/query/v1beta1/pagination.proto";
 import "gogoproto/gogo.proto";
 import "google/api/annotations.proto";
 import "teritori/nftstaking/v1beta1/nftstaking.proto";
+import "teritori/nftstaking/v1beta1/access.proto";
 
 option go_package = "github.com/NXTPOP/teritori-chain/x/nftstaking/types";
 
@@ -13,10 +14,30 @@ service Query {
   rpc QueryNftStakings(QueryNftStakingsRequest) returns (QueryNftStakingsResponse) {
     option (google.api.http).get = "/teritori/nftstaking/v1beta1/nftstakings";
   }
+  rpc QueryAccessInfos(QueryAccessInfosRequest) returns (QueryAccessInfosResponse) {
+    option (google.api.http).get = "/teritori/nftstaking/v1beta1/access_infos";
+  }
+  rpc QueryAccessInfo(QueryAccessInfoRequest) returns (QueryAccessInfoResponse) {
+    option (google.api.http).get = "/teritori/nftstaking/v1beta1/access_info/{address}";
+  }
 }
 
 message QueryNftStakingsRequest {}
 message QueryNftStakingsResponse {
   repeated teritori.nftstaking.v1beta1.NftStaking nftstakings = 1
+      [ (gogoproto.nullable) = false ];
+}
+
+message QueryAccessInfosRequest {}
+message QueryAccessInfosResponse {
+  repeated teritori.nftstaking.v1beta1.Access access_infos = 1
+      [ (gogoproto.nullable) = false ];
+}
+
+message QueryAccessInfoRequest {
+  string address = 1;
+}
+message QueryAccessInfoResponse {
+  teritori.nftstaking.v1beta1.Access access_info = 1
       [ (gogoproto.nullable) = false ];
 }
