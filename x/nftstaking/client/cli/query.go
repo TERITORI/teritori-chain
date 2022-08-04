@@ -18,6 +18,8 @@ func NewQueryCmd() *cobra.Command {
 	}
 	queryCmd.AddCommand(
 		GetCmdQueryNftStakings(),
+		GetCmdQueryAccessInfos(),
+		GetCmdQueryAccessInfo(),
 	)
 
 	return queryCmd
@@ -32,6 +34,53 @@ func GetCmdQueryNftStakings() *cobra.Command {
 
 			queryClient := types.NewQueryClient(clientCtx)
 			res, err := queryClient.QueryNftStakings(context.Background(), &types.QueryNftStakingsRequest{})
+			if err != nil {
+				return err
+			}
+
+			return clientCtx.PrintProto(res)
+		},
+	}
+
+	flags.AddQueryFlagsToCmd(cmd)
+
+	return cmd
+}
+
+func GetCmdQueryAccessInfos() *cobra.Command {
+	cmd := &cobra.Command{
+		Use:   "access-infos",
+		Short: "Get all access information",
+		RunE: func(cmd *cobra.Command, args []string) error {
+			clientCtx := client.GetClientContextFromCmd(cmd)
+
+			queryClient := types.NewQueryClient(clientCtx)
+			res, err := queryClient.QueryAccessInfos(context.Background(), &types.QueryAccessInfosRequest{})
+			if err != nil {
+				return err
+			}
+
+			return clientCtx.PrintProto(res)
+		},
+	}
+
+	flags.AddQueryFlagsToCmd(cmd)
+
+	return cmd
+}
+
+func GetCmdQueryAccessInfo() *cobra.Command {
+	cmd := &cobra.Command{
+		Use:   "access-info [address]",
+		Short: "Get an access information for an address",
+		Args:  cobra.ExactArgs(1),
+		RunE: func(cmd *cobra.Command, args []string) error {
+			clientCtx := client.GetClientContextFromCmd(cmd)
+
+			queryClient := types.NewQueryClient(clientCtx)
+			res, err := queryClient.QueryAccessInfo(context.Background(), &types.QueryAccessInfoRequest{
+				Address: args[0],
+			})
 			if err != nil {
 				return err
 			}
