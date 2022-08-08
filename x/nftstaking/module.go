@@ -110,6 +110,12 @@ func (am AppModule) InitGenesis(
 	for _, staking := range genesisState.NftStakings {
 		am.keeper.SetNftStaking(ctx, staking)
 	}
+	for _, accessInfo := range genesisState.AccessInfos {
+		am.keeper.SetAccessInfo(ctx, accessInfo)
+	}
+	for _, perms := range genesisState.NftTypePerms {
+		am.keeper.SetNftTypePerms(ctx, perms)
+	}
 
 	return nil
 }
@@ -117,6 +123,8 @@ func (am AppModule) InitGenesis(
 func (am AppModule) ExportGenesis(ctx sdk.Context, cdc codec.JSONCodec) json.RawMessage {
 	var genesisState types.GenesisState
 	genesisState.NftStakings = am.keeper.GetAllNftStakings(ctx)
+	genesisState.AccessInfos = am.keeper.GetAllAccessInfos(ctx)
+	genesisState.NftTypePerms = am.keeper.GetAllNftTypePerms(ctx)
 	return cdc.MustMarshalJSON(&genesisState)
 }
 

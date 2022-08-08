@@ -9,6 +9,7 @@ var (
 	QuerierRoute = ModuleName
 	StoreKey     = ModuleName
 
-	PrefixKeyNftStaking = []byte{0x0}
-	PrefixKeyAccessInfo = []byte{0x1}
+	PrefixKeyNftStaking   = []byte{0x0}
+	PrefixKeyAccessInfo   = []byte{0x1}
+	PrefixKeyNftTypePerms = []byte{0x2}
 )
