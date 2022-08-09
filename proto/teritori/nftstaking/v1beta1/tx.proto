@@ -6,7 +6,7 @@ import "google/protobuf/timestamp.proto";
 import "teritori/nftstaking/v1beta1/nftstaking.proto";
 import "teritori/nftstaking/v1beta1/access.proto";
 
-option go_package = "github.com/NXTPOP/teritori-chain/x/nftstaking/types";
+option go_package = "github.com/TERITORI/teritori-chain/x/nftstaking/types";
 
 // Msg defines the ubi Msg service.
 service Msg {

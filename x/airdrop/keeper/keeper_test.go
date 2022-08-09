@@ -10,7 +10,7 @@ import (
 	"github.com/cosmos/cosmos-sdk/codec"
 	sdk "github.com/cosmos/cosmos-sdk/types"
 
-	simapp "github.com/NXTPOP/teritori-chain/app"
+	simapp "github.com/TERITORI/teritori-chain/app"
 )
 
 const (

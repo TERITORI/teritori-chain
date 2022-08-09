@@ -4,7 +4,7 @@ import (
 	"context"
 	"fmt"
 
-	"github.com/NXTPOP/teritori-chain/x/airdrop/types"
+	"github.com/TERITORI/teritori-chain/x/airdrop/types"
 	"github.com/cosmos/cosmos-sdk/client"
 	"github.com/cosmos/cosmos-sdk/client/flags"
 	"github.com/spf13/cobra"

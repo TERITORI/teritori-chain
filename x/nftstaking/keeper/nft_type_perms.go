@@ -1,7 +1,7 @@
 package keeper
 
 import (
-	"github.com/NXTPOP/teritori-chain/x/nftstaking/types"
+	"github.com/TERITORI/teritori-chain/x/nftstaking/types"
 	"github.com/cosmos/cosmos-sdk/store/prefix"
 	sdk "github.com/cosmos/cosmos-sdk/types"
 )

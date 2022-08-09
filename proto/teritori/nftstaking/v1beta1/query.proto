@@ -7,7 +7,7 @@ import "google/api/annotations.proto";
 import "teritori/nftstaking/v1beta1/nftstaking.proto";
 import "teritori/nftstaking/v1beta1/access.proto";
 
-option go_package = "github.com/NXTPOP/teritori-chain/x/nftstaking/types";
+option go_package = "github.com/TERITORI/teritori-chain/x/nftstaking/types";
 
 // Query defines the gRPC querier service
 service Query {

@@ -9,12 +9,12 @@ import (
 	"path/filepath"
 	"strings"
 
-	airdrop "github.com/NXTPOP/teritori-chain/x/airdrop"
-	airdropkeeper "github.com/NXTPOP/teritori-chain/x/airdrop/keeper"
-	airdroptypes "github.com/NXTPOP/teritori-chain/x/airdrop/types"
-	nftstaking "github.com/NXTPOP/teritori-chain/x/nftstaking"
-	nftstakingkeeper "github.com/NXTPOP/teritori-chain/x/nftstaking/keeper"
-	nftstakingtypes "github.com/NXTPOP/teritori-chain/x/nftstaking/types"
+	airdrop "github.com/TERITORI/teritori-chain/x/airdrop"
+	airdropkeeper "github.com/TERITORI/teritori-chain/x/airdrop/keeper"
+	airdroptypes "github.com/TERITORI/teritori-chain/x/airdrop/types"
+	nftstaking "github.com/TERITORI/teritori-chain/x/nftstaking"
+	nftstakingkeeper "github.com/TERITORI/teritori-chain/x/nftstaking/keeper"
+	nftstakingtypes "github.com/TERITORI/teritori-chain/x/nftstaking/types"
 	"github.com/cosmos/cosmos-sdk/baseapp"
 	"github.com/cosmos/cosmos-sdk/client"
 	"github.com/cosmos/cosmos-sdk/client/grpc/tmservice"
@@ -110,7 +110,7 @@ import (
 	tmos "github.com/tendermint/tendermint/libs/os"
 	dbm "github.com/tendermint/tm-db"
 
-	teritoriappparams "github.com/NXTPOP/teritori-chain/app/params"
+	teritoriappparams "github.com/TERITORI/teritori-chain/app/params"
 	"github.com/strangelove-ventures/packet-forward-middleware/v2/router"
 	routerkeeper "github.com/strangelove-ventures/packet-forward-middleware/v2/router/keeper"
 	routertypes "github.com/strangelove-ventures/packet-forward-middleware/v2/router/types"
@@ -458,9 +458,9 @@ func NewTeritoriApp(
 		stakingtypes.NewMultiStakingHooks(app.DistrKeeper.Hooks(), app.SlashingKeeper.Hooks()),
 	)
 
-	app.AirdropKeeper = *airdropkeeper.NewKeeper(appCodec, keys[airdroptypes.StoreKey], app.BankKeeper, app.StakingKeeper, app.AccountKeeper)
+	app.AirdropKeeper = *airdropkeeper.NewKeeper(appCodec, keys[airdroptypes.StoreKey], app.GetSubspace(airdroptypes.ModuleName), app.BankKeeper, app.StakingKeeper, app.AccountKeeper)
 
-	app.NftStakingKeeper = nftstakingkeeper.NewKeeper(keys[nftstakingtypes.StoreKey], appCodec, app.BankKeeper)
+	app.NftStakingKeeper = nftstakingkeeper.NewKeeper(keys[nftstakingtypes.StoreKey], app.GetSubspace(nftstakingtypes.ModuleName), appCodec, app.BankKeeper)
 
 	app.IBCKeeper = ibckeeper.NewKeeper(
 		appCodec,

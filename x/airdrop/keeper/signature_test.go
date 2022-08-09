@@ -1,7 +1,7 @@
 package keeper_test
 
 import (
-	"github.com/NXTPOP/teritori-chain/x/airdrop/keeper"
+	"github.com/TERITORI/teritori-chain/x/airdrop/keeper"
 )
 
 func (suite *KeeperTestSuite) TestVerifySignature() {

@@ -3,7 +3,7 @@ package teritori.nftstaking.v1beta1;
 
 import "gogoproto/gogo.proto";
 
-option go_package = "github.com/NXTPOP/teritori-chain/x/nftstaking/types";
+option go_package = "github.com/TERITORI/teritori-chain/x/nftstaking/types";
 
 enum NftType {
   NFT_TYPE_DEFAULT = 0 [ (gogoproto.enumvalue_customname) = "NftTypeDefault" ];

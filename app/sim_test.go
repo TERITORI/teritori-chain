@@ -6,9 +6,9 @@ import (
 	"os"
 	"testing"
 
-	teritori "github.com/NXTPOP/teritori-chain/app"
+	teritori "github.com/TERITORI/teritori-chain/app"
 
-	"github.com/NXTPOP/teritori-chain/app/helpers"
+	"github.com/TERITORI/teritori-chain/app/helpers"
 	"github.com/stretchr/testify/require"
 	"github.com/tendermint/tendermint/libs/log"
 	"github.com/tendermint/tendermint/libs/rand"

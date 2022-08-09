@@ -1,7 +1,7 @@
 package teritori
 
 import (
-	"github.com/NXTPOP/teritori-chain/app/params"
+	"github.com/TERITORI/teritori-chain/app/params"
 
 	"github.com/cosmos/cosmos-sdk/std"
 )

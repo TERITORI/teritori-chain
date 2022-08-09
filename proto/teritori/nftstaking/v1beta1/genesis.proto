@@ -1,7 +1,7 @@
 syntax = "proto3";
 package teritori.nftstaking.v1beta1;
 
-option go_package = "github.com/NXTPOP/teritori-chain/x/nftstaking/types";
+option go_package = "github.com/TERITORI/teritori-chain/x/nftstaking/types";
 
 import "gogoproto/gogo.proto";
 import "teritori/nftstaking/v1beta1/nftstaking.proto";
