@@ -1,7 +1,7 @@
 package airdrop
 
 import (
-	"github.com/NXTPOP/teritori-chain/x/airdrop/keeper"
+	"github.com/TERITORI/teritori-chain/x/airdrop/keeper"
 	sdk "github.com/cosmos/cosmos-sdk/types"
 )
 

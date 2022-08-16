@@ -5,6 +5,7 @@ package types
 
 import (
 	fmt "fmt"
+	_ "github.com/gogo/protobuf/gogoproto"
 	proto "github.com/gogo/protobuf/proto"
 	io "io"
 	math "math"
@@ -22,11 +23,56 @@ var _ = math.Inf
 // proto package needs to be updated.
 const _ = proto.GoGoProtoPackageIsVersion3 // please upgrade the proto package
 
+type NftType int32
+
+const (
+	NftType_NftTypeDefault NftType = 0
+)
+
+var NftType_name = map[int32]string{
+	0: "NFT_TYPE_DEFAULT",
+}
+
+var NftType_value = map[string]int32{
+	"NFT_TYPE_DEFAULT": 0,
+}
+
+func (x NftType) String() string {
+	return proto.EnumName(NftType_name, int32(x))
+}
+
+func (NftType) EnumDescriptor() ([]byte, []int) {
+	return fileDescriptor_d4f464c8317ea07c, []int{0}
+}
+
+type Permission int32
+
+const (
+	Permission_PermSetServerAccess Permission = 0
+)
+
+var Permission_name = map[int32]string{
+	0: "SET_SERVER_ACCESS",
+}
+
+var Permission_value = map[string]int32{
+	"SET_SERVER_ACCESS": 0,
+}
+
+func (x Permission) String() string {
+	return proto.EnumName(Permission_name, int32(x))
+}
+
+func (Permission) EnumDescriptor() ([]byte, []int) {
+	return fileDescriptor_d4f464c8317ea07c, []int{1}
+}
+
 type NftStaking struct {
-	NftIdentifier string `protobuf:"bytes,1,opt,name=nft_identifier,json=nftIdentifier,proto3" json:"nft_identifier,omitempty"`
-	NftMetadata   string `protobuf:"bytes,2,opt,name=nft_metadata,json=nftMetadata,proto3" json:"nft_metadata,omitempty"`
-	RewardAddress string `protobuf:"bytes,3,opt,name=reward_address,json=rewardAddress,proto3" json:"reward_address,omitempty"`
-	RewardWeight  uint64 `protobuf:"varint,4,opt,name=reward_weight,json=rewardWeight,proto3" json:"reward_weight,omitempty"`
+	NftType       NftType `protobuf:"varint,1,opt,name=nft_type,json=nftType,proto3,enum=teritori.nftstaking.v1beta1.NftType" json:"nft_type,omitempty"`
+	NftIdentifier string  `protobuf:"bytes,2,opt,name=nft_identifier,json=nftIdentifier,proto3" json:"nft_identifier,omitempty"`
+	NftMetadata   string  `protobuf:"bytes,3,opt,name=nft_metadata,json=nftMetadata,proto3" json:"nft_metadata,omitempty"`
+	RewardAddress string  `protobuf:"bytes,4,opt,name=reward_address,json=rewardAddress,proto3" json:"reward_address,omitempty"`
+	RewardWeight  uint64  `protobuf:"varint,5,opt,name=reward_weight,json=rewardWeight,proto3" json:"reward_weight,omitempty"`
 }
 
 func (m *NftStaking) Reset()         { *m = NftStaking{} }
@@ -62,6 +108,13 @@ func (m *NftStaking) XXX_DiscardUnknown() {
 
 var xxx_messageInfo_NftStaking proto.InternalMessageInfo
 
+func (m *NftStaking) GetNftType() NftType {
+	if m != nil {
+		return m.NftType
+	}
+	return NftType_NftTypeDefault
+}
+
 func (m *NftStaking) GetNftIdentifier() string {
 	if m != nil {
 		return m.NftIdentifier
@@ -90,8 +143,63 @@ func (m *NftStaking) GetRewardWeight() uint64 {
 	return 0
 }
 
+type NftTypePerms struct {
+	NftType NftType      `protobuf:"varint,1,opt,name=nft_type,json=nftType,proto3,enum=teritori.nftstaking.v1beta1.NftType" json:"nft_type,omitempty"`
+	Perms   []Permission `protobuf:"varint,2,rep,packed,name=perms,proto3,enum=teritori.nftstaking.v1beta1.Permission" json:"perms,omitempty"`
+}
+
+func (m *NftTypePerms) Reset()         { *m = NftTypePerms{} }
+func (m *NftTypePerms) String() string { return proto.CompactTextString(m) }
+func (*NftTypePerms) ProtoMessage()    {}
+func (*NftTypePerms) Descriptor() ([]byte, []int) {
+	return fileDescriptor_d4f464c8317ea07c, []int{1}
+}
+func (m *NftTypePerms) XXX_Unmarshal(b []byte) error {
+	return m.Unmarshal(b)
+}
+func (m *NftTypePerms) XXX_Marshal(b []byte, deterministic bool) ([]byte, error) {
+	if deterministic {
+		return xxx_messageInfo_NftTypePerms.Marshal(b, m, deterministic)
+	} else {
+		b = b[:cap(b)]
+		n, err := m.MarshalToSizedBuffer(b)
+		if err != nil {
+			return nil, err
+		}
+		return b[:n], nil
+	}
+}
+func (m *NftTypePerms) XXX_Merge(src proto.Message) {
+	xxx_messageInfo_NftTypePerms.Merge(m, src)
+}
+func (m *NftTypePerms) XXX_Size() int {
+	return m.Size()
+}
+func (m *NftTypePerms) XXX_DiscardUnknown() {
+	xxx_messageInfo_NftTypePerms.DiscardUnknown(m)
+}
+
+var xxx_messageInfo_NftTypePerms proto.InternalMessageInfo
+
+func (m *NftTypePerms) GetNftType() NftType {
+	if m != nil {
+		return m.NftType
+	}
+	return NftType_NftTypeDefault
+}
+
+func (m *NftTypePerms) GetPerms() []Permission {
+	if m != nil {
+		return m.Perms
+	}
+	return nil
+}
+
 func init() {
+	proto.RegisterEnum("teritori.nftstaking.v1beta1.NftType", NftType_name, NftType_value)
+	proto.RegisterEnum("teritori.nftstaking.v1beta1.Permission", Permission_name, Permission_value)
 	proto.RegisterType((*NftStaking)(nil), "teritori.nftstaking.v1beta1.NftStaking")
+	proto.RegisterType((*NftTypePerms)(nil), "teritori.nftstaking.v1beta1.NftTypePerms")
 }
 
 func init() {
@@ -99,24 +207,34 @@ func init() {
 }
 
 var fileDescriptor_d4f464c8317ea07c = []byte{
-	// 258 bytes of a gzipped FileDescriptorProto
-	0x1f, 0x8b, 0x08, 0x00, 0x00, 0x00, 0x00, 0x00, 0x02, 0xff, 0xe2, 0xd2, 0x29, 0x49, 0x2d, 0xca,
-	0x2c, 0xc9, 0x2f, 0xca, 0xd4, 0xcf, 0x4b, 0x2b, 0x29, 0x2e, 0x49, 0xcc, 0xce, 0xcc, 0x4b, 0xd7,
-	0x2f, 0x33, 0x4c, 0x4a, 0x2d, 0x49, 0x34, 0x44, 0x12, 0xd2, 0x2b, 0x28, 0xca, 0x2f, 0xc9, 0x17,
-	0x92, 0x86, 0xa9, 0xd6, 0x43, 0x92, 0x82, 0xaa, 0x56, 0x5a, 0xc4, 0xc8, 0xc5, 0xe5, 0x97, 0x56,
-	0x12, 0x0c, 0x11, 0x16, 0x52, 0xe5, 0xe2, 0xcb, 0x4b, 0x2b, 0x89, 0xcf, 0x4c, 0x49, 0xcd, 0x2b,
-	0xc9, 0x4c, 0xcb, 0x4c, 0x2d, 0x92, 0x60, 0x54, 0x60, 0xd4, 0xe0, 0x0c, 0xe2, 0xcd, 0x4b, 0x2b,
-	0xf1, 0x84, 0x0b, 0x0a, 0x29, 0x72, 0xf1, 0x80, 0x94, 0xe5, 0xa6, 0x96, 0x24, 0xa6, 0x24, 0x96,
-	0x24, 0x4a, 0x30, 0x81, 0x15, 0x71, 0xe7, 0xa5, 0x95, 0xf8, 0x42, 0x85, 0x40, 0x26, 0x15, 0xa5,
-	0x96, 0x27, 0x16, 0xa5, 0xc4, 0x27, 0xa6, 0xa4, 0x14, 0xa5, 0x16, 0x17, 0x4b, 0x30, 0x43, 0x4c,
-	0x82, 0x88, 0x3a, 0x42, 0x04, 0x85, 0x94, 0xb9, 0xa0, 0x02, 0xf1, 0xe5, 0xa9, 0x99, 0xe9, 0x19,
-	0x25, 0x12, 0x2c, 0x0a, 0x8c, 0x1a, 0x2c, 0x41, 0x3c, 0x10, 0xc1, 0x70, 0xb0, 0x98, 0x93, 0xef,
-	0x89, 0x47, 0x72, 0x8c, 0x17, 0x1e, 0xc9, 0x31, 0x3e, 0x78, 0x24, 0xc7, 0x38, 0xe1, 0xb1, 0x1c,
-	0xc3, 0x85, 0xc7, 0x72, 0x0c, 0x37, 0x1e, 0xcb, 0x31, 0x44, 0x19, 0xa7, 0x67, 0x96, 0x64, 0x94,
-	0x26, 0xe9, 0x25, 0xe7, 0xe7, 0xea, 0xfb, 0x45, 0x84, 0x04, 0xf8, 0x07, 0xe8, 0xc3, 0x7c, 0xab,
-	0x9b, 0x9c, 0x91, 0x98, 0x99, 0xa7, 0x5f, 0x81, 0x1c, 0x46, 0x25, 0x95, 0x05, 0xa9, 0xc5, 0x49,
-	0x6c, 0xe0, 0x70, 0x31, 0x06, 0x04, 0x00, 0x00, 0xff, 0xff, 0x3d, 0x81, 0x62, 0xd9, 0x47, 0x01,
-	0x00, 0x00,
+	// 432 bytes of a gzipped FileDescriptorProto
+	0x1f, 0x8b, 0x08, 0x00, 0x00, 0x00, 0x00, 0x00, 0x02, 0xff, 0xa4, 0x92, 0xcf, 0x6e, 0xd3, 0x40,
+	0x10, 0x87, 0xbd, 0xfd, 0x43, 0x61, 0x09, 0x51, 0x30, 0x48, 0x58, 0x41, 0xb2, 0x4c, 0x01, 0x61,
+	0x55, 0x60, 0xab, 0xad, 0xb8, 0x81, 0x50, 0x68, 0x5d, 0x29, 0x12, 0xa4, 0x95, 0x6d, 0x40, 0x70,
+	0xb1, 0x36, 0xf1, 0xd8, 0x59, 0x41, 0xd6, 0xd1, 0xee, 0xb4, 0xa5, 0xaf, 0xd0, 0x03, 0xe2, 0x05,
+	0xfa, 0x3e, 0x1c, 0x7b, 0xe4, 0x88, 0x92, 0x17, 0x41, 0xeb, 0x75, 0x21, 0xa7, 0x5c, 0x7a, 0x1b,
+	0x7d, 0xfb, 0xcd, 0x6f, 0x77, 0x56, 0x43, 0x9f, 0x23, 0x48, 0x8e, 0x95, 0xe4, 0xa1, 0x28, 0x50,
+	0x21, 0xfb, 0xca, 0x45, 0x19, 0x9e, 0x6c, 0x0f, 0x01, 0xd9, 0xf6, 0x02, 0x0a, 0xa6, 0xb2, 0xc2,
+	0xca, 0x7e, 0x78, 0x65, 0x07, 0x0b, 0x47, 0x8d, 0xdd, 0xbd, 0x5f, 0x56, 0x65, 0x55, 0x7b, 0xa1,
+	0xae, 0x4c, 0xcb, 0xe6, 0x9c, 0x50, 0x3a, 0x28, 0x30, 0x31, 0xb2, 0xfd, 0x86, 0xde, 0x14, 0x05,
+	0x66, 0x78, 0x36, 0x05, 0x87, 0x78, 0xc4, 0x6f, 0xef, 0x3c, 0x09, 0x96, 0x84, 0x06, 0x83, 0x02,
+	0xd3, 0xb3, 0x29, 0xc4, 0x1b, 0xc2, 0x14, 0xf6, 0x53, 0xda, 0xd6, 0x01, 0x3c, 0x07, 0x81, 0xbc,
+	0xe0, 0x20, 0x9d, 0x15, 0x8f, 0xf8, 0xb7, 0xe2, 0x3b, 0xa2, 0xc0, 0xfe, 0x3f, 0x68, 0x3f, 0xa2,
+	0x2d, 0xad, 0x4d, 0x00, 0x59, 0xce, 0x90, 0x39, 0xab, 0xb5, 0x74, 0x5b, 0x14, 0xf8, 0xbe, 0x41,
+	0x3a, 0x49, 0xc2, 0x29, 0x93, 0x79, 0xc6, 0xf2, 0x5c, 0x82, 0x52, 0xce, 0x9a, 0x49, 0x32, 0xb4,
+	0x67, 0xa0, 0xfd, 0x98, 0x36, 0x20, 0x3b, 0x05, 0x5e, 0x8e, 0xd1, 0x59, 0xf7, 0x88, 0xbf, 0x16,
+	0xb7, 0x0c, 0xfc, 0x54, 0xb3, 0xcd, 0x1f, 0x84, 0xb6, 0x9a, 0xa7, 0x1e, 0x81, 0x9c, 0xa8, 0xeb,
+	0xcf, 0xf9, 0x9a, 0xae, 0x4f, 0x75, 0x92, 0xb3, 0xe2, 0xad, 0xfa, 0xed, 0x9d, 0x67, 0x4b, 0xbb,
+	0xf5, 0x9d, 0x5c, 0x29, 0x5e, 0x89, 0xd8, 0x74, 0x6d, 0xed, 0xd2, 0x8d, 0x26, 0xd2, 0xf6, 0x69,
+	0x67, 0x70, 0x90, 0x66, 0xe9, 0xe7, 0xa3, 0x28, 0xdb, 0x8f, 0x0e, 0x7a, 0x1f, 0xde, 0xa5, 0x1d,
+	0xab, 0x6b, 0x9f, 0x5f, 0x78, 0xed, 0x46, 0xd9, 0x87, 0x82, 0x1d, 0x7f, 0xc3, 0xad, 0x57, 0x94,
+	0xfe, 0x4f, 0xb2, 0x03, 0x7a, 0x37, 0x89, 0xd2, 0x2c, 0x89, 0xe2, 0x8f, 0x51, 0x9c, 0xf5, 0xf6,
+	0xf6, 0xa2, 0x24, 0xe9, 0x58, 0xdd, 0x07, 0xe7, 0x17, 0xde, 0x3d, 0xad, 0x25, 0x80, 0x09, 0xc8,
+	0x13, 0x90, 0xbd, 0xd1, 0x08, 0x94, 0x7a, 0x7b, 0xf8, 0x6b, 0xe6, 0x92, 0xcb, 0x99, 0x4b, 0xfe,
+	0xcc, 0x5c, 0xf2, 0x73, 0xee, 0x5a, 0x97, 0x73, 0xd7, 0xfa, 0x3d, 0x77, 0xad, 0x2f, 0x2f, 0x4b,
+	0x8e, 0xe3, 0xe3, 0x61, 0x30, 0xaa, 0x26, 0x61, 0x1a, 0xc5, 0xfd, 0xf4, 0x30, 0xee, 0x87, 0x57,
+	0xf3, 0xbc, 0x18, 0x8d, 0x19, 0x17, 0xe1, 0xf7, 0xc5, 0x05, 0xd4, 0xdf, 0xa6, 0x86, 0x37, 0xea,
+	0x0d, 0xda, 0xfd, 0x1b, 0x00, 0x00, 0xff, 0xff, 0x70, 0x9d, 0xf7, 0x5d, 0xa4, 0x02, 0x00, 0x00,
 }
 
 func (m *NftStaking) Marshal() (dAtA []byte, err error) {
@@ -142,28 +260,79 @@ func (m *NftStaking) MarshalToSizedBuffer(dAtA []byte) (int, error) {
 	if m.RewardWeight != 0 {
 		i = encodeVarintNftstaking(dAtA, i, uint64(m.RewardWeight))
 		i--
-		dAtA[i] = 0x20
+		dAtA[i] = 0x28
 	}
 	if len(m.RewardAddress) > 0 {
 		i -= len(m.RewardAddress)
 		copy(dAtA[i:], m.RewardAddress)
 		i = encodeVarintNftstaking(dAtA, i, uint64(len(m.RewardAddress)))
 		i--
-		dAtA[i] = 0x1a
+		dAtA[i] = 0x22
 	}
 	if len(m.NftMetadata) > 0 {
 		i -= len(m.NftMetadata)
 		copy(dAtA[i:], m.NftMetadata)
 		i = encodeVarintNftstaking(dAtA, i, uint64(len(m.NftMetadata)))
 		i--
-		dAtA[i] = 0x12
+		dAtA[i] = 0x1a
 	}
 	if len(m.NftIdentifier) > 0 {
 		i -= len(m.NftIdentifier)
 		copy(dAtA[i:], m.NftIdentifier)
 		i = encodeVarintNftstaking(dAtA, i, uint64(len(m.NftIdentifier)))
 		i--
-		dAtA[i] = 0xa
+		dAtA[i] = 0x12
+	}
+	if m.NftType != 0 {
+		i = encodeVarintNftstaking(dAtA, i, uint64(m.NftType))
+		i--
+		dAtA[i] = 0x8
+	}
+	return len(dAtA) - i, nil
+}
+
+func (m *NftTypePerms) Marshal() (dAtA []byte, err error) {
+	size := m.Size()
+	dAtA = make([]byte, size)
+	n, err := m.MarshalToSizedBuffer(dAtA[:size])
+	if err != nil {
+		return nil, err
+	}
+	return dAtA[:n], nil
+}
+
+func (m *NftTypePerms) MarshalTo(dAtA []byte) (int, error) {
+	size := m.Size()
+	return m.MarshalToSizedBuffer(dAtA[:size])
+}
+
+func (m *NftTypePerms) MarshalToSizedBuffer(dAtA []byte) (int, error) {
+	i := len(dAtA)
+	_ = i
+	var l int
+	_ = l
+	if len(m.Perms) > 0 {
+		dAtA2 := make([]byte, len(m.Perms)*10)
+		var j1 int
+		for _, num := range m.Perms {
+			for num >= 1<<7 {
+				dAtA2[j1] = uint8(uint64(num)&0x7f | 0x80)
+				num >>= 7
+				j1++
+			}
+			dAtA2[j1] = uint8(num)
+			j1++
+		}
+		i -= j1
+		copy(dAtA[i:], dAtA2[:j1])
+		i = encodeVarintNftstaking(dAtA, i, uint64(j1))
+		i--
+		dAtA[i] = 0x12
+	}
+	if m.NftType != 0 {
+		i = encodeVarintNftstaking(dAtA, i, uint64(m.NftType))
+		i--
+		dAtA[i] = 0x8
 	}
 	return len(dAtA) - i, nil
 }
@@ -185,6 +354,9 @@ func (m *NftStaking) Size() (n int) {
 	}
 	var l int
 	_ = l
+	if m.NftType != 0 {
+		n += 1 + sovNftstaking(uint64(m.NftType))
+	}
 	l = len(m.NftIdentifier)
 	if l > 0 {
 		n += 1 + l + sovNftstaking(uint64(l))
@@ -199,6 +371,25 @@ func (m *NftStaking) Size() (n int) {
 	}
 	if m.RewardWeight != 0 {
 		n += 1 + sovNftstaking(uint64(m.RewardWeight))
+	}
+	return n
+}
+
+func (m *NftTypePerms) Size() (n int) {
+	if m == nil {
+		return 0
+	}
+	var l int
+	_ = l
+	if m.NftType != 0 {
+		n += 1 + sovNftstaking(uint64(m.NftType))
+	}
+	if len(m.Perms) > 0 {
+		l = 0
+		for _, e := range m.Perms {
+			l += sovNftstaking(uint64(e))
+		}
+		n += 1 + sovNftstaking(uint64(l)) + l
 	}
 	return n
 }
@@ -239,6 +430,25 @@ func (m *NftStaking) Unmarshal(dAtA []byte) error {
 		}
 		switch fieldNum {
 		case 1:
+			if wireType != 0 {
+				return fmt.Errorf("proto: wrong wireType = %d for field NftType", wireType)
+			}
+			m.NftType = 0
+			for shift := uint(0); ; shift += 7 {
+				if shift >= 64 {
+					return ErrIntOverflowNftstaking
+				}
+				if iNdEx >= l {
+					return io.ErrUnexpectedEOF
+				}
+				b := dAtA[iNdEx]
+				iNdEx++
+				m.NftType |= NftType(b&0x7F) << shift
+				if b < 0x80 {
+					break
+				}
+			}
+		case 2:
 			if wireType != 2 {
 				return fmt.Errorf("proto: wrong wireType = %d for field NftIdentifier", wireType)
 			}
@@ -270,7 +480,7 @@ func (m *NftStaking) Unmarshal(dAtA []byte) error {
 			}
 			m.NftIdentifier = string(dAtA[iNdEx:postIndex])
 			iNdEx = postIndex
-		case 2:
+		case 3:
 			if wireType != 2 {
 				return fmt.Errorf("proto: wrong wireType = %d for field NftMetadata", wireType)
 			}
@@ -302,7 +512,7 @@ func (m *NftStaking) Unmarshal(dAtA []byte) error {
 			}
 			m.NftMetadata = string(dAtA[iNdEx:postIndex])
 			iNdEx = postIndex
-		case 3:
+		case 4:
 			if wireType != 2 {
 				return fmt.Errorf("proto: wrong wireType = %d for field RewardAddress", wireType)
 			}
@@ -334,7 +544,7 @@ func (m *NftStaking) Unmarshal(dAtA []byte) error {
 			}
 			m.RewardAddress = string(dAtA[iNdEx:postIndex])
 			iNdEx = postIndex
-		case 4:
+		case 5:
 			if wireType != 0 {
 				return fmt.Errorf("proto: wrong wireType = %d for field RewardWeight", wireType)
 			}
@@ -352,6 +562,144 @@ func (m *NftStaking) Unmarshal(dAtA []byte) error {
 				if b < 0x80 {
 					break
 				}
+			}
+		default:
+			iNdEx = preIndex
+			skippy, err := skipNftstaking(dAtA[iNdEx:])
+			if err != nil {
+				return err
+			}
+			if (skippy < 0) || (iNdEx+skippy) < 0 {
+				return ErrInvalidLengthNftstaking
+			}
+			if (iNdEx + skippy) > l {
+				return io.ErrUnexpectedEOF
+			}
+			iNdEx += skippy
+		}
+	}
+
+	if iNdEx > l {
+		return io.ErrUnexpectedEOF
+	}
+	return nil
+}
+func (m *NftTypePerms) Unmarshal(dAtA []byte) error {
+	l := len(dAtA)
+	iNdEx := 0
+	for iNdEx < l {
+		preIndex := iNdEx
+		var wire uint64
+		for shift := uint(0); ; shift += 7 {
+			if shift >= 64 {
+				return ErrIntOverflowNftstaking
+			}
+			if iNdEx >= l {
+				return io.ErrUnexpectedEOF
+			}
+			b := dAtA[iNdEx]
+			iNdEx++
+			wire |= uint64(b&0x7F) << shift
+			if b < 0x80 {
+				break
+			}
+		}
+		fieldNum := int32(wire >> 3)
+		wireType := int(wire & 0x7)
+		if wireType == 4 {
+			return fmt.Errorf("proto: NftTypePerms: wiretype end group for non-group")
+		}
+		if fieldNum <= 0 {
+			return fmt.Errorf("proto: NftTypePerms: illegal tag %d (wire type %d)", fieldNum, wire)
+		}
+		switch fieldNum {
+		case 1:
+			if wireType != 0 {
+				return fmt.Errorf("proto: wrong wireType = %d for field NftType", wireType)
+			}
+			m.NftType = 0
+			for shift := uint(0); ; shift += 7 {
+				if shift >= 64 {
+					return ErrIntOverflowNftstaking
+				}
+				if iNdEx >= l {
+					return io.ErrUnexpectedEOF
+				}
+				b := dAtA[iNdEx]
+				iNdEx++
+				m.NftType |= NftType(b&0x7F) << shift
+				if b < 0x80 {
+					break
+				}
+			}
+		case 2:
+			if wireType == 0 {
+				var v Permission
+				for shift := uint(0); ; shift += 7 {
+					if shift >= 64 {
+						return ErrIntOverflowNftstaking
+					}
+					if iNdEx >= l {
+						return io.ErrUnexpectedEOF
+					}
+					b := dAtA[iNdEx]
+					iNdEx++
+					v |= Permission(b&0x7F) << shift
+					if b < 0x80 {
+						break
+					}
+				}
+				m.Perms = append(m.Perms, v)
+			} else if wireType == 2 {
+				var packedLen int
+				for shift := uint(0); ; shift += 7 {
+					if shift >= 64 {
+						return ErrIntOverflowNftstaking
+					}
+					if iNdEx >= l {
+						return io.ErrUnexpectedEOF
+					}
+					b := dAtA[iNdEx]
+					iNdEx++
+					packedLen |= int(b&0x7F) << shift
+					if b < 0x80 {
+						break
+					}
+				}
+				if packedLen < 0 {
+					return ErrInvalidLengthNftstaking
+				}
+				postIndex := iNdEx + packedLen
+				if postIndex < 0 {
+					return ErrInvalidLengthNftstaking
+				}
+				if postIndex > l {
+					return io.ErrUnexpectedEOF
+				}
+				var elementCount int
+				if elementCount != 0 && len(m.Perms) == 0 {
+					m.Perms = make([]Permission, 0, elementCount)
+				}
+				for iNdEx < postIndex {
+					var v Permission
+					for shift := uint(0); ; shift += 7 {
+						if shift >= 64 {
+							return ErrIntOverflowNftstaking
+						}
+						if iNdEx >= l {
+							return io.ErrUnexpectedEOF
+						}
+						b := dAtA[iNdEx]
+						iNdEx++
+						v |= Permission(b&0x7F) << shift
+						if b < 0x80 {
+							break
+						}
+					}
+					m.Perms = append(m.Perms, v)
+				}
+			} else {
+				return fmt.Errorf("proto: wrong wireType = %d for field Perms", wireType)
 			}
 		default:
 			iNdEx = preIndex

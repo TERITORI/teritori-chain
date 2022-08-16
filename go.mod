@@ -1,4 +1,4 @@
-module github.com/NXTPOP/teritori-chain
+module github.com/TERITORI/teritori-chain
 
 go 1.17
 

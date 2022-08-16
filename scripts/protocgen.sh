@@ -5,7 +5,7 @@ set -eo pipefail
 # get protoc executions
 go get github.com/regen-network/cosmos-proto/protoc-gen-gocosmos 2>/dev/null
 # get cosmos sdk from github
-go get github.com/cosmos/cosmos-sdk 2>/dev/null
+go get github.com/cosmos/cosmos-sdk@v0.45.4 2>/dev/null
 
 # Get the path of the cosmos-sdk repo from go/pkg/mod
 cosmos_sdk_dir=$(go list -f '{{ .Dir }}' -m github.com/cosmos/cosmos-sdk)
@@ -29,5 +29,5 @@ Mgoogle/protobuf/any.proto=github.com/cosmos/cosmos-sdk/codec/types:. \
   $(find "${dir}" -maxdepth 1 -name '*.proto')
 done
 
-cp -r ./github.com/NXTPOP/teritori-chain/x/* x/
+cp -r ./github.com/TERITORI/teritori-chain/x/* x/
 rm -rf ./github.com

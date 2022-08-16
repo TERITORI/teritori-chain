@@ -1,8 +1,7 @@
 package keeper
 
 import (
-	"github.com/NXTPOP/teritori-chain/x/nftstaking/types"
-	"github.com/cosmos/cosmos-sdk/store/prefix"
+	"github.com/TERITORI/teritori-chain/x/nftstaking/types"
 	sdk "github.com/cosmos/cosmos-sdk/types"
 )
 
@@ -21,10 +20,46 @@ func (k Keeper) GetAllNftStakings(ctx sdk.Context) []types.NftStaking {
 	return stakings
 }
 
+func (k Keeper) GetNftStakingsByOwner(ctx sdk.Context, addr string) []types.NftStaking {
+	stakings := []types.NftStaking{}
+	store := ctx.KVStore(k.storeKey)
+	iterator := sdk.KVStorePrefixIterator(store, append(types.PrefixKeyNftStakingByOwner, []byte(addr)...))
+	defer iterator.Close()
+
+	for ; iterator.Valid(); iterator.Next() {
+		identifier := string(iterator.Value())
+		stakings = append(stakings, k.GetNftStaking(ctx, identifier))
+	}
+
+	return stakings
+}
+
+func (k Keeper) GetNftStaking(ctx sdk.Context, identifier string) types.NftStaking {
+	staking := types.NftStaking{}
+	store := ctx.KVStore(k.storeKey)
+	bz := store.Get(types.NftStakingKey(identifier))
+	if bz == nil {
+		return staking
+	}
+	k.cdc.MustUnmarshal(bz, &staking)
+	return staking
+}
+
 func (k Keeper) SetNftStaking(ctx sdk.Context, staking types.NftStaking) {
-	prefixStore := prefix.NewStore(ctx.KVStore(k.storeKey), types.PrefixKeyNftStaking)
+	nft := k.GetNftStaking(ctx, staking.NftIdentifier)
+	if nft.NftIdentifier == "" {
+		k.DeleteNftStaking(ctx, nft)
+	}
+	store := ctx.KVStore(k.storeKey)
 	bz := k.cdc.MustMarshal(&staking)
-	prefixStore.Set([]byte(staking.NftIdentifier), bz)
+	store.Set(types.NftStakingKey(staking.NftIdentifier), bz)
+	store.Set(types.NftStakingByOwnerKey(staking.RewardAddress, staking.NftIdentifier), []byte(staking.NftIdentifier))
+}
+
+func (k Keeper) DeleteNftStaking(ctx sdk.Context, staking types.NftStaking) {
+	store := ctx.KVStore(k.storeKey)
+	store.Delete(types.NftStakingKey(staking.NftIdentifier))
+	store.Delete(types.NftStakingByOwnerKey(staking.RewardAddress, staking.NftIdentifier))
 }
 
 func (k Keeper) AllocateTokensToRewardAddress(ctx sdk.Context, addr sdk.AccAddress, amount sdk.Coin) error {

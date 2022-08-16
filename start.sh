@@ -10,6 +10,9 @@ teritorid add-genesis-account $(teritorid keys show validator -a --keyring-backe
 teritorid gentx validator 500000000stake --keyring-backend=test --home=$HOME/.teritorid --chain-id=testing
 teritorid collect-gentxs --home=$HOME/.teritorid
 
+VALIDATOR=$(teritorid keys show -a validator --keyring-backend=test --home=$HOME/.teritorid)
+
+sed -i '' -e 's/"owner": ""/"owner": "'$VALIDATOR'"/g' $HOME/.teritorid/config/genesis.json
 sed -i '' -e 's/enabled-unsafe-cors = false/enabled-unsafe-cors = true/g' $HOME/.teritorid/config/app.toml 
 sed -i '' -e 's/enable = false/enable = true/g' $HOME/.teritorid/config/app.toml 
 sed -i '' -e 's/cors_allowed_origins = \[\]/cors_allowed_origins = ["*"]/g' $HOME/.teritorid/config/config.toml 

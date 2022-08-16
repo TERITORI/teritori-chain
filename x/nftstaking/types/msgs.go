@@ -4,9 +4,13 @@ import (
 	sdk "github.com/cosmos/cosmos-sdk/types"
 )
 
-var _ sdk.Msg = &MsgRegisterNftStaking{}
+var (
+	MsgTypeRegisterNftStaking = "register_nft_staking"
+	MsgTypeSetAccessInfo      = "set_access_info"
+	MsgTypeSetNftTypePerms    = "set_nft_type_perms"
+)
 
-var MsgTypeClaimAllocation = "claim_allocation"
+var _ sdk.Msg = &MsgRegisterNftStaking{}
 
 func NewMsgRegisterNftStaking(
 	sender string,
@@ -23,7 +27,7 @@ func (m *MsgRegisterNftStaking) Route() string {
 }
 
 func (m *MsgRegisterNftStaking) Type() string {
-	return MsgTypeClaimAllocation
+	return MsgTypeRegisterNftStaking
 }
 
 func (m *MsgRegisterNftStaking) ValidateBasic() error {
@@ -44,6 +48,94 @@ func (m *MsgRegisterNftStaking) GetSignBytes() []byte {
 }
 
 func (m *MsgRegisterNftStaking) GetSigners() []sdk.AccAddress {
+	sender, err := sdk.AccAddressFromBech32(m.Sender)
+	if err != nil {
+		panic(err)
+	}
+
+	return []sdk.AccAddress{
+		sender,
+	}
+}
+
+var _ sdk.Msg = &MsgSetAccessInfo{}
+
+func NewMsgSetAccessInfo(
+	sender string,
+	accessInfo Access,
+) *MsgSetAccessInfo {
+	return &MsgSetAccessInfo{
+		Sender:     sender,
+		AccessInfo: accessInfo,
+	}
+}
+
+func (m *MsgSetAccessInfo) Route() string {
+	return ModuleName
+}
+
+func (m *MsgSetAccessInfo) Type() string {
+	return MsgTypeSetAccessInfo
+}
+
+func (m *MsgSetAccessInfo) ValidateBasic() error {
+	if m.Sender == "" {
+		return ErrEmptySender
+	}
+
+	return nil
+}
+
+func (m *MsgSetAccessInfo) GetSignBytes() []byte {
+	bz := ModuleCdc.MustMarshalJSON(m)
+	return sdk.MustSortJSON(bz)
+}
+
+func (m *MsgSetAccessInfo) GetSigners() []sdk.AccAddress {
+	sender, err := sdk.AccAddressFromBech32(m.Sender)
+	if err != nil {
+		panic(err)
+	}
+
+	return []sdk.AccAddress{
+		sender,
+	}
+}
+
+var _ sdk.Msg = &MsgSetNftTypePerms{}
+
+func NewMsgSetNftTypePerms(
+	sender string,
+	nftTypePerms NftTypePerms,
+) *MsgSetNftTypePerms {
+	return &MsgSetNftTypePerms{
+		Sender:       sender,
+		NftTypePerms: nftTypePerms,
+	}
+}
+
+func (m *MsgSetNftTypePerms) Route() string {
+	return ModuleName
+}
+
+func (m *MsgSetNftTypePerms) Type() string {
+	return MsgTypeSetNftTypePerms
+}
+
+func (m *MsgSetNftTypePerms) ValidateBasic() error {
+	if m.Sender == "" {
+		return ErrEmptySender
+	}
+
+	return nil
+}
+
+func (m *MsgSetNftTypePerms) GetSignBytes() []byte {
+	bz := ModuleCdc.MustMarshalJSON(m)
+	return sdk.MustSortJSON(bz)
+}
+
+func (m *MsgSetNftTypePerms) GetSigners() []sdk.AccAddress {
 	sender, err := sdk.AccAddressFromBech32(m.Sender)
 	if err != nil {
 		panic(err)

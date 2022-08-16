@@ -1,11 +1,27 @@
 syntax = "proto3";
 package teritori.nftstaking.v1beta1;
 
-option go_package = "github.com/NXTPOP/teritori-chain/x/nftstaking/types";
+import "gogoproto/gogo.proto";
+
+option go_package = "github.com/TERITORI/teritori-chain/x/nftstaking/types";
+
+enum NftType {
+  NFT_TYPE_DEFAULT = 0 [ (gogoproto.enumvalue_customname) = "NftTypeDefault" ];
+}
 
 message NftStaking {
-  string nft_identifier = 1;
-  string nft_metadata = 2;
-  string reward_address = 3;
-  uint64 reward_weight = 4;
+  NftType nft_type = 1;
+  string nft_identifier = 2;
+  string nft_metadata = 3;
+  string reward_address = 4;
+  uint64 reward_weight = 5;
+}
+
+enum Permission {
+  SET_SERVER_ACCESS = 0 [ (gogoproto.enumvalue_customname) = "PermSetServerAccess" ];
+}
+
+message NftTypePerms {
+  NftType nft_type = 1;
+  repeated Permission perms = 2;
 }

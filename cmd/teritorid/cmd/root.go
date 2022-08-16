@@ -30,8 +30,8 @@ import (
 	"github.com/tendermint/tendermint/libs/log"
 	dbm "github.com/tendermint/tm-db"
 
-	teritori "github.com/NXTPOP/teritori-chain/app"
-	"github.com/NXTPOP/teritori-chain/app/params"
+	teritori "github.com/TERITORI/teritori-chain/app"
+	"github.com/TERITORI/teritori-chain/app/params"
 )
 
 // NewRootCmd creates a new root command for simd. It is called once in the

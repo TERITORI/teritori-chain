@@ -5,7 +5,7 @@ import "github.com/cosmos/cosmos-sdk/types"
 // DefaultGenesis returns the default Capability genesis state
 func DefaultGenesis() *GenesisState {
 	return &GenesisState{
-		Allocations: []*AirdropAllocation{
+		Allocations: []AirdropAllocation{
 			{
 				Chain:         "evm",
 				Address:       "0x--",

@@ -4,7 +4,7 @@ import (
 	"context"
 	"fmt"
 
-	"github.com/NXTPOP/teritori-chain/x/airdrop/types"
+	"github.com/TERITORI/teritori-chain/x/airdrop/types"
 	"github.com/cosmos/cosmos-sdk/client"
 	"github.com/cosmos/cosmos-sdk/client/flags"
 	"github.com/spf13/cobra"
@@ -31,6 +31,7 @@ func GetCmdQueryAllocation() *cobra.Command {
 	cmd := &cobra.Command{
 		Use:   "allocation [addr]",
 		Short: "Query allocations of an address",
+		Args:  cobra.ExactArgs(1),
 		RunE: func(cmd *cobra.Command, args []string) error {
 			clientCtx := client.GetClientContextFromCmd(cmd)
 

@@ -12,4 +12,5 @@ var (
 	ErrAirdropAllocationAlreadyClaimed          = errors.Register(ModuleName, 4, "airdrop allocation is already claimed for the address")
 	ErrNativeChainAccountSigVerificationFailure = errors.Register(ModuleName, 5, "native chain account signature verification failure")
 	ErrEmptyAddress                             = errors.Register(ModuleName, 6, "empty address")
+	ErrNotEnoughPermission                      = errors.Register(ModuleName, 7, "not enough permission for the action")
 )

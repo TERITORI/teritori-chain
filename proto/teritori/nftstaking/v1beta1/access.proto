@@ -1,0 +1,15 @@
+syntax = "proto3";
+package teritori.nftstaking.v1beta1;
+
+import "gogoproto/gogo.proto";
+
+option go_package = "github.com/TERITORI/teritori-chain/x/nftstaking/types";
+
+message ServerAccess {
+  string server = 1;
+  repeated string channels = 2;
+}
+message Access {
+  string address = 1;
+  repeated ServerAccess servers = 2 [ (gogoproto.nullable) = false ];
+}

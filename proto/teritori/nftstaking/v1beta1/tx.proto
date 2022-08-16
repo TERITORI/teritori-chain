@@ -4,12 +4,15 @@ package teritori.nftstaking.v1beta1;
 import "gogoproto/gogo.proto";
 import "google/protobuf/timestamp.proto";
 import "teritori/nftstaking/v1beta1/nftstaking.proto";
+import "teritori/nftstaking/v1beta1/access.proto";
 
-option go_package = "github.com/NXTPOP/teritori-chain/x/nftstaking/types";
+option go_package = "github.com/TERITORI/teritori-chain/x/nftstaking/types";
 
 // Msg defines the ubi Msg service.
 service Msg {
   rpc RegisterNftStaking(MsgRegisterNftStaking) returns (MsgRegisterNftStakingResponse);
+  rpc SetAccessInfo(MsgSetAccessInfo) returns (MsgSetAccessInfoResponse);
+  rpc SetNftTypePerms(MsgSetNftTypePerms) returns (MsgSetNftTypePermsResponse);
 }
 
 message MsgRegisterNftStaking {
@@ -17,3 +20,15 @@ message MsgRegisterNftStaking {
   teritori.nftstaking.v1beta1.NftStaking nft_staking = 2 [ (gogoproto.nullable) = false ];
 }
 message MsgRegisterNftStakingResponse {}
+
+message MsgSetAccessInfo {
+  string sender = 1;
+  teritori.nftstaking.v1beta1.Access access_info = 2 [ (gogoproto.nullable) = false ];
+}
+message MsgSetAccessInfoResponse {}
+
+message MsgSetNftTypePerms {
+  string sender = 1;
+  teritori.nftstaking.v1beta1.NftTypePerms nft_type_perms = 2 [ (gogoproto.nullable) = false ];
+}
+message MsgSetNftTypePermsResponse {}

@@ -5,13 +5,35 @@ import "cosmos/base/query/v1beta1/pagination.proto";
 import "gogoproto/gogo.proto";
 import "google/api/annotations.proto";
 import "teritori/nftstaking/v1beta1/nftstaking.proto";
+import "teritori/nftstaking/v1beta1/access.proto";
 
-option go_package = "github.com/NXTPOP/teritori-chain/x/nftstaking/types";
+option go_package = "github.com/TERITORI/teritori-chain/x/nftstaking/types";
 
 // Query defines the gRPC querier service
 service Query {
+  rpc QueryNftStaking(QueryNftStakingRequest) returns (QueryNftStakingResponse) {
+    option (google.api.http).get = "/teritori/nftstaking/v1beta1/nftstaking/{identifier}";
+  }
   rpc QueryNftStakings(QueryNftStakingsRequest) returns (QueryNftStakingsResponse) {
     option (google.api.http).get = "/teritori/nftstaking/v1beta1/nftstakings";
+  }
+  rpc QueryNftStakingsByOwner(QueryNftStakingsByOwnerRequest) returns (QueryNftStakingsByOwnerResponse) {
+    option (google.api.http).get = "/teritori/nftstaking/v1beta1/nftstakings_by_owner/{owner}";
+  }
+  rpc QueryAccessInfos(QueryAccessInfosRequest) returns (QueryAccessInfosResponse) {
+    option (google.api.http).get = "/teritori/nftstaking/v1beta1/access_infos";
+  }
+  rpc QueryAccessInfo(QueryAccessInfoRequest) returns (QueryAccessInfoResponse) {
+    option (google.api.http).get = "/teritori/nftstaking/v1beta1/access_info/{address}";
+  }
+  rpc QueryAllNftTypePerms(QueryAllNftTypePermsRequest) returns (QueryAllNftTypePermsResponse) {
+    option (google.api.http).get = "/teritori/nftstaking/v1beta1/all_nft_type_perms";
+  }
+  rpc QueryNftTypePerms(QueryNftTypePermsRequest) returns (QueryNftTypePermsResponse) {
+    option (google.api.http).get = "/teritori/nftstaking/v1beta1/nft_type_perms/{nft_type}";
+  }
+  rpc QueryHasPermission(QueryHasPermissionRequest) returns (QueryHasPermissionResponse) {
+    option (google.api.http).get = "/teritori/nftstaking/v1beta1/has_permission/{address}/{permission}";
   }
 }
 
@@ -19,4 +41,55 @@ message QueryNftStakingsRequest {}
 message QueryNftStakingsResponse {
   repeated teritori.nftstaking.v1beta1.NftStaking nftstakings = 1
       [ (gogoproto.nullable) = false ];
+}
+
+message QueryNftStakingRequest {
+  string identifier = 1;
+}
+message QueryNftStakingResponse {
+  teritori.nftstaking.v1beta1.NftStaking nftstaking = 1
+      [ (gogoproto.nullable) = false ];
+}
+
+
+message QueryNftStakingsByOwnerRequest {
+  string owner = 1;
+}
+message QueryNftStakingsByOwnerResponse {
+  repeated teritori.nftstaking.v1beta1.NftStaking nftstakings = 1
+      [ (gogoproto.nullable) = false ];
+}
+
+message QueryAccessInfosRequest {}
+message QueryAccessInfosResponse {
+  repeated teritori.nftstaking.v1beta1.Access access_infos = 1
+      [ (gogoproto.nullable) = false ];
+}
+
+message QueryAccessInfoRequest {
+  string address = 1;
+}
+message QueryAccessInfoResponse {
+  teritori.nftstaking.v1beta1.Access access_info = 1
+      [ (gogoproto.nullable) = false ];
+}
+
+message QueryAllNftTypePermsRequest {}
+message QueryAllNftTypePermsResponse {
+  repeated teritori.nftstaking.v1beta1.NftTypePerms all_nft_type_perms = 1 [ (gogoproto.nullable) = false ];
+} 
+
+message QueryNftTypePermsRequest {
+  NftType nft_type = 1;
+}
+message QueryNftTypePermsResponse {
+  teritori.nftstaking.v1beta1.NftTypePerms nft_type_perms = 1 [ (gogoproto.nullable) = false ];
+} 
+
+message QueryHasPermissionRequest {
+  string address = 1;
+  string permission = 2;
+}
+message QueryHasPermissionResponse {
+  bool has_permission = 1;
 }

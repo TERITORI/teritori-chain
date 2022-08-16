@@ -3,7 +3,7 @@ package keeper
 import (
 	"context"
 
-	"github.com/NXTPOP/teritori-chain/x/airdrop/types"
+	"github.com/TERITORI/teritori-chain/x/airdrop/types"
 	sdk "github.com/cosmos/cosmos-sdk/types"
 )
 
@@ -31,6 +31,10 @@ func (k msgServer) ClaimAllocation(goCtx context.Context, msg *types.MsgClaimAll
 func (k msgServer) SetAllocation(goCtx context.Context, msg *types.MsgSetAllocation) (*types.MsgSetAllocationResponse, error) {
 	ctx := sdk.UnwrapSDKContext(goCtx)
 
+	params := k.keeper.GetParamSet(ctx)
+	if msg.Sender != params.Owner {
+		return nil, types.ErrNotEnoughPermission
+	}
 	k.keeper.SetAllocation(ctx, msg.Allocation)
 	return &types.MsgSetAllocationResponse{}, nil
 }
