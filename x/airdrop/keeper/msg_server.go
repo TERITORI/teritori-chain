@@ -31,7 +31,10 @@ func (k msgServer) ClaimAllocation(goCtx context.Context, msg *types.MsgClaimAll
 func (k msgServer) SetAllocation(goCtx context.Context, msg *types.MsgSetAllocation) (*types.MsgSetAllocationResponse, error) {
 	ctx := sdk.UnwrapSDKContext(goCtx)
 
-	// TODO: check permission
+	params := k.keeper.GetParamSet(ctx)
+	if msg.Sender != params.Owner {
+		return nil, types.ErrNotEnoughPermission
+	}
 	k.keeper.SetAllocation(ctx, msg.Allocation)
 	return &types.MsgSetAllocationResponse{}, nil
 }

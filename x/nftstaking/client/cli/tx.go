@@ -30,6 +30,7 @@ func NewTxCmd() *cobra.Command {
 
 	txCmd.AddCommand(
 		GetTxRegisterNftStakingCmd(),
+		GetTxSetNftTypePermsCmd(),
 		GetTxSetAccessInfoCmd(),
 	)
 
@@ -81,6 +82,37 @@ func GetTxRegisterNftStakingCmd() *cobra.Command {
 	cmd.Flags().String(FlagNftMetadata, "", "nft metadata.")
 	cmd.Flags().String(FlagRewardAddress, "", "Reward address to receive staking rewards.")
 	cmd.Flags().Uint64(FlagRewardWeight, 0, "Reward weight for the nft")
+
+	flags.AddTxFlagsToCmd(cmd)
+	_ = cmd.MarkFlagRequired(flags.FlagFrom)
+
+	return cmd
+}
+
+func GetTxSetNftTypePermsCmd() *cobra.Command {
+	cmd := &cobra.Command{
+		Use:   "set-nft-type-perms [nft_type] [permissions] [flags]",
+		Short: "Set permissions for a nft type by module admin",
+		Args:  cobra.ExactArgs(2),
+		RunE: func(cmd *cobra.Command, args []string) error {
+			clientCtx, err := client.GetClientTxContext(cmd)
+
+			permissionStrs := strings.Split(args[1], ",")
+			permissions := []types.Permission{}
+			for _, permissionStr := range permissionStrs {
+				permissions = append(permissions, types.Permission(types.Permission_value[permissionStr]))
+			}
+
+			msg := types.NewMsgSetNftTypePerms(clientCtx.FromAddress.String(), types.NftTypePerms{
+				NftType: types.NftType(types.NftType_value[args[0]]),
+			})
+			if err != nil {
+				return err
+			}
+
+			return tx.GenerateOrBroadcastTxCLI(clientCtx, cmd.Flags(), msg)
+		},
+	}
 
 	flags.AddTxFlagsToCmd(cmd)
 	_ = cmd.MarkFlagRequired(flags.FlagFrom)

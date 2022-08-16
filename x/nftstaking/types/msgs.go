@@ -7,6 +7,7 @@ import (
 var (
 	MsgTypeRegisterNftStaking = "register_nft_staking"
 	MsgTypeSetAccessInfo      = "set_access_info"
+	MsgTypeSetNftTypePerms    = "set_nft_type_perms"
 )
 
 var _ sdk.Msg = &MsgRegisterNftStaking{}
@@ -91,6 +92,50 @@ func (m *MsgSetAccessInfo) GetSignBytes() []byte {
 }
 
 func (m *MsgSetAccessInfo) GetSigners() []sdk.AccAddress {
+	sender, err := sdk.AccAddressFromBech32(m.Sender)
+	if err != nil {
+		panic(err)
+	}
+
+	return []sdk.AccAddress{
+		sender,
+	}
+}
+
+var _ sdk.Msg = &MsgSetNftTypePerms{}
+
+func NewMsgSetNftTypePerms(
+	sender string,
+	nftTypePerms NftTypePerms,
+) *MsgSetNftTypePerms {
+	return &MsgSetNftTypePerms{
+		Sender:       sender,
+		NftTypePerms: nftTypePerms,
+	}
+}
+
+func (m *MsgSetNftTypePerms) Route() string {
+	return ModuleName
+}
+
+func (m *MsgSetNftTypePerms) Type() string {
+	return MsgTypeSetNftTypePerms
+}
+
+func (m *MsgSetNftTypePerms) ValidateBasic() error {
+	if m.Sender == "" {
+		return ErrEmptySender
+	}
+
+	return nil
+}
+
+func (m *MsgSetNftTypePerms) GetSignBytes() []byte {
+	bz := ModuleCdc.MustMarshalJSON(m)
+	return sdk.MustSortJSON(bz)
+}
+
+func (m *MsgSetNftTypePerms) GetSigners() []sdk.AccAddress {
 	sender, err := sdk.AccAddressFromBech32(m.Sender)
 	if err != nil {
 		panic(err)

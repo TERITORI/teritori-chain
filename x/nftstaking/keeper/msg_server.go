@@ -24,7 +24,10 @@ var _ types.MsgServer = msgServer{}
 func (k msgServer) RegisterNftStaking(goCtx context.Context, msg *types.MsgRegisterNftStaking) (*types.MsgRegisterNftStakingResponse, error) {
 	ctx := sdk.UnwrapSDKContext(goCtx)
 
-	// TODO: check permission
+	params := k.keeper.GetParamSet(ctx)
+	if msg.Sender != params.Owner {
+		return nil, types.ErrNotEnoughPermission
+	}
 	k.keeper.SetNftStaking(ctx, msg.NftStaking)
 	return &types.MsgRegisterNftStakingResponse{}, nil
 }
@@ -32,7 +35,10 @@ func (k msgServer) RegisterNftStaking(goCtx context.Context, msg *types.MsgRegis
 func (k msgServer) SetAccessInfo(goCtx context.Context, msg *types.MsgSetAccessInfo) (*types.MsgSetAccessInfoResponse, error) {
 	ctx := sdk.UnwrapSDKContext(goCtx)
 
-	// TODO: check permission
+	params := k.keeper.GetParamSet(ctx)
+	if msg.Sender != params.Owner {
+		return nil, types.ErrNotEnoughPermission
+	}
 	k.keeper.SetAccessInfo(ctx, msg.AccessInfo)
 	return &types.MsgSetAccessInfoResponse{}, nil
 }
@@ -40,7 +46,10 @@ func (k msgServer) SetAccessInfo(goCtx context.Context, msg *types.MsgSetAccessI
 func (k msgServer) SetNftTypePerms(goCtx context.Context, msg *types.MsgSetNftTypePerms) (*types.MsgSetNftTypePermsResponse, error) {
 	ctx := sdk.UnwrapSDKContext(goCtx)
 
-	// TODO: check permission
+	params := k.keeper.GetParamSet(ctx)
+	if msg.Sender != params.Owner {
+		return nil, types.ErrNotEnoughPermission
+	}
 	k.keeper.SetNftTypePerms(ctx, msg.NftTypePerms)
 	return &types.MsgSetNftTypePermsResponse{}, nil
 }

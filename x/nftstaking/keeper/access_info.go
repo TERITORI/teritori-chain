@@ -38,3 +38,8 @@ func (k Keeper) SetAccessInfo(ctx sdk.Context, accessInfo types.Access) {
 	bz := k.cdc.MustMarshal(&accessInfo)
 	prefixStore.Set([]byte(accessInfo.Address), bz)
 }
+
+func (k Keeper) DeleteAccessInfo(ctx sdk.Context, address string) {
+	prefixStore := prefix.NewStore(ctx.KVStore(k.storeKey), types.PrefixKeyAccessInfo)
+	prefixStore.Delete([]byte(address))
+}

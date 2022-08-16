@@ -107,6 +107,7 @@ func (am AppModule) InitGenesis(
 	var genesisState types.GenesisState
 	cdc.MustUnmarshalJSON(data, &genesisState)
 
+	am.keeper.SetParamSet(ctx, genesisState.Params)
 	for _, staking := range genesisState.NftStakings {
 		am.keeper.SetNftStaking(ctx, staking)
 	}
@@ -122,6 +123,7 @@ func (am AppModule) InitGenesis(
 
 func (am AppModule) ExportGenesis(ctx sdk.Context, cdc codec.JSONCodec) json.RawMessage {
 	var genesisState types.GenesisState
+	genesisState.Params = am.keeper.GetParamSet(ctx)
 	genesisState.NftStakings = am.keeper.GetAllNftStakings(ctx)
 	genesisState.AccessInfos = am.keeper.GetAllAccessInfos(ctx)
 	genesisState.NftTypePerms = am.keeper.GetAllNftTypePerms(ctx)
