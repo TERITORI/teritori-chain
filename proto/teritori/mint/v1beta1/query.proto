@@ -1,0 +1,45 @@
+syntax = "proto3";
+package teritori.mint.v1beta1;
+
+import "gogoproto/gogo.proto";
+import "google/api/annotations.proto";
+import "teritori/mint/v1beta1/mint.proto";
+
+option go_package = "github.com/TERITORI/teritori-chain/x/mint/types";
+
+// Query provides defines the gRPC querier service.
+service Query {
+  // Params returns the total set of minting parameters.
+  rpc Params(QueryParamsRequest) returns (QueryParamsResponse) {
+    option (google.api.http).get = "/teritori/mint/v1beta1/params";
+  }
+
+  // BlockProvisions current minting epoch provisions value.
+  rpc BlockProvisions(QueryBlockProvisionsRequest)
+      returns (QueryBlockProvisionsResponse) {
+    option (google.api.http).get = "/teritori/mint/v1beta1/block_provisions";
+  }
+}
+
+// QueryParamsRequest is the request type for the Query/Params RPC method.
+message QueryParamsRequest {}
+
+// QueryParamsResponse is the response type for the Query/Params RPC method.
+message QueryParamsResponse {
+  // params defines the parameters of the module.
+  Params params = 1 [ (gogoproto.nullable) = false ];
+}
+
+// QueryBlockProvisionsRequest is the request type for the
+// Query/BlockProvisions RPC method.
+message QueryBlockProvisionsRequest {}
+
+// QueryBlockProvisionsResponse is the response type for the
+// Query/BlockProvisions RPC method.
+message QueryBlockProvisionsResponse {
+  // block_provisions is the current minting per epoch provisions value.
+  bytes block_provisions = 1 [
+    (gogoproto.customtype) = "github.com/cosmos/cosmos-sdk/types.Dec",
+    (gogoproto.nullable) = false
+  ];
+}
