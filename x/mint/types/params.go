@@ -48,16 +48,20 @@ func NewParams(
 func DefaultParams() Params {
 	return Params{
 		MintDenom:               sdk.DefaultBondDenom,
-		GenesisBlockProvisions:  sdk.NewDec(5000000),
-		ReductionPeriodInBlocks: 156,                      // 3 years
-		ReductionFactor:         sdk.NewDecWithPrec(5, 1), // 0.5
+		GenesisBlockProvisions:  sdk.NewDec(47),              //  300 million /  6307200
+		ReductionPeriodInBlocks: 6307200,                     // 1 year - 86400 x 365 / 5
+		ReductionFactor:         sdk.NewDecWithPrec(3333, 4), // 0.3333
 		DistributionProportions: DistributionProportions{
-			Staking:          sdk.NewDecWithPrec(4, 1), // 0.4
-			PoolIncentives:   sdk.NewDecWithPrec(3, 1), // 0.3
-			DeveloperRewards: sdk.NewDecWithPrec(2, 1), // 0.2
-			CommunityPool:    sdk.NewDecWithPrec(1, 1), // 0.1
+			GrantsProgram:    sdk.NewDecWithPrec(10, 2), // 10%
+			CommunityPool:    sdk.NewDecWithPrec(10, 2), // 10%
+			UsageIncentive:   sdk.NewDecWithPrec(25, 2), // 25%
+			Staking:          sdk.NewDecWithPrec(40, 2), // 40%
+			DeveloperRewards: sdk.NewDecWithPrec(15, 2), // 15%
 		},
 		WeightedDeveloperRewardsReceivers:    []WeightedAddress{},
+		UsageIncentiveAddress:                "",
+		GrantsProgramAddress:                 "",
+		TeamReserveAddress:                   "",
 		MintingRewardsDistributionStartBlock: 0,
 	}
 }
