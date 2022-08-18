@@ -1,0 +1,33 @@
+apiVersion: networking.k8s.io/v1
+kind: Ingress
+metadata:
+  annotations:
+    nginx.ingress.kubernetes.io/rewrite-target: /$2
+    nginx.ingress.kubernetes.io/force-ssl-redirect: "false"
+    external-dns.alpha.kubernetes.io/hostname: teritorid.YOUR_DOMAIN
+    cert-manager.io/cluster-issuer: letsencrypt-prod
+  name: teritorid
+spec:
+  ingressClassName: nginx
+  rules:
+  - host: teritorid.YOUR_DOMAIN
+    http:
+      paths:
+      - backend:
+          service:
+            name: teritorid
+            port:
+              name: rpc
+        path: /rpc(/|$)(.*)
+        pathType: Prefix
+      - backend:
+          service:
+            name: teritorid
+            port:
+              name: rest
+        path: /rest(/|$)(.*)
+        pathType: Prefix
+  tls:
+  - hosts:
+    - teritorid.YOUR_DOMAIN
+    secretName: teritorid-tls
