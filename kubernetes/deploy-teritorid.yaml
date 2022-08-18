@@ -1,0 +1,103 @@
+apiVersion: v1
+kind: PersistentVolume
+metadata:
+  name: teritorid-pv
+spec:
+  capacity:
+    storage: 500Gi
+  volumeMode: Filesystem
+  accessModes:
+  - ReadWriteOnce
+  persistentVolumeReclaimPolicy: Delete
+  storageClassName: ""
+  claimRef:
+    namespace: YOUR_NAMESPACE
+    name: teritorid-pvc
+  local:
+    path: TERITORI_DATA_PATH
+  nodeAffinity:
+    required:
+      nodeSelectorTerms:
+      - matchExpressions:
+        - key: YOUR_NODE
+          operator: In
+          values:
+          - "true"
+---
+apiVersion: v1
+kind: PersistentVolumeClaim
+metadata:
+  name: teritorid-pvc
+  labels:
+    app: teritorid
+spec:
+ storageClassName: ""
+ accessModes:
+   - ReadWriteOnce
+ resources:
+   requests:
+      storage: 500Gi
+---
+# yaml-language-server: $schema=https://kubernetesjsonschema.dev/v1.14.0/deployment-apps-v1.json
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: teritorid
+  annotations:
+    reloader.stakater.com/auto: "true"
+spec:
+  revisionHistoryLimit: 3
+  strategy:
+    type: RollingUpdate
+    rollingUpdate:
+      maxSurge: 1
+      maxUnavailable: 0
+  selector:
+    matchLabels:
+      app: teritorid
+  template:
+    metadata:
+      labels:
+        app: teritorid
+    spec:
+      containers:
+      - name: teritorid
+        image: YOUR_REGISTRY/teritori/teritorid:IMAGE_COMMIT
+        command: ["teritorid", "start"]
+        securityContext:
+          allowPrivilegeEscalation: false
+        imagePullPolicy: IfNotPresent
+        ports:
+        - containerPort: 26657
+        - containerPort: 1317
+        volumeMounts:
+          - mountPath: /teritori/.teritorid
+            name: teritorid-storage
+      dnsConfig:
+        options:
+        - name: ndots
+          value: "3"
+      securityContext:
+        runAsUser: 1000
+        runAsGroup: 3000
+        fsGroup: 2000
+      volumes:
+      - name: teritorid-storage
+        persistentVolumeClaim:
+          claimName: teritorid-pvc
+---
+# yaml-language-server: $schema=https://kubernetesjsonschema.dev/v1.10.3-standalone/service-v1.json
+apiVersion: v1
+kind: Service
+metadata:
+  name: teritorid
+spec:
+  selector:
+    app: teritorid
+  ports:
+  - name: rpc
+    port: 26657
+    targetPort: 26657
+  - name: rest
+    port: 1317
+    targetPort: 1317
