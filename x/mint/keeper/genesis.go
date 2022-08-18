@@ -21,20 +21,8 @@ func (k Keeper) InitGenesis(ctx sdk.Context, data *types.GenesisState) {
 	// The call to GetModuleAccount creates a module account if it does not exist.
 	k.accountKeeper.GetModuleAccount(ctx, types.ModuleName)
 
-	// The account should be exported in the ExportGenesis of the
-	// x/auth SDK module. Therefore, we check for existence here
-	// to avoid overwriting pre-existing genesis account data.
-	if !k.accountKeeper.HasAccount(ctx, k.accountKeeper.GetModuleAddress(types.DeveloperVestingModuleAcctName)) {
-		totalDeveloperVestingCoins := sdk.NewCoin(data.Params.MintDenom, sdk.NewInt(developerVestingAmount))
-
-		if err := k.CreateDeveloperVestingModuleAccount(ctx, totalDeveloperVestingCoins); err != nil {
-			panic(err)
-		}
-
-		k.bankKeeper.AddSupplyOffset(ctx, data.Params.MintDenom, sdk.NewInt(developerVestingAmount).Neg())
-	}
-
 	k.SetLastReductionBlockNum(ctx, data.ReductionStartedBlock)
+	k.SetTeamVestingMonthInfo(ctx, data.MonthInfo)
 }
 
 // ExportGenesis returns a GenesisState for a given context and keeper.
@@ -47,5 +35,6 @@ func (k Keeper) ExportGenesis(ctx sdk.Context) *types.GenesisState {
 	}
 
 	lastReductionBlock := k.GetLastReductionBlockNum(ctx)
-	return types.NewGenesisState(minter, params, lastReductionBlock)
+	monthInfo := k.GetTeamVestingMonthInfo(ctx)
+	return types.NewGenesisState(minter, params, lastReductionBlock, monthInfo)
 }

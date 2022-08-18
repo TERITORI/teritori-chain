@@ -59,9 +59,9 @@ func DefaultParams() Params {
 			DeveloperRewards: sdk.NewDecWithPrec(15, 2), // 15%
 		},
 		WeightedDeveloperRewardsReceivers:    []WeightedAddress{},
-		UsageIncentiveAddress:                "",
-		GrantsProgramAddress:                 "",
-		TeamReserveAddress:                   "",
+		UsageIncentiveAddress:                "tori1g2escsu26508tgrpv865d80d62pvmw69je2ztn",
+		GrantsProgramAddress:                 "tori1g2escsu26508tgrpv865d80d62pvmw69je2ztn",
+		TeamReserveAddress:                   "tori1g2escsu26508tgrpv865d80d62pvmw69je2ztn",
 		MintingRewardsDistributionStartBlock: 0,
 	}
 }
@@ -84,6 +84,19 @@ func (p Params) Validate() error {
 	if err := validateDistributionProportions(p.DistributionProportions); err != nil {
 		return err
 	}
+
+	if err := validateAddress(p.UsageIncentiveAddress); err != nil {
+		return err
+	}
+
+	if err := validateAddress(p.GrantsProgramAddress); err != nil {
+		return err
+	}
+
+	if err := validateAddress(p.TeamReserveAddress); err != nil {
+		return err
+	}
+
 	if err := validateWeightedDeveloperRewardsReceivers(p.WeightedDeveloperRewardsReceivers); err != nil {
 		return err
 	}
@@ -102,6 +115,7 @@ func (p Params) String() string {
 
 // Implements params.ParamSet.
 func (p *Params) ParamSetPairs() paramtypes.ParamSetPairs {
+
 	return paramtypes.ParamSetPairs{
 		paramtypes.NewParamSetPair(KeyMintDenom, &p.MintDenom, validateMintDenom),
 		paramtypes.NewParamSetPair(KeyGenesisBlockProvisions, &p.GenesisBlockProvisions, validateGenesisBlockProvisions),
@@ -109,6 +123,9 @@ func (p *Params) ParamSetPairs() paramtypes.ParamSetPairs {
 		paramtypes.NewParamSetPair(KeyReductionFactor, &p.ReductionFactor, validateReductionFactor),
 		paramtypes.NewParamSetPair(KeyPoolAllocationRatio, &p.DistributionProportions, validateDistributionProportions),
 		paramtypes.NewParamSetPair(KeyDeveloperRewardsReceiver, &p.WeightedDeveloperRewardsReceivers, validateWeightedDeveloperRewardsReceivers),
+		paramtypes.NewParamSetPair(KeyDeveloperRewardsReceiver, &p.UsageIncentiveAddress, validateAddress),
+		paramtypes.NewParamSetPair(KeyDeveloperRewardsReceiver, &p.GrantsProgramAddress, validateAddress),
+		paramtypes.NewParamSetPair(KeyDeveloperRewardsReceiver, &p.TeamReserveAddress, validateAddress),
 		paramtypes.NewParamSetPair(KeyMintingRewardsDistributionStartBlock, &p.MintingRewardsDistributionStartBlock, validateMintingRewardsDistributionStartBlock),
 	}
 }
@@ -178,23 +195,27 @@ func validateDistributionProportions(i interface{}) error {
 		return fmt.Errorf("invalid parameter type: %T", i)
 	}
 
-	if v.Staking.IsNegative() {
+	if v.GrantsProgram.IsNegative() {
 		return errors.New("staking distribution ratio should not be negative")
 	}
 
-	if v.PoolIncentives.IsNegative() {
-		return errors.New("pool incentives distribution ratio should not be negative")
+	if v.CommunityPool.IsNegative() {
+		return errors.New("staking distribution ratio should not be negative")
+	}
+
+	if v.UsageIncentive.IsNegative() {
+		return errors.New("community pool distribution ratio should not be negative")
+	}
+
+	if v.Staking.IsNegative() {
+		return errors.New("staking distribution ratio should not be negative")
 	}
 
 	if v.DeveloperRewards.IsNegative() {
 		return errors.New("developer rewards distribution ratio should not be negative")
 	}
 
-	if v.CommunityPool.IsNegative() {
-		return errors.New("community pool distribution ratio should not be negative")
-	}
-
-	totalProportions := v.Staking.Add(v.PoolIncentives).Add(v.DeveloperRewards).Add(v.CommunityPool)
+	totalProportions := v.GrantsProgram.Add(v.CommunityPool).Add(v.UsageIncentive).Add(v.Staking).Add(v.DeveloperRewards)
 
 	if !totalProportions.Equal(sdk.NewDec(1)) {
 		return errors.New("total distributions ratio should be 1")
@@ -250,4 +271,15 @@ func validateMintingRewardsDistributionStartBlock(i interface{}) error {
 	}
 
 	return nil
+}
+
+func validateAddress(i interface{}) error {
+	v, ok := i.(string)
+	if !ok {
+		return fmt.Errorf("invalid parameter type: %T", i)
+	}
+
+	_, err := sdk.AccAddressFromBech32(v)
+
+	return err
 }

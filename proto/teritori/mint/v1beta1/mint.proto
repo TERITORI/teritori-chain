@@ -17,6 +17,12 @@ message Minter {
   ];
 }
 
+// required values for team rewards
+message TeamVestingMonthInfo {
+  int64 months_since_genesis = 1;
+  int64 month_started_block = 2;
+}
+
 message WeightedAddress {
   string address = 1 [ (gogoproto.moretags) = "yaml:\"address\"" ];
   string weight = 2 [

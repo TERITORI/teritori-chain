@@ -1,11 +1,12 @@
 package types
 
 // NewGenesisState creates a new GenesisState object.
-func NewGenesisState(minter Minter, params Params, reductionStartedBlock int64) *GenesisState {
+func NewGenesisState(minter Minter, params Params, reductionStartedBlock int64, monthInfo TeamVestingMonthInfo) *GenesisState {
 	return &GenesisState{
 		Minter:                minter,
 		Params:                params,
 		ReductionStartedBlock: reductionStartedBlock,
+		MonthInfo:             monthInfo,
 	}
 }
 
@@ -15,6 +16,7 @@ func DefaultGenesisState() *GenesisState {
 		Minter:                DefaultInitialMinter(),
 		Params:                DefaultParams(),
 		ReductionStartedBlock: 0,
+		MonthInfo:             TeamVestingMonthInfo{},
 	}
 }
 
