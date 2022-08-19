@@ -6,8 +6,6 @@ import (
 	"github.com/TERITORI/teritori-chain/x/mint/types"
 )
 
-const developerVestingAmount = 225_000_000_000_000
-
 // InitGenesis new mint genesis.
 func (k Keeper) InitGenesis(ctx sdk.Context, data *types.GenesisState) {
 	if data == nil {

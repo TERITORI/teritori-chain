@@ -16,7 +16,9 @@ func DefaultGenesisState() *GenesisState {
 		Minter:                DefaultInitialMinter(),
 		Params:                DefaultParams(),
 		ReductionStartedBlock: 0,
-		MonthInfo:             TeamVestingMonthInfo{},
+		MonthInfo: TeamVestingMonthInfo{
+			OneMonthPeriodInBlocks: 525600, // 1 month - 86400 x 365 / 12 / 5			,
+		},
 	}
 }
 

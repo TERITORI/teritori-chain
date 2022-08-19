@@ -23,10 +23,9 @@ The module uses time basis blocks supported by the `blocks` module.
 The `x/mint` module is designed to handle the regular printing of new
 tokens within a chain. The design taken is to
 
-- Mint new tokens once per block (default one week)
+- Mint new tokens once per block
 - To have a "Reductioning factor" every period, which reduces the number of
-  rewards per block. (default: period is 3 years, where a
-  year is 52 blocks. The next period's rewards are 2/3 of the prior
+  rewards per block. (default: period is 1 year. The next period's rewards are 2/3 of the prior
   period's rewards)
 
 ### Reduction factor
@@ -58,7 +57,7 @@ coin mint amount per block has happened.
 ### NextBlockProvisions
 
 The target block provision is recalculated on each reduction period
-(default 3 years). At the time of the reduction, the current provision is
+(1 year). At the time of the reduction, the current provision is
 multiplied by the reduction factor (default `2/3`), to calculate the
 provisions for the next block. Consequently, the rewards of the next
 period will be lowered by a `1` - reduction factor.
@@ -73,6 +72,20 @@ This fee collector is specified as the `auth` module's `FeeCollector` `ModuleAcc
 
 ## Network Parameters
 
+// distribution_proportions defines the proportion of the minted denom
+DistributionProportions distribution_proportions = 5 [ (gogoproto.nullable) = false ];
+// address to receive developer rewards
+repeated WeightedAddress weighted_developer_rewards_receivers = 6 [(gogoproto.nullable) = false];
+// usage incentive address
+string usage_incentive_address = 7;
+// grants program address
+string grants_program_address = 8;
+// team reserve funds address
+string team_reserve_address = 9;
+// start block to distribute minting rewards
+int64 minting_rewards_distribution_start_block = 10;
+}
+
 The minting module contains the following parameters:
 
 | Key                                        | Type         | Example                                |
@@ -81,11 +94,15 @@ The minting module contains the following parameters:
 | genesis_block_provisions                   | string (dec) | "500000000"                            |
 | reduction_period_in_blocks                 | int64        | 156                                    |
 | reduction_factor                           | string (dec) | "0.6666666666666"                      |
-| distribution_proportions.staking           | string (dec) | "0.4"                                  |
-| distribution_proportions.pool_incentives   | string (dec) | "0.3"                                  |
-| distribution_proportions.developer_rewards | string (dec) | "0.2"                                  |
-| distribution_proportions.community_pool    | string (dec) | "0.1"                                  |
+| distribution_proportions.grants_program    | string (dec) | "0.4"                                  |
+| distribution_proportions.community_pool    | string (dec) | "0.3"                                  |
+| distribution_proportions.usage_incentive   | string (dec) | "0.2"                                  |
+| distribution_proportions.staking           | string (dec) | "0.1"                                  |
+| distribution_proportions.developer_rewards | string (dec) | "0.1"                                  |
 | weighted_developer_rewards_receivers       | array        | [{"address": "torixx", "weight": "1"}] |
+| usage_incentive_address                    | string       | "torixx"                               |
+| grants_program_address                     | string       | "torixx"                               |
+| team_reserve_address                       | string       | "torixx"                               |
 | minting_rewards_distribution_start_block   | int64        | 10                                     |
 
 Below are all the network parameters for the `mint` module:
@@ -95,10 +112,14 @@ Below are all the network parameters for the `mint` module:
 - **`reduction_period_in_blocks`** - How many blocks must occur before implementing the reduction factor
 - **`reduction_factor`** - What the total token issuance factor will reduce by after the reduction period passes (if set to 66.66%, token issuance will reduce by 1/3)
 - **`distribution_proportions`** - Categories in which the specified proportion of newly released tokens are distributed to
-  - **`staking`** - Proportion of minted funds to incentivize staking TORI
-  - **`pool_incentives`** - Proportion of minted funds to incentivize pools
-  - **`developer_rewards`** - Proportion of minted funds to pay developers for their past and future work
+  - **`grants_program`** - Proportion of minted funds to grants program account
   - **`community_pool`** - Proportion of minted funds to be set aside for the community pool
+  - **`usage_incentive`** - Proportion of minted funds to usage incentive account
+  - **`staking`** - Proportion of minted funds to pay staking incentive
+  - **`developer_rewards`** - Proportion of minted funds to pay developers for their past and future work
+- **`grants_program_address`** - Address to receive gran program tokens
+- **`usage_incentive_address`** - Address to receive usage incentive
+- **`team_reserve_address`** - Address to receive team reserve tokens
 - **`weighted_developer_rewards_receivers`** - Addresses that developer rewards will go to. The weight attached to an address is the percent of the developer rewards that the specific address will receive
 - **`minting_rewards_distribution_start_block`** - What block will start the rewards distribution to the aforementioned distribution categories
 
@@ -123,12 +144,4 @@ Query all the current mint parameter values
 
 ```sh
 query mint params
-```
-
-::: details Example
-
-List all current min parameters in json format by:
-
-```bash
-teritorid query mint params -o json | jq
 ```

@@ -12,6 +12,9 @@ import (
 	airdrop "github.com/TERITORI/teritori-chain/x/airdrop"
 	airdropkeeper "github.com/TERITORI/teritori-chain/x/airdrop/keeper"
 	airdroptypes "github.com/TERITORI/teritori-chain/x/airdrop/types"
+	"github.com/TERITORI/teritori-chain/x/mint"
+	mintkeeper "github.com/TERITORI/teritori-chain/x/mint/keeper"
+	minttypes "github.com/TERITORI/teritori-chain/x/mint/types"
 	nftstaking "github.com/TERITORI/teritori-chain/x/nftstaking"
 	nftstakingkeeper "github.com/TERITORI/teritori-chain/x/nftstaking/keeper"
 	nftstakingtypes "github.com/TERITORI/teritori-chain/x/nftstaking/types"
@@ -65,9 +68,6 @@ import (
 	govclient "github.com/cosmos/cosmos-sdk/x/gov/client"
 	govkeeper "github.com/cosmos/cosmos-sdk/x/gov/keeper"
 	govtypes "github.com/cosmos/cosmos-sdk/x/gov/types"
-	"github.com/cosmos/cosmos-sdk/x/mint"
-	mintkeeper "github.com/cosmos/cosmos-sdk/x/mint/keeper"
-	minttypes "github.com/cosmos/cosmos-sdk/x/mint/types"
 	"github.com/cosmos/cosmos-sdk/x/params"
 	paramsclient "github.com/cosmos/cosmos-sdk/x/params/client"
 	paramskeeper "github.com/cosmos/cosmos-sdk/x/params/keeper"
@@ -409,9 +409,9 @@ func NewTeritoriApp(
 		appCodec,
 		keys[minttypes.StoreKey],
 		app.GetSubspace(minttypes.ModuleName),
-		&stakingKeeper,
 		app.AccountKeeper,
 		app.BankKeeper,
+		app.DistrKeeper,
 		authtypes.FeeCollectorName,
 	)
 	app.DistrKeeper = distrkeeper.NewKeeper(
@@ -593,7 +593,7 @@ func NewTeritoriApp(
 		capability.NewAppModule(appCodec, *app.CapabilityKeeper),
 		crisis.NewAppModule(&app.CrisisKeeper, skipGenesisInvariants),
 		gov.NewAppModule(appCodec, app.GovKeeper, app.AccountKeeper, app.BankKeeper),
-		mint.NewAppModule(appCodec, app.MintKeeper, app.AccountKeeper),
+		mint.NewAppModule(appCodec, app.MintKeeper, app.AccountKeeper, app.BankKeeper),
 		slashing.NewAppModule(appCodec, app.SlashingKeeper, app.AccountKeeper, app.BankKeeper, app.StakingKeeper),
 		distr.NewAppModule(appCodec, app.DistrKeeper, app.AccountKeeper, app.BankKeeper, app.StakingKeeper),
 		staking.NewAppModule(appCodec, app.StakingKeeper, app.AccountKeeper, app.BankKeeper),
@@ -718,7 +718,7 @@ func NewTeritoriApp(
 		gov.NewAppModule(appCodec, app.GovKeeper, app.AccountKeeper, app.BankKeeper),
 		airdrop.NewAppModule(appCodec, app.AirdropKeeper),
 		nftstaking.NewAppModule(appCodec, app.NftStakingKeeper),
-		mint.NewAppModule(appCodec, app.MintKeeper, app.AccountKeeper),
+		mint.NewAppModule(appCodec, app.MintKeeper, app.AccountKeeper, app.BankKeeper),
 		staking.NewAppModule(appCodec, app.StakingKeeper, app.AccountKeeper, app.BankKeeper),
 		distr.NewAppModule(appCodec, app.DistrKeeper, app.AccountKeeper, app.BankKeeper, app.StakingKeeper),
 		slashing.NewAppModule(appCodec, app.SlashingKeeper, app.AccountKeeper, app.BankKeeper, app.StakingKeeper),

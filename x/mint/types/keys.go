@@ -15,18 +15,10 @@ var TeamVestingMonthInfoKey = []byte{0x04}
 const (
 	// ModuleName is the module name.
 	ModuleName = "mint"
-	// DeveloperVestingModuleAcctName is the module acct name for developer vesting.
-	DeveloperVestingModuleAcctName = "developer_vesting_unvested"
 
 	// StoreKey is the default store key for mint.
 	StoreKey = ModuleName
 
 	// QuerierRoute is the querier route for the minting store.
 	QuerierRoute = StoreKey
-
-	// QueryParameters is an endpoint path for querying mint parameters.
-	QueryParameters = "parameters"
-
-	// QueryBlockProvisions is an endpoint path for querying mint block provisions.
-	QueryBlockProvisions = "block_provisions"
 )

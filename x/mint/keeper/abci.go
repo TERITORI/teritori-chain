@@ -33,6 +33,14 @@ func (k Keeper) EndBlocker(ctx sdk.Context) {
 		k.SetLastReductionBlockNum(ctx, blockNumber)
 	}
 
+	// implement automatic monthInfo updates
+	monthInfo := k.GetTeamVestingMonthInfo(ctx)
+	if blockNumber >= monthInfo.OneMonthPeriodInBlocks+monthInfo.MonthStartedBlock {
+		monthInfo.MonthsSinceGenesis++
+		monthInfo.MonthStartedBlock = ctx.BlockHeight()
+		k.SetTeamVestingMonthInfo(ctx, monthInfo)
+	}
+
 	// mint coins, update supply
 	mintedCoin := minter.BlockProvision(params)
 	mintedCoins := sdk.NewCoins(mintedCoin)

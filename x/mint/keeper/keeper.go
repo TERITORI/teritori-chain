@@ -285,7 +285,7 @@ func (k Keeper) distributeDeveloperRewards(ctx sdk.Context, totalMintedCoin sdk.
 			if err != nil {
 				return sdk.Int{}, err
 			}
-			err = k.bankKeeper.SendCoinsFromModuleToAccount(ctx, types.DeveloperVestingModuleAcctName, devRewardsAddr, devRewardPortionCoins)
+			err = k.bankKeeper.SendCoinsFromModuleToAccount(ctx, types.ModuleName, devRewardsAddr, devRewardPortionCoins)
 			if err != nil {
 				return sdk.Int{}, err
 			}
@@ -302,7 +302,7 @@ func (k Keeper) distributeDeveloperRewards(ctx sdk.Context, totalMintedCoin sdk.
 		}
 
 		err = k.bankKeeper.SendCoinsFromModuleToAccount(
-			ctx, types.DeveloperVestingModuleAcctName, reserve, sdk.Coins{remainingCoins})
+			ctx, types.ModuleName, reserve, sdk.Coins{remainingCoins})
 		if err != nil {
 			return sdk.Int{}, err
 		}
