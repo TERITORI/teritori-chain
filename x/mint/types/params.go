@@ -20,6 +20,9 @@ var (
 	KeyPoolAllocationRatio                  = []byte("PoolAllocationRatio")
 	KeyDeveloperRewardsReceiver             = []byte("DeveloperRewardsReceiver")
 	KeyMintingRewardsDistributionStartBlock = []byte("MintingRewardsDistributionStartBlock")
+	KeyUsageIncentiveAddress                = []byte("UsageIncentiveAddress")
+	KeyGrantsProgramAddress                 = []byte("GrantsProgramAddress")
+	KeyTeamReserveAddress                   = []byte("TeamReserveAddress")
 )
 
 // ParamTable for minting module.
@@ -123,9 +126,9 @@ func (p *Params) ParamSetPairs() paramtypes.ParamSetPairs {
 		paramtypes.NewParamSetPair(KeyReductionFactor, &p.ReductionFactor, validateReductionFactor),
 		paramtypes.NewParamSetPair(KeyPoolAllocationRatio, &p.DistributionProportions, validateDistributionProportions),
 		paramtypes.NewParamSetPair(KeyDeveloperRewardsReceiver, &p.WeightedDeveloperRewardsReceivers, validateWeightedDeveloperRewardsReceivers),
-		paramtypes.NewParamSetPair(KeyDeveloperRewardsReceiver, &p.UsageIncentiveAddress, validateAddress),
-		paramtypes.NewParamSetPair(KeyDeveloperRewardsReceiver, &p.GrantsProgramAddress, validateAddress),
-		paramtypes.NewParamSetPair(KeyDeveloperRewardsReceiver, &p.TeamReserveAddress, validateAddress),
+		paramtypes.NewParamSetPair(KeyUsageIncentiveAddress, &p.UsageIncentiveAddress, validateAddress),
+		paramtypes.NewParamSetPair(KeyGrantsProgramAddress, &p.GrantsProgramAddress, validateAddress),
+		paramtypes.NewParamSetPair(KeyTeamReserveAddress, &p.TeamReserveAddress, validateAddress),
 		paramtypes.NewParamSetPair(KeyMintingRewardsDistributionStartBlock, &p.MintingRewardsDistributionStartBlock, validateMintingRewardsDistributionStartBlock),
 	}
 }
