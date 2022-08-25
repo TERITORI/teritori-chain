@@ -63,8 +63,8 @@ func DefaultParams() Params {
 		},
 		WeightedDeveloperRewardsReceivers:    []WeightedAddress{},
 		UsageIncentiveAddress:                "tori1g2escsu26508tgrpv865d80d62pvmw69je2ztn",
-		GrantsProgramAddress:                 "tori1g2escsu26508tgrpv865d80d62pvmw69je2ztn",
-		TeamReserveAddress:                   "tori1g2escsu26508tgrpv865d80d62pvmw69je2ztn",
+		GrantsProgramAddress:                 "tori13x69ej2gp5u4zkzk6qe83flgrwmhq9c75nshm2",
+		TeamReserveAddress:                   "tori1tc0a4zfsas9a6papcnntdz3fuk78ld3pnfq624",
 		MintingRewardsDistributionStartBlock: 0,
 	}
 }
