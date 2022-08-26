@@ -88,10 +88,8 @@ func (k Keeper) distributeToModule(ctx sdk.Context, recipientModule string, mint
 	return distributionCoin.Amount, nil
 }
 
-var MonthlyPercentages = []float32{4.79, 5.30, 5.83, 6.38, 6.95, 7.51, 8.06, 8.59, 9.08, 9.52, 9.89, 10.18, 15.57, 15.72, 15.72, 15.57, 15.27, 14.83, 14.28, 13.62, 12.89, 12.09, 11.27, 10.42, 14.36, 13.12, 11.92, 10.78, 9.70, 8.69, 7.76, 6.91, 6.14, 5.43, 4.80, 4.23, 5.59, 4.91, 4.31, 3.78, 3.31, 2.89, 2.53, 2.21, 1.93, 1.68, 1.47}
-
 func (k Keeper) distributeDeveloperRewards(ctx sdk.Context, totalMintedCoin sdk.Coin, developerRewardsProportion sdk.Dec, developerRewardsReceivers []types.WeightedAddress) (sdk.Int, error) {
-	monthPercentage := float32(0)
+	monthBasisPoint := int64(0)
 
 	totalDevRewards, err := getProportions(totalMintedCoin, developerRewardsProportion)
 	if err != nil {
@@ -99,11 +97,11 @@ func (k Keeper) distributeDeveloperRewards(ctx sdk.Context, totalMintedCoin sdk.
 	}
 
 	monthInfo := k.GetTeamVestingMonthInfo(ctx)
-	if len(MonthlyPercentages) > int(monthInfo.MonthsSinceGenesis) {
-		monthPercentage = MonthlyPercentages[monthInfo.MonthsSinceGenesis]
+	if len(types.MonthlyBasisPoints) > int(monthInfo.MonthsSinceGenesis) {
+		monthBasisPoint = types.MonthlyBasisPoints[monthInfo.MonthsSinceGenesis]
 	}
 
-	vestedTokens, err := getProportions(totalMintedCoin, sdk.NewDec(int64(monthPercentage*100)).QuoInt(sdk.NewInt(10000)))
+	vestedTokens, err := getProportions(totalMintedCoin, sdk.NewDec(monthBasisPoint).QuoInt(sdk.NewInt(10000)))
 	if err != nil {
 		return sdk.Int{}, err
 	}

@@ -1,7 +1,6 @@
 package keeper_test
 
 import (
-	"github.com/TERITORI/teritori-chain/x/mint/keeper"
 	"github.com/TERITORI/teritori-chain/x/mint/types"
 	sdk "github.com/cosmos/cosmos-sdk/types"
 	authtypes "github.com/cosmos/cosmos-sdk/x/auth/types"
@@ -101,7 +100,7 @@ func (suite *KeeperTestSuite) TestDistributeMintedCoin() {
 
 			// check developer reward amount is distributed correctly per month: each address registered on weighted
 			dev1AddrCoins := suite.app.BankKeeper.GetBalance(suite.ctx, dev1Addr, params.MintDenom)
-			vested := 1000000 * int64(keeper.MonthlyPercentages[tc.monthIndex]*100) / 10000
+			vested := 1000000 * types.MonthlyBasisPoints[tc.monthIndex] / 10000
 			dev1Expected := vested * 7 / 10
 			suite.Require().Equal(dev1AddrCoins, sdk.NewInt64Coin(params.MintDenom, dev1Expected))
 			dev2Expected := vested * 3 / 10
