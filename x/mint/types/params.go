@@ -34,7 +34,7 @@ func ParamKeyTable() paramtypes.KeyTable {
 func NewParams(
 	mintDenom string, genesisBlockProvisions sdk.Dec,
 	ReductionFactor sdk.Dec, reductionPeriodInBlocks int64, distrProportions DistributionProportions,
-	weightedDevRewardsReceivers []WeightedAddress, MintingRewardsDistributionStartBlock int64,
+	weightedDevRewardsReceivers []MonthlyVestingAddress, MintingRewardsDistributionStartBlock int64,
 ) Params {
 	return Params{
 		MintDenom:                            mintDenom,
@@ -61,7 +61,7 @@ func DefaultParams() Params {
 			Staking:          sdk.NewDecWithPrec(40, 2), // 40%
 			DeveloperRewards: sdk.NewDecWithPrec(15, 2), // 15%
 		},
-		WeightedDeveloperRewardsReceivers:    []WeightedAddress{},
+		WeightedDeveloperRewardsReceivers:    []MonthlyVestingAddress{},
 		UsageIncentiveAddress:                "tori1g2escsu26508tgrpv865d80d62pvmw69je2ztn",
 		GrantsProgramAddress:                 "tori13x69ej2gp5u4zkzk6qe83flgrwmhq9c75nshm2",
 		TeamReserveAddress:                   "tori1tc0a4zfsas9a6papcnntdz3fuk78ld3pnfq624",
@@ -228,7 +228,7 @@ func validateDistributionProportions(i interface{}) error {
 }
 
 func validateWeightedDeveloperRewardsReceivers(i interface{}) error {
-	v, ok := i.([]WeightedAddress)
+	v, ok := i.([]MonthlyVestingAddress)
 	if !ok {
 		return fmt.Errorf("invalid parameter type: %T", i)
 	}
@@ -236,28 +236,6 @@ func validateWeightedDeveloperRewardsReceivers(i interface{}) error {
 	// fund community pool when rewards address is empty
 	if len(v) == 0 {
 		return nil
-	}
-
-	weightSum := sdk.NewDec(0)
-	for i, w := range v {
-		// we allow address to be "" to go to community pool
-		if w.Address != "" {
-			_, err := sdk.AccAddressFromBech32(w.Address)
-			if err != nil {
-				return fmt.Errorf("invalid address at %dth", i)
-			}
-		}
-		if !w.Weight.IsPositive() {
-			return fmt.Errorf("non-positive weight at %dth", i)
-		}
-		if w.Weight.GT(sdk.NewDec(1)) {
-			return fmt.Errorf("more than 1 weight at %dth", i)
-		}
-		weightSum = weightSum.Add(w.Weight)
-	}
-
-	if !weightSum.Equal(sdk.NewDec(1)) {
-		return fmt.Errorf("invalid weight sum: %s", weightSum.String())
 	}
 
 	return nil

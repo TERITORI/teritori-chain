@@ -88,45 +88,28 @@ func (k Keeper) distributeToModule(ctx sdk.Context, recipientModule string, mint
 	return distributionCoin.Amount, nil
 }
 
-func (k Keeper) distributeDeveloperRewards(ctx sdk.Context, totalMintedCoin sdk.Coin, developerRewardsProportion sdk.Dec, developerRewardsReceivers []types.WeightedAddress) (sdk.Int, error) {
-	monthBasisPoint := int64(0)
+func (k Keeper) distributeDeveloperRewards(ctx sdk.Context, totalMintedCoin sdk.Coin, developerRewardsProportion sdk.Dec, developerRewardsReceivers []types.MonthlyVestingAddress) (sdk.Int, error) {
 
+	params := k.GetParams(ctx)
 	totalDevRewards, err := getProportions(totalMintedCoin, developerRewardsProportion)
 	if err != nil {
 		return sdk.Int{}, err
 	}
 
-	monthInfo := k.GetTeamVestingMonthInfo(ctx)
-	if len(types.MonthlyBasisPoints) > int(monthInfo.MonthsSinceGenesis) {
-		monthBasisPoint = types.MonthlyBasisPoints[monthInfo.MonthsSinceGenesis]
-	}
-
-	vestedTokens, err := getProportions(totalMintedCoin, sdk.NewDec(monthBasisPoint).QuoInt(sdk.NewInt(10000)))
-	if err != nil {
-		return sdk.Int{}, err
-	}
-
-	if vestedTokens.Amount.GT(totalDevRewards.Amount) {
-		vestedTokens.Amount = totalDevRewards.Amount
-	}
-
-	remainingCoins := totalDevRewards.Sub(vestedTokens)
-
+	vestedAmount := sdk.ZeroInt()
 	// allocate developer rewards to addresses by weight
 	for _, w := range developerRewardsReceivers {
-		devPortionCoin, err := getProportions(vestedTokens, w.Weight)
-		if err != nil {
-			return sdk.Int{}, err
-		}
-
-		if devPortionCoin.IsZero() {
+		monthInfo := k.GetTeamVestingMonthInfo(ctx)
+		if len(w.MonthlyAmounts) <= int(monthInfo.MonthsSinceGenesis) {
 			continue
 		}
-		devRewardPortionCoins := sdk.NewCoins(devPortionCoin)
+		devPortionAmount := w.MonthlyAmounts[monthInfo.MonthsSinceGenesis].Quo(sdk.NewInt(monthInfo.OneMonthPeriodInBlocks))
+		if devPortionAmount.IsZero() {
+			continue
+		}
+		devRewardPortionCoins := sdk.NewCoins(sdk.NewCoin(params.MintDenom, devPortionAmount))
 		// fund community pool when rewards address is empty.
-		if w.Address == emptyWeightedAddressReceiver {
-			remainingCoins = remainingCoins.Add(devPortionCoin)
-		} else {
+		if w.Address != emptyAddressReceiver {
 			devRewardsAddr, err := sdk.AccAddressFromBech32(w.Address)
 			if err != nil {
 				return sdk.Int{}, err
@@ -135,12 +118,13 @@ func (k Keeper) distributeDeveloperRewards(ctx sdk.Context, totalMintedCoin sdk.
 			if err != nil {
 				return sdk.Int{}, err
 			}
+
+			vestedAmount = vestedAmount.Add(devPortionAmount)
 		}
 	}
-
 	// send remaining tokens to team reserve
-	params := k.GetParams(ctx)
-
+	vestedTokens := sdk.NewCoin(params.MintDenom, vestedAmount)
+	remainingCoins := totalDevRewards.Sub(vestedTokens)
 	if remainingCoins.IsPositive() {
 		reserve, err := sdk.AccAddressFromBech32(params.TeamReserveAddress)
 		if err != nil {

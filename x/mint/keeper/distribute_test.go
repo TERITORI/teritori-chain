@@ -25,14 +25,14 @@ func (suite *KeeperTestSuite) TestDistributeMintedCoin() {
 			Staking:          sdk.NewDecWithPrec(2, 1),
 			DeveloperRewards: sdk.NewDecWithPrec(2, 1),
 		},
-		WeightedDeveloperRewardsReceivers: []types.WeightedAddress{
+		WeightedDeveloperRewardsReceivers: []types.MonthlyVestingAddress{
 			{
-				Address: dev1Addr.String(),
-				Weight:  sdk.NewDecWithPrec(7, 1),
+				Address:        dev1Addr.String(),
+				MonthlyAmounts: []sdk.Int{sdk.NewInt(7000000), sdk.NewInt(7000000), sdk.NewInt(7000000)},
 			},
 			{
-				Address: dev2Addr.String(),
-				Weight:  sdk.NewDecWithPrec(3, 1),
+				Address:        dev2Addr.String(),
+				MonthlyAmounts: []sdk.Int{sdk.NewInt(3000000), sdk.NewInt(3000000), sdk.NewInt(3000000)},
 			},
 		},
 		UsageIncentiveAddress:                usageIncentiveAddr.String(),
@@ -68,7 +68,7 @@ func (suite *KeeperTestSuite) TestDistributeMintedCoin() {
 		newMonthInfo := types.TeamVestingMonthInfo{
 			MonthsSinceGenesis:     tc.monthIndex,
 			MonthStartedBlock:      1,
-			OneMonthPeriodInBlocks: 1,
+			OneMonthPeriodInBlocks: 43200,
 		}
 		suite.app.MintKeeper.SetTeamVestingMonthInfo(suite.ctx, newMonthInfo)
 
@@ -100,16 +100,15 @@ func (suite *KeeperTestSuite) TestDistributeMintedCoin() {
 
 			// check developer reward amount is distributed correctly per month: each address registered on weighted
 			dev1AddrCoins := suite.app.BankKeeper.GetBalance(suite.ctx, dev1Addr, params.MintDenom)
-			vested := 1000000 * types.MonthlyBasisPoints[tc.monthIndex] / 10000
-			dev1Expected := vested * 7 / 10
-			suite.Require().Equal(dev1AddrCoins, sdk.NewInt64Coin(params.MintDenom, dev1Expected))
-			dev2Expected := vested * 3 / 10
+			dev1Expected := params.WeightedDeveloperRewardsReceivers[0].MonthlyAmounts[tc.monthIndex].Quo(sdk.NewInt(newMonthInfo.OneMonthPeriodInBlocks))
+			suite.Require().Equal(dev1AddrCoins, sdk.NewCoin(params.MintDenom, dev1Expected))
+			dev2Expected := params.WeightedDeveloperRewardsReceivers[1].MonthlyAmounts[tc.monthIndex].Quo(sdk.NewInt(newMonthInfo.OneMonthPeriodInBlocks))
 			dev2AddrCoins := suite.app.BankKeeper.GetBalance(suite.ctx, dev2Addr, params.MintDenom)
-			suite.Require().Equal(dev2AddrCoins, sdk.NewInt64Coin(params.MintDenom, dev2Expected))
+			suite.Require().Equal(dev2AddrCoins, sdk.NewCoin(params.MintDenom, dev2Expected))
 
 			// check team reserve balance
 			teamReserveAddrCoins := suite.app.BankKeeper.GetBalance(suite.ctx, teamReserveAddr, params.MintDenom)
-			suite.Require().Equal(teamReserveAddrCoins, sdk.NewInt64Coin(params.MintDenom, 200000-dev1Expected-dev2Expected))
+			suite.Require().Equal(teamReserveAddrCoins, sdk.NewCoin(params.MintDenom, sdk.NewInt(200000).Sub(dev1Expected).Sub(dev2Expected)))
 		} else {
 			suite.Require().Error(err)
 		}

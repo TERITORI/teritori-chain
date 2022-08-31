@@ -24,11 +24,11 @@ message TeamVestingMonthInfo {
   int64 one_month_period_in_blocks = 3;
 }
 
-message WeightedAddress {
+message MonthlyVestingAddress {
   string address = 1 [ (gogoproto.moretags) = "yaml:\"address\"" ];
-  string weight = 2 [
-    (gogoproto.moretags) = "yaml:\"weight\"",
-    (gogoproto.customtype) = "github.com/cosmos/cosmos-sdk/types.Dec",
+  repeated string monthly_amounts = 2 [
+    (gogoproto.moretags) = "yaml:\"monthly_amounts\"",
+    (gogoproto.customtype) = "github.com/cosmos/cosmos-sdk/types.Int",
     (gogoproto.nullable) = false
   ];
 }
@@ -88,7 +88,7 @@ message Params {
   // distribution_proportions defines the proportion of the minted denom
   DistributionProportions distribution_proportions = 5 [ (gogoproto.nullable) = false ];
   // address to receive developer rewards
-  repeated WeightedAddress weighted_developer_rewards_receivers = 6 [(gogoproto.nullable) = false];
+  repeated MonthlyVestingAddress weighted_developer_rewards_receivers = 6 [(gogoproto.nullable) = false];
   // usage incentive address
   string usage_incentive_address = 7;
   // grants program address

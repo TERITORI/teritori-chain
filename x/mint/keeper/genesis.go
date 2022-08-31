@@ -29,7 +29,7 @@ func (k Keeper) ExportGenesis(ctx sdk.Context) *types.GenesisState {
 	params := k.GetParams(ctx)
 
 	if params.WeightedDeveloperRewardsReceivers == nil {
-		params.WeightedDeveloperRewardsReceivers = make([]types.WeightedAddress, 0)
+		params.WeightedDeveloperRewardsReceivers = make([]types.MonthlyVestingAddress, 0)
 	}
 
 	lastReductionBlock := k.GetLastReductionBlockNum(ctx)

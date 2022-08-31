@@ -41,7 +41,7 @@ func (e insufficientDevVestingBalanceError) Error() string {
 	return fmt.Sprintf("developer vesting balance (%s) is smaller than requested distribution of (%s)", e.ActualBalance, e.AttemptedDistribution)
 }
 
-const emptyWeightedAddressReceiver = ""
+const emptyAddressReceiver = ""
 
 // NewKeeper creates a new mint Keeper instance.
 func NewKeeper(

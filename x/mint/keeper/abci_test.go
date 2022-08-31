@@ -26,14 +26,14 @@ func (suite *KeeperTestSuite) TestEndBlocker() {
 			Staking:          sdk.NewDecWithPrec(2, 1),
 			DeveloperRewards: sdk.NewDecWithPrec(2, 1),
 		},
-		WeightedDeveloperRewardsReceivers: []types.WeightedAddress{
+		WeightedDeveloperRewardsReceivers: []types.MonthlyVestingAddress{
 			{
-				Address: dev1Addr.String(),
-				Weight:  sdk.NewDecWithPrec(7, 1),
+				Address:        dev1Addr.String(),
+				MonthlyAmounts: []sdk.Int{sdk.NewInt(6000), sdk.NewInt(6000), sdk.NewInt(6000)},
 			},
 			{
-				Address: dev2Addr.String(),
-				Weight:  sdk.NewDecWithPrec(3, 1),
+				Address:        dev2Addr.String(),
+				MonthlyAmounts: []sdk.Int{sdk.NewInt(4000), sdk.NewInt(4000), sdk.NewInt(4000)},
 			},
 		},
 		UsageIncentiveAddress:                usageIncentiveAddr.String(),
@@ -48,7 +48,7 @@ func (suite *KeeperTestSuite) TestEndBlocker() {
 	newMonthInfo := types.TeamVestingMonthInfo{
 		MonthsSinceGenesis:     1,
 		MonthStartedBlock:      1,
-		OneMonthPeriodInBlocks: 100,
+		OneMonthPeriodInBlocks: 4000,
 	}
 	suite.app.MintKeeper.SetTeamVestingMonthInfo(suite.ctx, newMonthInfo)
 

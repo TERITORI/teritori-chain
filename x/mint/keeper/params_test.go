@@ -22,10 +22,10 @@ func (suite *KeeperTestSuite) TestParamsGetSet() {
 			Staking:          sdk.NewDecWithPrec(2, 1),
 			DeveloperRewards: sdk.NewDecWithPrec(2, 1),
 		},
-		WeightedDeveloperRewardsReceivers: []types.WeightedAddress{
+		WeightedDeveloperRewardsReceivers: []types.MonthlyVestingAddress{
 			{
-				Address: "",
-				Weight:  sdk.NewDec(1),
+				Address:        "",
+				MonthlyAmounts: []sdk.Int{sdk.NewInt(7000), sdk.NewInt(7000), sdk.NewInt(7000)},
 			},
 		},
 		UsageIncentiveAddress:                addr.String(),

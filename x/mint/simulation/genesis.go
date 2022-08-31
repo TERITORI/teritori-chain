@@ -30,66 +30,18 @@ var (
 		Staking:          sdk.NewDecWithPrec(40, 2), // 40%
 		DeveloperRewards: sdk.NewDecWithPrec(15, 2), // 15%
 	}
-	weightedDevRewardReceivers = []types.WeightedAddress{
+	weightedDevRewardReceivers = []types.MonthlyVestingAddress{
 		{
-			Address: "tori1g2escsu26508tgrpv865d80d62pvmw69je2ztn",
-			Weight:  sdk.NewDecWithPrec(2887, 4),
+			Address:        "tori1g2escsu26508tgrpv865d80d62pvmw69je2ztn",
+			MonthlyAmounts: []sdk.Int{sdk.NewInt(7000), sdk.NewInt(7000), sdk.NewInt(7000)},
 		},
 		{
-			Address: "tori1g2escsu26508tgrpv865d80d62pvmw69je2ztn",
-			Weight:  sdk.NewDecWithPrec(229, 3),
+			Address:        "tori1g2escsu26508tgrpv865d80d62pvmw69je2ztn",
+			MonthlyAmounts: []sdk.Int{sdk.NewInt(2000), sdk.NewInt(2000), sdk.NewInt(2000)},
 		},
 		{
-			Address: "tori1g2escsu26508tgrpv865d80d62pvmw69je2ztn",
-			Weight:  sdk.NewDecWithPrec(1625, 4),
-		},
-		{
-			Address: "tori1g2escsu26508tgrpv865d80d62pvmw69je2ztn",
-			Weight:  sdk.NewDecWithPrec(109, 3),
-		},
-		{
-			Address: "tori1g2escsu26508tgrpv865d80d62pvmw69je2ztn",
-			Weight:  sdk.NewDecWithPrec(995, 3).Quo(sdk.NewDec(10)), // 0.0995
-		},
-		{
-			Address: "tori1g2escsu26508tgrpv865d80d62pvmw69je2ztn",
-			Weight:  sdk.NewDecWithPrec(6, 1).Quo(sdk.NewDec(10)), // 0.06
-		},
-		{
-			Address: "tori1g2escsu26508tgrpv865d80d62pvmw69je2ztn",
-			Weight:  sdk.NewDecWithPrec(15, 2).Quo(sdk.NewDec(10)), // 0.015
-		},
-		{
-			Address: "tori1g2escsu26508tgrpv865d80d62pvmw69je2ztn",
-			Weight:  sdk.NewDecWithPrec(1, 1).Quo(sdk.NewDec(10)), // 0.01
-		},
-		{
-			Address: "tori1g2escsu26508tgrpv865d80d62pvmw69je2ztn",
-			Weight:  sdk.NewDecWithPrec(75, 2).Quo(sdk.NewDec(100)), // 0.0075
-		},
-		{
-			Address: "tori1g2escsu26508tgrpv865d80d62pvmw69je2ztn",
-			Weight:  sdk.NewDecWithPrec(7, 1).Quo(sdk.NewDec(100)), // 0.007
-		},
-		{
-			Address: "tori1g2escsu26508tgrpv865d80d62pvmw69je2ztn",
-			Weight:  sdk.NewDecWithPrec(5, 1).Quo(sdk.NewDec(100)), // 0.005
-		},
-		{
-			Address: "tori1g2escsu26508tgrpv865d80d62pvmw69je2ztn",
-			Weight:  sdk.NewDecWithPrec(25, 2).Quo(sdk.NewDec(100)), // 0.0025
-		},
-		{
-			Address: "tori1g2escsu26508tgrpv865d80d62pvmw69je2ztn",
-			Weight:  sdk.NewDecWithPrec(25, 2).Quo(sdk.NewDec(100)), // 0.0025
-		},
-		{
-			Address: "tori1g2escsu26508tgrpv865d80d62pvmw69je2ztn",
-			Weight:  sdk.NewDecWithPrec(1, 1).Quo(sdk.NewDec(100)), // 0.001
-		},
-		{
-			Address: "tori1g2escsu26508tgrpv865d80d62pvmw69je2ztn",
-			Weight:  sdk.NewDecWithPrec(8, 1).Quo(sdk.NewDec(1000)), // 0.0008
+			Address:        "tori1g2escsu26508tgrpv865d80d62pvmw69je2ztn",
+			MonthlyAmounts: []sdk.Int{sdk.NewInt(1000), sdk.NewInt(1000), sdk.NewInt(1000)},
 		},
 	}
 )
