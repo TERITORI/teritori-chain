@@ -51,7 +51,7 @@ func NewParams(
 func DefaultParams() Params {
 	return Params{
 		MintDenom:               sdk.DefaultBondDenom,
-		GenesisBlockProvisions:  sdk.NewDec(47),              //  300 million /  6307200
+		GenesisBlockProvisions:  sdk.NewDec(47000000),        //  300 million /  6307200 * 10 ^ 6
 		ReductionPeriodInBlocks: 6307200,                     // 1 year - 86400 x 365 / 5
 		ReductionFactor:         sdk.NewDecWithPrec(3333, 4), // 0.3333
 		DistributionProportions: DistributionProportions{

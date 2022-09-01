@@ -84,7 +84,7 @@ func (suite *KeeperTestSuite) TestEndBlocker() {
 
 	// check grants amount is not distributed
 	grantsAddrBalance = suite.app.BankKeeper.GetBalance(suite.ctx, grantsAddr, params.MintDenom)
-	suite.Require().Equal(grantsAddrBalance, sdk.NewInt64Coin(params.MintDenom, 9))
+	suite.Require().Equal(grantsAddrBalance, sdk.NewInt64Coin(params.MintDenom, 9400000))
 
 	// check minter information
 	minter = suite.app.MintKeeper.GetMinter(suite.ctx)
@@ -104,14 +104,28 @@ func (suite *KeeperTestSuite) TestEndBlocker() {
 
 	// check grants amount is not distributed
 	grantsAddrBalance = suite.app.BankKeeper.GetBalance(suite.ctx, grantsAddr, params.MintDenom)
-	suite.Require().Equal(grantsAddrBalance, sdk.NewInt64Coin(params.MintDenom, 13))
+	suite.Require().Equal(grantsAddrBalance, sdk.NewInt64Coin(params.MintDenom, 14100000))
 
 	// check minter information
 	minter = suite.app.MintKeeper.GetMinter(suite.ctx)
-	suite.Require().Equal(minter.BlockProvisions, sdk.NewDecWithPrec(235, 1)) // 23.5
+	suite.Require().Equal(minter.BlockProvisions, sdk.NewDec(23500000)) // 23.5
 
 	// check month info update
 	monthInfo = suite.app.MintKeeper.GetTeamVestingMonthInfo(suite.ctx)
 	suite.Require().Equal(monthInfo.MonthStartedBlock, int64(10+params.ReductionPeriodInBlocks))
 	suite.Require().Equal(monthInfo.MonthsSinceGenesis, int64(2))
+}
+
+func (suite *KeeperTestSuite) TestEndBlocker90MonthsCheck() {
+	monthInfo := suite.app.MintKeeper.GetTeamVestingMonthInfo(suite.ctx)
+	monthInfo.OneMonthPeriodInBlocks = 1000
+	suite.app.MintKeeper.SetTeamVestingMonthInfo(suite.ctx, monthInfo)
+
+	for i := 0; i < 90; i++ {
+		for j := 0; j < int(monthInfo.OneMonthPeriodInBlocks); j++ {
+			suite.NotPanics(func() {
+				suite.app.MintKeeper.EndBlocker(suite.ctx)
+			})
+		}
+	}
 }
