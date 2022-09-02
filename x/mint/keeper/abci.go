@@ -45,6 +45,7 @@ func (k Keeper) EndBlocker(ctx sdk.Context) {
 	mintedCoin := minter.BlockProvision(params)
 	mintedCoins := sdk.NewCoins(mintedCoin)
 
+	fmt.Println("mintedCoins", mintedCoin)
 	// We over-allocate by the developer vesting portion, and burn this later
 	err := k.MintCoins(ctx, mintedCoins)
 	if err != nil {
