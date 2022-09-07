@@ -1,0 +1,100 @@
+syntax = "proto3";
+package teritori.mint.v1beta1;
+
+option go_package = "github.com/TERITORI/teritori-chain/x/mint/types";
+
+import "gogoproto/gogo.proto";
+import "google/protobuf/timestamp.proto";
+import "google/protobuf/any.proto";
+import "google/protobuf/duration.proto";
+
+// Minter represents the minting state.
+message Minter {
+  // current block provisions
+  string block_provisions = 1 [
+    (gogoproto.customtype) = "github.com/cosmos/cosmos-sdk/types.Dec",
+    (gogoproto.nullable) = false
+  ];
+}
+
+// required values for team rewards
+message TeamVestingMonthInfo {
+  int64 months_since_genesis = 1;
+  int64 month_started_block = 2;
+  int64 one_month_period_in_blocks = 3;
+}
+
+message MonthlyVestingAddress {
+  string address = 1 [ (gogoproto.moretags) = "yaml:\"address\"" ];
+  repeated string monthly_amounts = 2 [
+    (gogoproto.moretags) = "yaml:\"monthly_amounts\"",
+    (gogoproto.customtype) = "github.com/cosmos/cosmos-sdk/types.Int",
+    (gogoproto.nullable) = false
+  ];
+}
+
+message DistributionProportions {
+  // grants_program defines the proportion of the minted minted_denom that is
+  // to be allocated as grants.
+  string grants_program = 1 [
+    (gogoproto.customtype) = "github.com/cosmos/cosmos-sdk/types.Dec",
+    (gogoproto.nullable) = false
+  ];
+  // community_pool defines the proportion of the minted minted_denom that is
+  // to be allocated to the community pool.
+  string community_pool = 2 [
+    (gogoproto.customtype) = "github.com/cosmos/cosmos-sdk/types.Dec",
+    (gogoproto.moretags) = "yaml:\"community_pool\"",
+    (gogoproto.nullable) = false
+  ];
+  // usage_incentive defines the proportion of the minted minted_denom that is
+  // to be allocated as usage incentive.
+  string usage_incentive = 3 [
+    (gogoproto.customtype) = "github.com/cosmos/cosmos-sdk/types.Dec",
+    (gogoproto.nullable) = false
+  ];
+  // staking defines the proportion of the minted minted_denom that is to be
+  // allocated as staking rewards.
+  string staking = 4 [
+    (gogoproto.customtype) = "github.com/cosmos/cosmos-sdk/types.Dec",
+    (gogoproto.nullable) = false
+  ];
+  // developer_rewards defines the proportion of the minted minted_denom that is
+  // to be allocated to developer rewards address.
+  string developer_rewards = 5 [
+    (gogoproto.customtype) = "github.com/cosmos/cosmos-sdk/types.Dec",
+    (gogoproto.nullable) = false
+  ];
+}
+
+// Params holds parameters for the mint module.
+message Params {
+  option (gogoproto.goproto_stringer) = false;
+
+  // type of coin to mint
+  string mint_denom = 1;
+  // block provisions from the first block
+  string genesis_block_provisions = 2 [
+    (gogoproto.customtype) = "github.com/cosmos/cosmos-sdk/types.Dec",
+    (gogoproto.nullable) = false
+  ];
+  // number of blocks take to reduce rewards
+  int64 reduction_period_in_blocks = 3;
+  // reduction multiplier to execute on each period
+  string reduction_factor = 4 [
+    (gogoproto.customtype) = "github.com/cosmos/cosmos-sdk/types.Dec",
+    (gogoproto.nullable) = false
+  ];
+  // distribution_proportions defines the proportion of the minted denom
+  DistributionProportions distribution_proportions = 5 [ (gogoproto.nullable) = false ];
+  // address to receive developer rewards
+  repeated MonthlyVestingAddress weighted_developer_rewards_receivers = 6 [(gogoproto.nullable) = false];
+  // usage incentive address
+  string usage_incentive_address = 7;
+  // grants program address
+  string grants_program_address = 8;
+  // team reserve funds address
+  string team_reserve_address = 9;
+  // start block to distribute minting rewards
+  int64 minting_rewards_distribution_start_block = 10;
+}
