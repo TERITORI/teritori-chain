@@ -62,6 +62,31 @@ func VerifySignature(chain string, address string, pubKey string, rewardAddr str
 
 		signatureData := hexutil.MustDecode(signatureBytes)
 		return secp256k1PubKey.VerifySignature(signBytes, signatureData)
+	case "secret":
+		pubKeyBytes := hexutil.MustDecode(pubKey)
+		secp256k1PubKey := secp256k1.PubKey{Key: pubKeyBytes}
+		secretAddr, err := bech32.ConvertAndEncode("secret", secp256k1PubKey.Address())
+		if err != nil {
+			return false
+		}
+		if secretAddr != address {
+			return false
+		}
+
+		signatureData := hexutil.MustDecode(signatureBytes)
+		return secp256k1PubKey.VerifySignature(signBytes, signatureData)
+	case "stargaze":
+		_, bz, err := bech32.DecodeAndConvert(address)
+		if err != nil {
+			return false
+		}
+
+		bech32Addr, err := bech32.ConvertAndEncode(appparams.Bech32PrefixAccAddr, bz)
+		if err != nil {
+			return false
+		}
+
+		return bech32Addr == rewardAddr
 	case "osmosis":
 		_, bz, err := bech32.DecodeAndConvert(address)
 		if err != nil {
