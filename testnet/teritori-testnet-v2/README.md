@@ -147,7 +147,7 @@ go install github.com/cosmos/cosmos-sdk/cosmovisor/cmd/cosmovisor@latest
 
 ```shell
 export DAEMON_NAME=teritorid
-export DAEMON_HOME=$HOME/.teritori
+export DAEMON_HOME=$HOME/.teritorid
 source ~/.profile
 ```  
 
@@ -169,12 +169,12 @@ After=network-online.target
 
 [Service]
 User=$USER
-ExecStart=/home/$USER/go/bin/cosmovisor start
+ExecStart=/home/$USER/go/bin/cosmovisor run start
 Restart=always
 RestartSec=3
 LimitNOFILE=4096
 Environment="DAEMON_NAME=teritorid"
-Environment="DAEMON_HOME=/home/$USER/.teritori"
+Environment="DAEMON_HOME=/home/$USER/.teritorid"
 Environment="DAEMON_ALLOW_DOWNLOAD_BINARIES=false"
 Environment="DAEMON_RESTART_AFTER_UPGRADE=true"
 Environment="DAEMON_LOG_BUFFER_SIZE=512"
