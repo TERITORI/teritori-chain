@@ -24,11 +24,6 @@ type SignMessage struct {
 }
 
 func VerifySignature(chain string, address string, pubKey string, rewardAddr string, signatureBytes string) bool {
-	signer, err := sdk.AccAddressFromBech32(rewardAddr)
-	if err != nil {
-		return false
-	}
-
 	signMsg := SignMessage{
 		Chain:      chain,
 		Address:    address,
@@ -74,7 +69,7 @@ func VerifySignature(chain string, address string, pubKey string, rewardAddr str
 		keplrSignBytes := legacytx.StdSignBytes(
 			"", 0, 0, 0,
 			legacytx.StdFee{Amount: sdk.Coins{}, Gas: 0},
-			[]sdk.Msg{types.NewMsgSignData(signer, signBytes)}, "",
+			[]sdk.Msg{types.NewMsgSignData(address, signBytes)}, "",
 		)
 		fmt.Println("keplrSignBytes", string(keplrSignBytes))
 		pubKeyBytes := hexutil.MustDecode(pubKey)

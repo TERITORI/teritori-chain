@@ -105,11 +105,11 @@ var _ sdk.Msg = &MsgSignData{}
 var MsgTypeSignData = "sign_data"
 
 func NewMsgSignData(
-	sender sdk.AccAddress,
+	signer string,
 	data []byte,
 ) *MsgSignData {
 	return &MsgSignData{
-		Signer: sender,
+		Signer: signer,
 		Data:   data,
 	}
 }
@@ -127,11 +127,9 @@ func (m *MsgSignData) ValidateBasic() error {
 }
 
 func (m *MsgSignData) GetSignBytes() []byte {
-	return m.Data
+	return sdk.MustSortJSON(ModuleCdc.MustMarshalJSON(m))
 }
 
 func (m *MsgSignData) GetSigners() []sdk.AccAddress {
-	return []sdk.AccAddress{
-		m.Signer,
-	}
+	return []sdk.AccAddress{}
 }
