@@ -99,3 +99,39 @@ func (m *MsgSetAllocation) GetSigners() []sdk.AccAddress {
 		addr,
 	}
 }
+
+var _ sdk.Msg = &MsgSignData{}
+
+var MsgTypeSignData = "sign_data"
+
+func NewMsgSignData(
+	sender sdk.AccAddress,
+	data []byte,
+) *MsgSignData {
+	return &MsgSignData{
+		Signer: sender,
+		Data:   data,
+	}
+}
+
+func (m *MsgSignData) Route() string {
+	return ModuleName
+}
+
+func (m *MsgSignData) Type() string {
+	return MsgTypeSignData
+}
+
+func (m *MsgSignData) ValidateBasic() error {
+	return nil
+}
+
+func (m *MsgSignData) GetSignBytes() []byte {
+	return m.Data
+}
+
+func (m *MsgSignData) GetSigners() []sdk.AccAddress {
+	return []sdk.AccAddress{
+		m.Signer,
+	}
+}

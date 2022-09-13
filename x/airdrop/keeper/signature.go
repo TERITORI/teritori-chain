@@ -3,10 +3,14 @@ package keeper
 import (
 	"encoding/hex"
 	"encoding/json"
+	"fmt"
 
 	appparams "github.com/TERITORI/teritori-chain/app/params"
+	"github.com/TERITORI/teritori-chain/x/airdrop/types"
 	"github.com/cosmos/cosmos-sdk/crypto/keys/secp256k1"
+	sdk "github.com/cosmos/cosmos-sdk/types"
 	"github.com/cosmos/cosmos-sdk/types/bech32"
+	"github.com/cosmos/cosmos-sdk/x/auth/legacy/legacytx"
 	"github.com/ethereum/go-ethereum/accounts"
 	"github.com/ethereum/go-ethereum/common/hexutil"
 	"github.com/ethereum/go-ethereum/crypto"
@@ -20,13 +24,17 @@ type SignMessage struct {
 }
 
 func VerifySignature(chain string, address string, pubKey string, rewardAddr string, signatureBytes string) bool {
+	signer, err := sdk.AccAddressFromBech32(rewardAddr)
+	if err != nil {
+		return false
+	}
+
 	signMsg := SignMessage{
 		Chain:      chain,
 		Address:    address,
 		RewardAddr: rewardAddr,
 	}
 	signBytes, err := json.Marshal(signMsg)
-
 	if err != nil {
 		return false
 	}
@@ -63,6 +71,12 @@ func VerifySignature(chain string, address string, pubKey string, rewardAddr str
 		signatureData := hexutil.MustDecode(signatureBytes)
 		return secp256k1PubKey.VerifySignature(signBytes, signatureData)
 	case "secret":
+		keplrSignBytes := legacytx.StdSignBytes(
+			"", 0, 0, 0,
+			legacytx.StdFee{Amount: sdk.Coins{}, Gas: 0},
+			[]sdk.Msg{types.NewMsgSignData(signer, signBytes)}, "",
+		)
+		fmt.Println("keplrSignBytes", string(keplrSignBytes))
 		pubKeyBytes := hexutil.MustDecode(pubKey)
 		secp256k1PubKey := secp256k1.PubKey{Key: pubKeyBytes}
 		secretAddr, err := bech32.ConvertAndEncode("secret", secp256k1PubKey.Address())
@@ -74,7 +88,7 @@ func VerifySignature(chain string, address string, pubKey string, rewardAddr str
 		}
 
 		signatureData := hexutil.MustDecode(signatureBytes)
-		return secp256k1PubKey.VerifySignature(signBytes, signatureData)
+		return secp256k1PubKey.VerifySignature(keplrSignBytes, signatureData)
 	case "stargaze":
 		_, bz, err := bech32.DecodeAndConvert(address)
 		if err != nil {
