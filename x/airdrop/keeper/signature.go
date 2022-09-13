@@ -3,7 +3,6 @@ package keeper
 import (
 	"encoding/hex"
 	"encoding/json"
-	"fmt"
 
 	appparams "github.com/TERITORI/teritori-chain/app/params"
 	"github.com/TERITORI/teritori-chain/x/airdrop/types"
@@ -33,6 +32,11 @@ func VerifySignature(chain string, address string, pubKey string, rewardAddr str
 	if err != nil {
 		return false
 	}
+	keplrSignBytes := legacytx.StdSignBytes(
+		"", 0, 0, 0,
+		legacytx.StdFee{Amount: sdk.Coins{}, Gas: 0},
+		[]sdk.Msg{types.NewMsgSignData(address, signBytes)}, "",
+	)
 
 	switch chain {
 	case "solana":
@@ -66,12 +70,6 @@ func VerifySignature(chain string, address string, pubKey string, rewardAddr str
 		signatureData := hexutil.MustDecode(signatureBytes)
 		return secp256k1PubKey.VerifySignature(signBytes, signatureData)
 	case "secret":
-		keplrSignBytes := legacytx.StdSignBytes(
-			"", 0, 0, 0,
-			legacytx.StdFee{Amount: sdk.Coins{}, Gas: 0},
-			[]sdk.Msg{types.NewMsgSignData(address, signBytes)}, "",
-		)
-		fmt.Println("keplrSignBytes", string(keplrSignBytes))
 		pubKeyBytes := hexutil.MustDecode(pubKey)
 		secp256k1PubKey := secp256k1.PubKey{Key: pubKeyBytes}
 		secretAddr, err := bech32.ConvertAndEncode("secret", secp256k1PubKey.Address())
