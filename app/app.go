@@ -15,9 +15,6 @@ import (
 	"github.com/TERITORI/teritori-chain/x/mint"
 	mintkeeper "github.com/TERITORI/teritori-chain/x/mint/keeper"
 	minttypes "github.com/TERITORI/teritori-chain/x/mint/types"
-	nftstaking "github.com/TERITORI/teritori-chain/x/nftstaking"
-	nftstakingkeeper "github.com/TERITORI/teritori-chain/x/nftstaking/keeper"
-	nftstakingtypes "github.com/TERITORI/teritori-chain/x/nftstaking/types"
 	"github.com/cosmos/cosmos-sdk/baseapp"
 	"github.com/cosmos/cosmos-sdk/client"
 	"github.com/cosmos/cosmos-sdk/client/grpc/tmservice"
@@ -189,7 +186,6 @@ var (
 	// and genesis verification.
 	ModuleBasics = module.NewBasicManager(
 		airdrop.AppModuleBasic{},
-		nftstaking.AppModuleBasic{},
 		auth.AppModuleBasic{},
 		genutil.AppModuleBasic{},
 		bank.AppModuleBasic{},
@@ -232,8 +228,7 @@ var (
 		govtypes.ModuleName:            {authtypes.Burner},
 		liquiditytypes.ModuleName:      {authtypes.Minter, authtypes.Burner},
 		ibctransfertypes.ModuleName:    {authtypes.Minter, authtypes.Burner},
-		airdroptypes.ModuleName:        {authtypes.Minter},
-		nftstakingtypes.ModuleName:     {authtypes.Minter},
+		airdroptypes.ModuleName:        nil,
 	}
 )
 
@@ -279,7 +274,6 @@ type TeritoriApp struct { // nolint: golint
 	LiquidityKeeper  liquiditykeeper.Keeper
 	RouterKeeper     routerkeeper.Keeper
 	AirdropKeeper    airdropkeeper.Keeper
-	NftStakingKeeper nftstakingkeeper.Keeper
 
 	// make scoped keepers public for test purposes
 	ScopedIBCKeeper      capabilitykeeper.ScopedKeeper
@@ -336,7 +330,6 @@ func NewTeritoriApp(
 		capabilitytypes.StoreKey, feegrant.StoreKey, authzkeeper.StoreKey, routertypes.StoreKey,
 		icahosttypes.StoreKey,
 		airdroptypes.StoreKey,
-		nftstakingtypes.ModuleName,
 		wasm.StoreKey,
 	)
 	tkeys := sdk.NewTransientStoreKeys(paramstypes.TStoreKey)
@@ -459,8 +452,6 @@ func NewTeritoriApp(
 	)
 
 	app.AirdropKeeper = *airdropkeeper.NewKeeper(appCodec, keys[airdroptypes.StoreKey], app.GetSubspace(airdroptypes.ModuleName), app.BankKeeper, app.StakingKeeper, app.AccountKeeper)
-
-	app.NftStakingKeeper = nftstakingkeeper.NewKeeper(keys[nftstakingtypes.StoreKey], app.GetSubspace(nftstakingtypes.ModuleName), appCodec, app.BankKeeper)
 
 	app.IBCKeeper = ibckeeper.NewKeeper(
 		appCodec,
@@ -586,7 +577,6 @@ func NewTeritoriApp(
 			encodingConfig.TxConfig,
 		),
 		airdrop.NewAppModule(appCodec, app.AirdropKeeper),
-		nftstaking.NewAppModule(appCodec, app.NftStakingKeeper),
 		auth.NewAppModule(appCodec, app.AccountKeeper, nil),
 		vesting.NewAppModule(app.AccountKeeper, app.BankKeeper),
 		bank.NewAppModule(appCodec, app.BankKeeper, app.AccountKeeper),
@@ -637,7 +627,6 @@ func NewTeritoriApp(
 		icatypes.ModuleName,
 		routertypes.ModuleName,
 		airdroptypes.ModuleName,
-		nftstakingtypes.ModuleName,
 		wasm.ModuleName,
 	)
 	app.mm.SetOrderEndBlockers(
@@ -663,7 +652,6 @@ func NewTeritoriApp(
 		feegrant.ModuleName,
 		authz.ModuleName,
 		airdroptypes.ModuleName,
-		nftstakingtypes.ModuleName,
 		wasm.ModuleName,
 	)
 
@@ -695,7 +683,6 @@ func NewTeritoriApp(
 		authz.ModuleName,
 		routertypes.ModuleName,
 		airdroptypes.ModuleName,
-		nftstakingtypes.ModuleName,
 		wasm.ModuleName,
 	)
 
@@ -717,7 +704,6 @@ func NewTeritoriApp(
 		authzmodule.NewAppModule(appCodec, app.AuthzKeeper, app.AccountKeeper, app.BankKeeper, app.interfaceRegistry),
 		gov.NewAppModule(appCodec, app.GovKeeper, app.AccountKeeper, app.BankKeeper),
 		airdrop.NewAppModule(appCodec, app.AirdropKeeper),
-		nftstaking.NewAppModule(appCodec, app.NftStakingKeeper),
 		mint.NewAppModule(appCodec, app.MintKeeper, app.AccountKeeper, app.BankKeeper),
 		staking.NewAppModule(appCodec, app.StakingKeeper, app.AccountKeeper, app.BankKeeper),
 		distr.NewAppModule(appCodec, app.DistrKeeper, app.AccountKeeper, app.BankKeeper, app.StakingKeeper),
@@ -948,7 +934,6 @@ func initParamsKeeper(appCodec codec.BinaryCodec, legacyAmino *codec.LegacyAmino
 	paramsKeeper.Subspace(routertypes.ModuleName).WithKeyTable(routertypes.ParamKeyTable())
 	paramsKeeper.Subspace(icahosttypes.SubModuleName)
 	paramsKeeper.Subspace(airdroptypes.ModuleName)
-	paramsKeeper.Subspace(nftstakingtypes.ModuleName)
 
 	return paramsKeeper
 }

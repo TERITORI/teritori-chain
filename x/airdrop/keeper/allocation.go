@@ -69,10 +69,6 @@ func (k Keeper) ClaimAllocation(ctx sdk.Context, address string, pubKey string, 
 		return err
 	}
 
-	err = k.bankKeeper.MintCoins(ctx, types.ModuleName, sdk.Coins{unclaimed})
-	if err != nil {
-		return err
-	}
 	err = k.bankKeeper.SendCoinsFromModuleToAccount(ctx, types.ModuleName, sdkAddr, sdk.Coins{unclaimed})
 	if err != nil {
 		return err
