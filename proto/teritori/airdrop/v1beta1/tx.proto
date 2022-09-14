@@ -37,3 +37,11 @@ message MsgClaimAllocation {
 // MsgClaimAllocationResponse defines the Msg/ClaimAllocation response type.
 message MsgClaimAllocationResponse {
 }
+
+// MsgSignData defines an arbitrary, general-purpose, off-chain message
+message MsgSignData {
+    // Signer is the sdk.AccAddress of the message signer
+    string signer = 1 [(gogoproto.jsontag) = "signer"];
+    // data represents the raw bytes of the content that is signed (text, json, etc)
+    bytes data = 2 [(gogoproto.jsontag) = "data"];
+}
