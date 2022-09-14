@@ -1,8 +1,6 @@
 package keeper
 
 import (
-	"fmt"
-
 	"github.com/TERITORI/teritori-chain/x/mint/types"
 	sdk "github.com/cosmos/cosmos-sdk/types"
 )
@@ -94,25 +92,18 @@ func (k Keeper) distributeDeveloperRewards(ctx sdk.Context, totalMintedCoin sdk.
 
 	params := k.GetParams(ctx)
 	totalDevRewards, err := getProportions(totalMintedCoin, developerRewardsProportion)
-	fmt.Println("totalDevRewards", totalDevRewards)
-	fmt.Println("developerRewardsProportion, err", developerRewardsProportion, err)
 	if err != nil {
 		return sdk.Int{}, err
 	}
-	fmt.Println("developerRewardsReceivers", developerRewardsReceivers)
 
 	vestedAmount := sdk.ZeroInt()
 	// allocate developer rewards to addresses by weight
 	for _, w := range developerRewardsReceivers {
 		monthInfo := k.GetTeamVestingMonthInfo(ctx)
-		fmt.Println("w.MonthlyAmounts", w.MonthlyAmounts)
-		fmt.Println("monthInfo.MonthsSinceGenesis", monthInfo.MonthsSinceGenesis)
 		if len(w.MonthlyAmounts) <= int(monthInfo.MonthsSinceGenesis) {
 			continue
 		}
-		fmt.Println("monthInfo.OneMonthPeriodInBlocks", monthInfo.OneMonthPeriodInBlocks)
 		devPortionAmount := w.MonthlyAmounts[monthInfo.MonthsSinceGenesis].Quo(sdk.NewInt(monthInfo.OneMonthPeriodInBlocks))
-		fmt.Println("devPortionAmount", devPortionAmount.String())
 		if devPortionAmount.IsZero() {
 			continue
 		}
