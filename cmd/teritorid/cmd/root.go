@@ -104,6 +104,7 @@ func initRootCmd(rootCmd *cobra.Command, encodingConfig params.EncodingConfig) {
 		genutilcli.CollectGenTxsCmd(banktypes.GenesisBalancesIterator{}, teritori.DefaultNodeHome),
 		genutilcli.GenTxCmd(teritori.ModuleBasics, encodingConfig.TxConfig, banktypes.GenesisBalancesIterator{}, teritori.DefaultNodeHome),
 		genutilcli.ValidateGenesisCmd(teritori.ModuleBasics),
+		PrepareGenesisCmd(teritori.DefaultNodeHome, teritori.ModuleBasics),
 		AddGenesisAccountCmd(teritori.DefaultNodeHome),
 		tmcli.NewCompletionCmd(rootCmd, true),
 		testnetCmd(teritori.ModuleBasics, banktypes.GenesisBalancesIterator{}),
