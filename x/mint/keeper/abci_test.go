@@ -116,6 +116,35 @@ func (suite *KeeperTestSuite) TestEndBlocker() {
 	suite.Require().Equal(monthInfo.MonthsSinceGenesis, int64(2))
 }
 
+func (suite *KeeperTestSuite) TestEndBlocker90MonthsCheckWithDefaultGenesis() {
+	monthInfo := suite.app.MintKeeper.GetTeamVestingMonthInfo(suite.ctx)
+	monthInfo.OneMonthPeriodInBlocks = 10
+	suite.app.MintKeeper.SetTeamVestingMonthInfo(suite.ctx, monthInfo)
+
+	params := suite.app.MintKeeper.GetParams(suite.ctx)
+	dev1Addr, _ := sdk.AccAddressFromBech32(params.WeightedDeveloperRewardsReceivers[0].Address)
+	dev2Addr, _ := sdk.AccAddressFromBech32(params.WeightedDeveloperRewardsReceivers[1].Address)
+	suite.app.MintKeeper.SetParams(suite.ctx, params)
+
+	minterInfo := suite.app.MintKeeper.GetMinter(suite.ctx)
+	minterInfo.BlockProvisions = minterInfo.BlockProvisions.Mul(sdk.NewDec(525600 / monthInfo.OneMonthPeriodInBlocks))
+	suite.app.MintKeeper.SetMinter(suite.ctx, minterInfo)
+
+	for i := 0; i < 90; i++ {
+		for j := 0; j < int(monthInfo.OneMonthPeriodInBlocks); j++ {
+			suite.NotPanics(func() {
+				suite.app.MintKeeper.EndBlocker(suite.ctx)
+				suite.ctx = suite.ctx.WithBlockHeight(suite.ctx.BlockHeight() + 1)
+			})
+		}
+	}
+
+	dev1Balance := suite.app.BankKeeper.GetBalance(suite.ctx, dev1Addr, params.MintDenom)
+	dev2Balance := suite.app.BankKeeper.GetBalance(suite.ctx, dev2Addr, params.MintDenom)
+	suite.Require().Equal(dev1Balance.String(), sdk.NewCoin(params.MintDenom, sdk.NewInt(3000003280000)).String())
+	suite.Require().Equal(dev2Balance.String(), sdk.NewCoin(params.MintDenom, sdk.NewInt(6000006530000)).String())
+}
+
 func (suite *KeeperTestSuite) TestEndBlocker90MonthsCheck() {
 	monthInfo := suite.app.MintKeeper.GetTeamVestingMonthInfo(suite.ctx)
 	monthInfo.OneMonthPeriodInBlocks = 1000

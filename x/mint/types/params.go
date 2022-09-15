@@ -47,6 +47,32 @@ func NewParams(
 	}
 }
 
+func parseMonthlyVesting() []MonthlyVestingAddress {
+	records := [][]string{}
+	lines := strings.Split(vestingStr, "\n")
+	for _, line := range lines {
+		records = append(records, strings.Split(line, ","))
+	}
+
+	vAddrs := []MonthlyVestingAddress{}
+	for _, addr := range records[0] {
+		vAddrs = append(vAddrs, MonthlyVestingAddress{
+			Address:        sdk.AccAddress(addr).String(), // TODO: should use 'addr' itself
+			MonthlyAmounts: []sdk.Int{},
+		})
+	}
+
+	for _, line := range records[1:] {
+		for index, amountStr := range line {
+			amountDec := sdk.MustNewDecFromStr(amountStr)
+			amountInt := amountDec.Mul(sdk.NewDec(1000_000)).TruncateInt()
+			vAddrs[index].MonthlyAmounts = append(vAddrs[index].MonthlyAmounts, amountInt)
+		}
+	}
+
+	return vAddrs
+}
+
 // DefaultParams returns the default minting module parameters.
 func DefaultParams() Params {
 	return Params{
@@ -61,7 +87,7 @@ func DefaultParams() Params {
 			Staking:          sdk.NewDecWithPrec(40, 2), // 40%
 			DeveloperRewards: sdk.NewDecWithPrec(15, 2), // 15%
 		},
-		WeightedDeveloperRewardsReceivers:    []MonthlyVestingAddress{},
+		WeightedDeveloperRewardsReceivers:    parseMonthlyVesting(),
 		UsageIncentiveAddress:                "tori1g2escsu26508tgrpv865d80d62pvmw69je2ztn",
 		GrantsProgramAddress:                 "tori13x69ej2gp5u4zkzk6qe83flgrwmhq9c75nshm2",
 		TeamReserveAddress:                   "tori1tc0a4zfsas9a6papcnntdz3fuk78ld3pnfq624",
