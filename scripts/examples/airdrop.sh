@@ -1,5 +1,8 @@
 #!/usr/bin/env bash
 
+# query params
+teritorid query airdrop params
+
 # query allocation for XXX address
 teritorid query airdrop allocation XXX --home=/Users/admin/.teritorid
 

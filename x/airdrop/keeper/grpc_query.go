@@ -22,3 +22,15 @@ func (k Keeper) Allocation(c context.Context, req *types.QueryAllocationRequest)
 		Allocation: k.GetAllocation(ctx, req.Address),
 	}, nil
 }
+
+func (k Keeper) Params(c context.Context, req *types.QueryParamsRequest) (*types.QueryParamsResponse, error) {
+	if req == nil {
+		return nil, status.Error(codes.InvalidArgument, "invalid request")
+	}
+
+	ctx := sdk.UnwrapSDKContext(c)
+
+	return &types.QueryParamsResponse{
+		Params: k.GetParamSet(ctx),
+	}, nil
+}

@@ -22,6 +22,7 @@ func GetQueryCmd() *cobra.Command {
 
 	queryCmd.AddCommand(
 		GetCmdQueryAllocation(),
+		GetCmdQueryParams(),
 	)
 
 	return queryCmd
@@ -44,6 +45,31 @@ func GetCmdQueryAllocation() *cobra.Command {
 			}
 
 			return clientCtx.PrintProto(res.Allocation)
+		},
+	}
+
+	flags.AddQueryFlagsToCmd(cmd)
+
+	return cmd
+}
+
+func GetCmdQueryParams() *cobra.Command {
+	cmd := &cobra.Command{
+		Use:   "params",
+		Short: "Query params",
+		Args:  cobra.ExactArgs(0),
+		RunE: func(cmd *cobra.Command, args []string) error {
+			clientCtx := client.GetClientContextFromCmd(cmd)
+
+			params := &types.QueryParamsRequest{}
+
+			queryClient := types.NewQueryClient(clientCtx)
+			res, err := queryClient.Params(context.Background(), params)
+			if err != nil {
+				return err
+			}
+
+			return clientCtx.PrintProto(&res.Params)
 		},
 	}
 
