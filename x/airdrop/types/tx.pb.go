@@ -252,48 +252,142 @@ func (m *MsgSignData) GetData() []byte {
 	return nil
 }
 
+type MsgTransferModuleOwnership struct {
+	Sender   string `protobuf:"bytes,1,opt,name=sender,proto3" json:"sender,omitempty"`
+	NewOwner string `protobuf:"bytes,2,opt,name=new_owner,json=newOwner,proto3" json:"new_owner,omitempty"`
+}
+
+func (m *MsgTransferModuleOwnership) Reset()         { *m = MsgTransferModuleOwnership{} }
+func (m *MsgTransferModuleOwnership) String() string { return proto.CompactTextString(m) }
+func (*MsgTransferModuleOwnership) ProtoMessage()    {}
+func (*MsgTransferModuleOwnership) Descriptor() ([]byte, []int) {
+	return fileDescriptor_2fbdab318d176f45, []int{5}
+}
+func (m *MsgTransferModuleOwnership) XXX_Unmarshal(b []byte) error {
+	return m.Unmarshal(b)
+}
+func (m *MsgTransferModuleOwnership) XXX_Marshal(b []byte, deterministic bool) ([]byte, error) {
+	if deterministic {
+		return xxx_messageInfo_MsgTransferModuleOwnership.Marshal(b, m, deterministic)
+	} else {
+		b = b[:cap(b)]
+		n, err := m.MarshalToSizedBuffer(b)
+		if err != nil {
+			return nil, err
+		}
+		return b[:n], nil
+	}
+}
+func (m *MsgTransferModuleOwnership) XXX_Merge(src proto.Message) {
+	xxx_messageInfo_MsgTransferModuleOwnership.Merge(m, src)
+}
+func (m *MsgTransferModuleOwnership) XXX_Size() int {
+	return m.Size()
+}
+func (m *MsgTransferModuleOwnership) XXX_DiscardUnknown() {
+	xxx_messageInfo_MsgTransferModuleOwnership.DiscardUnknown(m)
+}
+
+var xxx_messageInfo_MsgTransferModuleOwnership proto.InternalMessageInfo
+
+func (m *MsgTransferModuleOwnership) GetSender() string {
+	if m != nil {
+		return m.Sender
+	}
+	return ""
+}
+
+func (m *MsgTransferModuleOwnership) GetNewOwner() string {
+	if m != nil {
+		return m.NewOwner
+	}
+	return ""
+}
+
+type MsgTransferModuleOwnershipResponse struct {
+}
+
+func (m *MsgTransferModuleOwnershipResponse) Reset()         { *m = MsgTransferModuleOwnershipResponse{} }
+func (m *MsgTransferModuleOwnershipResponse) String() string { return proto.CompactTextString(m) }
+func (*MsgTransferModuleOwnershipResponse) ProtoMessage()    {}
+func (*MsgTransferModuleOwnershipResponse) Descriptor() ([]byte, []int) {
+	return fileDescriptor_2fbdab318d176f45, []int{6}
+}
+func (m *MsgTransferModuleOwnershipResponse) XXX_Unmarshal(b []byte) error {
+	return m.Unmarshal(b)
+}
+func (m *MsgTransferModuleOwnershipResponse) XXX_Marshal(b []byte, deterministic bool) ([]byte, error) {
+	if deterministic {
+		return xxx_messageInfo_MsgTransferModuleOwnershipResponse.Marshal(b, m, deterministic)
+	} else {
+		b = b[:cap(b)]
+		n, err := m.MarshalToSizedBuffer(b)
+		if err != nil {
+			return nil, err
+		}
+		return b[:n], nil
+	}
+}
+func (m *MsgTransferModuleOwnershipResponse) XXX_Merge(src proto.Message) {
+	xxx_messageInfo_MsgTransferModuleOwnershipResponse.Merge(m, src)
+}
+func (m *MsgTransferModuleOwnershipResponse) XXX_Size() int {
+	return m.Size()
+}
+func (m *MsgTransferModuleOwnershipResponse) XXX_DiscardUnknown() {
+	xxx_messageInfo_MsgTransferModuleOwnershipResponse.DiscardUnknown(m)
+}
+
+var xxx_messageInfo_MsgTransferModuleOwnershipResponse proto.InternalMessageInfo
+
 func init() {
 	proto.RegisterType((*MsgSetAllocation)(nil), "teritori.airdrop.v1beta1.MsgSetAllocation")
 	proto.RegisterType((*MsgSetAllocationResponse)(nil), "teritori.airdrop.v1beta1.MsgSetAllocationResponse")
 	proto.RegisterType((*MsgClaimAllocation)(nil), "teritori.airdrop.v1beta1.MsgClaimAllocation")
 	proto.RegisterType((*MsgClaimAllocationResponse)(nil), "teritori.airdrop.v1beta1.MsgClaimAllocationResponse")
 	proto.RegisterType((*MsgSignData)(nil), "teritori.airdrop.v1beta1.MsgSignData")
+	proto.RegisterType((*MsgTransferModuleOwnership)(nil), "teritori.airdrop.v1beta1.MsgTransferModuleOwnership")
+	proto.RegisterType((*MsgTransferModuleOwnershipResponse)(nil), "teritori.airdrop.v1beta1.MsgTransferModuleOwnershipResponse")
 }
 
 func init() { proto.RegisterFile("teritori/airdrop/v1beta1/tx.proto", fileDescriptor_2fbdab318d176f45) }
 
 var fileDescriptor_2fbdab318d176f45 = []byte{
-	// 466 bytes of a gzipped FileDescriptorProto
-	0x1f, 0x8b, 0x08, 0x00, 0x00, 0x00, 0x00, 0x00, 0x02, 0xff, 0x94, 0x92, 0xbf, 0x6f, 0xd3, 0x40,
-	0x14, 0xc7, 0x6d, 0x1a, 0xa5, 0xcd, 0x2b, 0x05, 0x74, 0x42, 0x60, 0xac, 0xc8, 0x2e, 0x96, 0x90,
-	0xca, 0x2f, 0x9f, 0x1a, 0x98, 0xd8, 0x12, 0x60, 0xa8, 0x20, 0xaa, 0x30, 0x9d, 0x58, 0xaa, 0x73,
-	0x7c, 0x5c, 0x4f, 0xa4, 0x3e, 0xeb, 0xee, 0x0c, 0xcd, 0xc0, 0xce, 0xc8, 0xc4, 0xdc, 0x3f, 0xa7,
-	0x63, 0x47, 0xa6, 0x08, 0x25, 0x0b, 0xaa, 0xc4, 0xff, 0x80, 0x72, 0x39, 0x27, 0x6d, 0xa3, 0x20,
-	0xba, 0x24, 0xfe, 0xbe, 0xf7, 0x79, 0xef, 0x7d, 0xef, 0xe9, 0xc1, 0x7d, 0x4d, 0x25, 0xd7, 0x42,
-	0x72, 0x4c, 0xb8, 0xcc, 0xa4, 0x28, 0xf0, 0xe7, 0xed, 0x94, 0x6a, 0xb2, 0x8d, 0xf5, 0x51, 0x5c,
-	0x48, 0xa1, 0x05, 0xf2, 0x2a, 0x24, 0xb6, 0x48, 0x6c, 0x11, 0xff, 0x36, 0x13, 0x4c, 0x18, 0x08,
-	0x4f, 0xbe, 0xa6, 0xbc, 0x7f, 0x8f, 0x09, 0xc1, 0xfa, 0x14, 0x1b, 0x95, 0x96, 0x1f, 0x31, 0xc9,
-	0x07, 0x36, 0xf5, 0x70, 0xe9, 0x34, 0xd2, 0xef, 0x8b, 0x1e, 0xd1, 0x5c, 0xe4, 0x53, 0x34, 0xfa,
-	0x0a, 0xb7, 0xba, 0x8a, 0xbd, 0xa7, 0xba, 0x3d, 0xcb, 0xa0, 0x3b, 0x50, 0x57, 0x34, 0xcf, 0xa8,
-	0xf4, 0xdc, 0x4d, 0x77, 0xab, 0x91, 0x58, 0x85, 0xde, 0x01, 0xcc, 0xeb, 0xbd, 0x6b, 0x9b, 0xee,
-	0xd6, 0x7a, 0xeb, 0x71, 0xbc, 0xcc, 0x76, 0xdc, 0x9e, 0xea, 0x79, 0xe3, 0x4e, 0xed, 0x64, 0x18,
-	0x3a, 0xc9, 0xb9, 0x26, 0x91, 0x0f, 0xde, 0xe5, 0xf1, 0x09, 0x55, 0x85, 0xc8, 0x15, 0x8d, 0x7e,
-	0xb8, 0x80, 0xba, 0x8a, 0xbd, 0xec, 0x13, 0x7e, 0x78, 0xce, 0x9d, 0x07, 0xab, 0x24, 0xcb, 0x24,
-	0x55, 0xca, 0xda, 0xab, 0x24, 0xba, 0x0b, 0xab, 0x45, 0x99, 0xee, 0x7f, 0xa2, 0x03, 0x63, 0xae,
-	0x91, 0xd4, 0x8b, 0x32, 0x7d, 0x43, 0x07, 0xe8, 0x01, 0xdc, 0x90, 0xf4, 0x0b, 0x91, 0xd9, 0x7e,
-	0x55, 0xb9, 0x62, 0xf2, 0x1b, 0xd3, 0x68, 0xdb, 0xd6, 0x37, 0xa1, 0xa1, 0x38, 0xcb, 0x89, 0x2e,
-	0x25, 0xf5, 0x6a, 0x86, 0x98, 0x07, 0x5e, 0xac, 0x7d, 0x3b, 0x0e, 0x9d, 0xdf, 0xc7, 0xa1, 0x13,
-	0x35, 0xc1, 0x5f, 0xf4, 0x35, 0xb3, 0xbd, 0x0b, 0xeb, 0x93, 0x27, 0x71, 0x96, 0xbf, 0x22, 0x9a,
-	0xa0, 0x08, 0xea, 0x93, 0x1e, 0xd5, 0x32, 0x3b, 0x70, 0x36, 0x0c, 0x6d, 0x24, 0xb1, 0xff, 0xa8,
-	0x09, 0xb5, 0x8c, 0x68, 0x62, 0x5c, 0x5f, 0xef, 0xac, 0x9d, 0x0d, 0x43, 0xa3, 0x13, 0xf3, 0xdb,
-	0xfa, 0xe3, 0xc2, 0x4a, 0x57, 0x31, 0x54, 0xc2, 0xcd, 0xcb, 0xbb, 0x78, 0xb2, 0x7c, 0xfb, 0x8b,
-	0x0e, 0xfd, 0xe7, 0x57, 0xa1, 0xab, 0xf7, 0x20, 0x01, 0x1b, 0x17, 0xcf, 0xe3, 0xd1, 0x3f, 0xdb,
-	0x5c, 0x60, 0xfd, 0xd6, 0xff, 0xb3, 0xd5, 0xc0, 0xce, 0xdb, 0x93, 0x51, 0xe0, 0x9e, 0x8e, 0x02,
-	0xf7, 0xd7, 0x28, 0x70, 0xbf, 0x8f, 0x03, 0xe7, 0x74, 0x1c, 0x38, 0x3f, 0xc7, 0x81, 0xf3, 0xa1,
-	0xc5, 0xb8, 0x3e, 0x28, 0xd3, 0xb8, 0x27, 0x0e, 0xf1, 0xde, 0xeb, 0x64, 0x67, 0x6f, 0x37, 0xd9,
-	0xc1, 0xd5, 0x80, 0xa7, 0xbd, 0x03, 0xc2, 0x73, 0x7c, 0x34, 0xbb, 0x79, 0x3d, 0x28, 0xa8, 0x4a,
-	0xeb, 0xe6, 0xce, 0x9f, 0xfd, 0x0d, 0x00, 0x00, 0xff, 0xff, 0x4a, 0xb5, 0x38, 0xcf, 0x82, 0x03,
-	0x00, 0x00,
+	// 531 bytes of a gzipped FileDescriptorProto
+	0x1f, 0x8b, 0x08, 0x00, 0x00, 0x00, 0x00, 0x00, 0x02, 0xff, 0x9c, 0x53, 0xbf, 0x6f, 0xd3, 0x40,
+	0x14, 0xb6, 0xdb, 0x28, 0x4d, 0x5e, 0x29, 0x20, 0x0b, 0x51, 0x63, 0x22, 0xa7, 0x58, 0x20, 0x95,
+	0x5f, 0xb6, 0x1a, 0x98, 0x10, 0x4b, 0x02, 0x0c, 0x15, 0x44, 0x51, 0x4d, 0x26, 0x96, 0xe8, 0x1c,
+	0x5f, 0x9d, 0x13, 0xee, 0x9d, 0x75, 0x77, 0x26, 0xcd, 0xc0, 0xce, 0x82, 0xc4, 0xc4, 0xdc, 0x3f,
+	0xa7, 0x63, 0x47, 0xa6, 0x08, 0x25, 0x0b, 0xea, 0xff, 0x80, 0x84, 0x72, 0xb1, 0x93, 0xfe, 0x90,
+	0x2b, 0x60, 0xb1, 0xfd, 0xee, 0x7d, 0xdf, 0xfb, 0xbe, 0xf7, 0x9e, 0x0f, 0xee, 0x49, 0xcc, 0x89,
+	0x64, 0x9c, 0x78, 0x88, 0xf0, 0x90, 0xb3, 0xc4, 0xfb, 0xb4, 0x13, 0x60, 0x89, 0x76, 0x3c, 0x79,
+	0xe8, 0x26, 0x9c, 0x49, 0x66, 0x98, 0x39, 0xc4, 0xcd, 0x20, 0x6e, 0x06, 0xb1, 0x6e, 0x45, 0x2c,
+	0x62, 0x0a, 0xe4, 0xcd, 0xbe, 0xe6, 0x78, 0xeb, 0x4e, 0xc4, 0x58, 0x14, 0x63, 0x4f, 0x45, 0x41,
+	0xba, 0xef, 0x21, 0x3a, 0xca, 0x52, 0x0f, 0x0b, 0xd5, 0x50, 0x1c, 0xb3, 0x3e, 0x92, 0x84, 0xd1,
+	0x39, 0xd4, 0xf9, 0x0c, 0x37, 0xdb, 0x22, 0x7a, 0x8f, 0x65, 0x73, 0x91, 0x31, 0x6e, 0x43, 0x59,
+	0x60, 0x1a, 0x62, 0x6e, 0xea, 0x5b, 0xfa, 0x76, 0xd5, 0xcf, 0x22, 0x63, 0x0f, 0x60, 0xc9, 0x37,
+	0x57, 0xb6, 0xf4, 0xed, 0xf5, 0xc6, 0x63, 0xb7, 0xc8, 0xb6, 0xdb, 0x9c, 0xc7, 0xcb, 0xc2, 0xad,
+	0xd2, 0xf1, 0xb8, 0xae, 0xf9, 0x67, 0x8a, 0x38, 0x16, 0x98, 0x17, 0xe5, 0x7d, 0x2c, 0x12, 0x46,
+	0x05, 0x76, 0xbe, 0xeb, 0x60, 0xb4, 0x45, 0xf4, 0x2a, 0x46, 0xe4, 0xe0, 0x8c, 0x3b, 0x13, 0xd6,
+	0x50, 0x18, 0x72, 0x2c, 0x44, 0x66, 0x2f, 0x0f, 0x8d, 0x4d, 0x58, 0x4b, 0xd2, 0xa0, 0xf7, 0x11,
+	0x8f, 0x94, 0xb9, 0xaa, 0x5f, 0x4e, 0xd2, 0xe0, 0x2d, 0x1e, 0x19, 0x0f, 0xe0, 0x3a, 0xc7, 0x43,
+	0xc4, 0xc3, 0x5e, 0xce, 0x5c, 0x55, 0xf9, 0x8d, 0xf9, 0x69, 0x33, 0xe3, 0xd7, 0xa0, 0x2a, 0x48,
+	0x44, 0x91, 0x4c, 0x39, 0x36, 0x4b, 0x0a, 0xb1, 0x3c, 0x78, 0x51, 0xf9, 0x72, 0x54, 0xd7, 0x7e,
+	0x1d, 0xd5, 0x35, 0xa7, 0x06, 0xd6, 0x65, 0x5f, 0x0b, 0xdb, 0x1d, 0x58, 0x9f, 0xb5, 0x44, 0x22,
+	0xfa, 0x1a, 0x49, 0x64, 0x38, 0x50, 0x9e, 0xd5, 0xc8, 0x87, 0xd9, 0x82, 0xd3, 0x71, 0x3d, 0x3b,
+	0xf1, 0xb3, 0xb7, 0x51, 0x83, 0x52, 0x88, 0x24, 0x52, 0xae, 0xaf, 0xb5, 0x2a, 0xa7, 0xe3, 0xba,
+	0x8a, 0x7d, 0xf5, 0x74, 0xf6, 0x94, 0x5c, 0x97, 0x23, 0x2a, 0xf6, 0x31, 0x6f, 0xb3, 0x30, 0x8d,
+	0x71, 0x67, 0x48, 0x31, 0x17, 0x03, 0x92, 0x14, 0x2e, 0xeb, 0x2e, 0x54, 0x29, 0x1e, 0xf6, 0xd8,
+	0x0c, 0x98, 0x8d, 0xa3, 0x42, 0xf1, 0x50, 0x11, 0x9d, 0xfb, 0xe0, 0x14, 0x97, 0xcc, 0x3b, 0x69,
+	0xfc, 0x5e, 0x81, 0xd5, 0xb6, 0x88, 0x8c, 0x14, 0x6e, 0x5c, 0x5c, 0xc2, 0x93, 0xe2, 0xb5, 0x5f,
+	0x1e, 0x8d, 0xf5, 0xfc, 0x5f, 0xd0, 0xb9, 0xbc, 0xc1, 0x60, 0xe3, 0xfc, 0x7f, 0xf9, 0xe8, 0xca,
+	0x32, 0xe7, 0xb0, 0x56, 0xe3, 0xef, 0xb1, 0x0b, 0xc1, 0xaf, 0x3a, 0x6c, 0x16, 0x8d, 0xf9, 0xea,
+	0x16, 0x0a, 0x58, 0xd6, 0xcb, 0xff, 0x61, 0xe5, 0x7e, 0x5a, 0xef, 0x8e, 0x27, 0xb6, 0x7e, 0x32,
+	0xb1, 0xf5, 0x9f, 0x13, 0x5b, 0xff, 0x36, 0xb5, 0xb5, 0x93, 0xa9, 0xad, 0xfd, 0x98, 0xda, 0xda,
+	0x87, 0x46, 0x44, 0xe4, 0x20, 0x0d, 0xdc, 0x3e, 0x3b, 0xf0, 0xba, 0x6f, 0xfc, 0xdd, 0x6e, 0xc7,
+	0xdf, 0xf5, 0x72, 0xa9, 0xa7, 0xfd, 0x01, 0x22, 0xd4, 0x3b, 0x5c, 0x5c, 0x7e, 0x39, 0x4a, 0xb0,
+	0x08, 0xca, 0xea, 0xc2, 0x3f, 0xfb, 0x13, 0x00, 0x00, 0xff, 0xff, 0xe3, 0x9a, 0xd7, 0x38, 0x8b,
+	0x04, 0x00, 0x00,
 }
 
 // Reference imports to suppress errors if they are not otherwise used.
@@ -312,6 +406,8 @@ type MsgClient interface {
 	ClaimAllocation(ctx context.Context, in *MsgClaimAllocation, opts ...grpc.CallOption) (*MsgClaimAllocationResponse, error)
 	// SetAllocation defines a method to set allocation
 	SetAllocation(ctx context.Context, in *MsgSetAllocation, opts ...grpc.CallOption) (*MsgSetAllocationResponse, error)
+	// TransferModuleOwnership defines a method to transfer module ownership to other address
+	TransferModuleOwnership(ctx context.Context, in *MsgTransferModuleOwnership, opts ...grpc.CallOption) (*MsgTransferModuleOwnershipResponse, error)
 }
 
 type msgClient struct {
@@ -340,12 +436,23 @@ func (c *msgClient) SetAllocation(ctx context.Context, in *MsgSetAllocation, opt
 	return out, nil
 }
 
+func (c *msgClient) TransferModuleOwnership(ctx context.Context, in *MsgTransferModuleOwnership, opts ...grpc.CallOption) (*MsgTransferModuleOwnershipResponse, error) {
+	out := new(MsgTransferModuleOwnershipResponse)
+	err := c.cc.Invoke(ctx, "/teritori.airdrop.v1beta1.Msg/TransferModuleOwnership", in, out, opts...)
+	if err != nil {
+		return nil, err
+	}
+	return out, nil
+}
+
 // MsgServer is the server API for Msg service.
 type MsgServer interface {
 	// ClaimAllocation defines a method to claim allocation
 	ClaimAllocation(context.Context, *MsgClaimAllocation) (*MsgClaimAllocationResponse, error)
 	// SetAllocation defines a method to set allocation
 	SetAllocation(context.Context, *MsgSetAllocation) (*MsgSetAllocationResponse, error)
+	// TransferModuleOwnership defines a method to transfer module ownership to other address
+	TransferModuleOwnership(context.Context, *MsgTransferModuleOwnership) (*MsgTransferModuleOwnershipResponse, error)
 }
 
 // UnimplementedMsgServer can be embedded to have forward compatible implementations.
@@ -357,6 +464,9 @@ func (*UnimplementedMsgServer) ClaimAllocation(ctx context.Context, req *MsgClai
 }
 func (*UnimplementedMsgServer) SetAllocation(ctx context.Context, req *MsgSetAllocation) (*MsgSetAllocationResponse, error) {
 	return nil, status.Errorf(codes.Unimplemented, "method SetAllocation not implemented")
+}
+func (*UnimplementedMsgServer) TransferModuleOwnership(ctx context.Context, req *MsgTransferModuleOwnership) (*MsgTransferModuleOwnershipResponse, error) {
+	return nil, status.Errorf(codes.Unimplemented, "method TransferModuleOwnership not implemented")
 }
 
 func RegisterMsgServer(s grpc1.Server, srv MsgServer) {
@@ -399,6 +509,24 @@ func _Msg_SetAllocation_Handler(srv interface{}, ctx context.Context, dec func(i
 	return interceptor(ctx, in, info, handler)
 }
 
+func _Msg_TransferModuleOwnership_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
+	in := new(MsgTransferModuleOwnership)
+	if err := dec(in); err != nil {
+		return nil, err
+	}
+	if interceptor == nil {
+		return srv.(MsgServer).TransferModuleOwnership(ctx, in)
+	}
+	info := &grpc.UnaryServerInfo{
+		Server:     srv,
+		FullMethod: "/teritori.airdrop.v1beta1.Msg/TransferModuleOwnership",
+	}
+	handler := func(ctx context.Context, req interface{}) (interface{}, error) {
+		return srv.(MsgServer).TransferModuleOwnership(ctx, req.(*MsgTransferModuleOwnership))
+	}
+	return interceptor(ctx, in, info, handler)
+}
+
 var _Msg_serviceDesc = grpc.ServiceDesc{
 	ServiceName: "teritori.airdrop.v1beta1.Msg",
 	HandlerType: (*MsgServer)(nil),
@@ -410,6 +538,10 @@ var _Msg_serviceDesc = grpc.ServiceDesc{
 		{
 			MethodName: "SetAllocation",
 			Handler:    _Msg_SetAllocation_Handler,
+		},
+		{
+			MethodName: "TransferModuleOwnership",
+			Handler:    _Msg_TransferModuleOwnership_Handler,
 		},
 	},
 	Streams:  []grpc.StreamDesc{},
@@ -590,6 +722,66 @@ func (m *MsgSignData) MarshalToSizedBuffer(dAtA []byte) (int, error) {
 	return len(dAtA) - i, nil
 }
 
+func (m *MsgTransferModuleOwnership) Marshal() (dAtA []byte, err error) {
+	size := m.Size()
+	dAtA = make([]byte, size)
+	n, err := m.MarshalToSizedBuffer(dAtA[:size])
+	if err != nil {
+		return nil, err
+	}
+	return dAtA[:n], nil
+}
+
+func (m *MsgTransferModuleOwnership) MarshalTo(dAtA []byte) (int, error) {
+	size := m.Size()
+	return m.MarshalToSizedBuffer(dAtA[:size])
+}
+
+func (m *MsgTransferModuleOwnership) MarshalToSizedBuffer(dAtA []byte) (int, error) {
+	i := len(dAtA)
+	_ = i
+	var l int
+	_ = l
+	if len(m.NewOwner) > 0 {
+		i -= len(m.NewOwner)
+		copy(dAtA[i:], m.NewOwner)
+		i = encodeVarintTx(dAtA, i, uint64(len(m.NewOwner)))
+		i--
+		dAtA[i] = 0x12
+	}
+	if len(m.Sender) > 0 {
+		i -= len(m.Sender)
+		copy(dAtA[i:], m.Sender)
+		i = encodeVarintTx(dAtA, i, uint64(len(m.Sender)))
+		i--
+		dAtA[i] = 0xa
+	}
+	return len(dAtA) - i, nil
+}
+
+func (m *MsgTransferModuleOwnershipResponse) Marshal() (dAtA []byte, err error) {
+	size := m.Size()
+	dAtA = make([]byte, size)
+	n, err := m.MarshalToSizedBuffer(dAtA[:size])
+	if err != nil {
+		return nil, err
+	}
+	return dAtA[:n], nil
+}
+
+func (m *MsgTransferModuleOwnershipResponse) MarshalTo(dAtA []byte) (int, error) {
+	size := m.Size()
+	return m.MarshalToSizedBuffer(dAtA[:size])
+}
+
+func (m *MsgTransferModuleOwnershipResponse) MarshalToSizedBuffer(dAtA []byte) (int, error) {
+	i := len(dAtA)
+	_ = i
+	var l int
+	_ = l
+	return len(dAtA) - i, nil
+}
+
 func encodeVarintTx(dAtA []byte, offset int, v uint64) int {
 	offset -= sovTx(v)
 	base := offset
@@ -673,6 +865,32 @@ func (m *MsgSignData) Size() (n int) {
 	if l > 0 {
 		n += 1 + l + sovTx(uint64(l))
 	}
+	return n
+}
+
+func (m *MsgTransferModuleOwnership) Size() (n int) {
+	if m == nil {
+		return 0
+	}
+	var l int
+	_ = l
+	l = len(m.Sender)
+	if l > 0 {
+		n += 1 + l + sovTx(uint64(l))
+	}
+	l = len(m.NewOwner)
+	if l > 0 {
+		n += 1 + l + sovTx(uint64(l))
+	}
+	return n
+}
+
+func (m *MsgTransferModuleOwnershipResponse) Size() (n int) {
+	if m == nil {
+		return 0
+	}
+	var l int
+	_ = l
 	return n
 }
 
@@ -1170,6 +1388,170 @@ func (m *MsgSignData) Unmarshal(dAtA []byte) error {
 				m.Data = []byte{}
 			}
 			iNdEx = postIndex
+		default:
+			iNdEx = preIndex
+			skippy, err := skipTx(dAtA[iNdEx:])
+			if err != nil {
+				return err
+			}
+			if (skippy < 0) || (iNdEx+skippy) < 0 {
+				return ErrInvalidLengthTx
+			}
+			if (iNdEx + skippy) > l {
+				return io.ErrUnexpectedEOF
+			}
+			iNdEx += skippy
+		}
+	}
+
+	if iNdEx > l {
+		return io.ErrUnexpectedEOF
+	}
+	return nil
+}
+func (m *MsgTransferModuleOwnership) Unmarshal(dAtA []byte) error {
+	l := len(dAtA)
+	iNdEx := 0
+	for iNdEx < l {
+		preIndex := iNdEx
+		var wire uint64
+		for shift := uint(0); ; shift += 7 {
+			if shift >= 64 {
+				return ErrIntOverflowTx
+			}
+			if iNdEx >= l {
+				return io.ErrUnexpectedEOF
+			}
+			b := dAtA[iNdEx]
+			iNdEx++
+			wire |= uint64(b&0x7F) << shift
+			if b < 0x80 {
+				break
+			}
+		}
+		fieldNum := int32(wire >> 3)
+		wireType := int(wire & 0x7)
+		if wireType == 4 {
+			return fmt.Errorf("proto: MsgTransferModuleOwnership: wiretype end group for non-group")
+		}
+		if fieldNum <= 0 {
+			return fmt.Errorf("proto: MsgTransferModuleOwnership: illegal tag %d (wire type %d)", fieldNum, wire)
+		}
+		switch fieldNum {
+		case 1:
+			if wireType != 2 {
+				return fmt.Errorf("proto: wrong wireType = %d for field Sender", wireType)
+			}
+			var stringLen uint64
+			for shift := uint(0); ; shift += 7 {
+				if shift >= 64 {
+					return ErrIntOverflowTx
+				}
+				if iNdEx >= l {
+					return io.ErrUnexpectedEOF
+				}
+				b := dAtA[iNdEx]
+				iNdEx++
+				stringLen |= uint64(b&0x7F) << shift
+				if b < 0x80 {
+					break
+				}
+			}
+			intStringLen := int(stringLen)
+			if intStringLen < 0 {
+				return ErrInvalidLengthTx
+			}
+			postIndex := iNdEx + intStringLen
+			if postIndex < 0 {
+				return ErrInvalidLengthTx
+			}
+			if postIndex > l {
+				return io.ErrUnexpectedEOF
+			}
+			m.Sender = string(dAtA[iNdEx:postIndex])
+			iNdEx = postIndex
+		case 2:
+			if wireType != 2 {
+				return fmt.Errorf("proto: wrong wireType = %d for field NewOwner", wireType)
+			}
+			var stringLen uint64
+			for shift := uint(0); ; shift += 7 {
+				if shift >= 64 {
+					return ErrIntOverflowTx
+				}
+				if iNdEx >= l {
+					return io.ErrUnexpectedEOF
+				}
+				b := dAtA[iNdEx]
+				iNdEx++
+				stringLen |= uint64(b&0x7F) << shift
+				if b < 0x80 {
+					break
+				}
+			}
+			intStringLen := int(stringLen)
+			if intStringLen < 0 {
+				return ErrInvalidLengthTx
+			}
+			postIndex := iNdEx + intStringLen
+			if postIndex < 0 {
+				return ErrInvalidLengthTx
+			}
+			if postIndex > l {
+				return io.ErrUnexpectedEOF
+			}
+			m.NewOwner = string(dAtA[iNdEx:postIndex])
+			iNdEx = postIndex
+		default:
+			iNdEx = preIndex
+			skippy, err := skipTx(dAtA[iNdEx:])
+			if err != nil {
+				return err
+			}
+			if (skippy < 0) || (iNdEx+skippy) < 0 {
+				return ErrInvalidLengthTx
+			}
+			if (iNdEx + skippy) > l {
+				return io.ErrUnexpectedEOF
+			}
+			iNdEx += skippy
+		}
+	}
+
+	if iNdEx > l {
+		return io.ErrUnexpectedEOF
+	}
+	return nil
+}
+func (m *MsgTransferModuleOwnershipResponse) Unmarshal(dAtA []byte) error {
+	l := len(dAtA)
+	iNdEx := 0
+	for iNdEx < l {
+		preIndex := iNdEx
+		var wire uint64
+		for shift := uint(0); ; shift += 7 {
+			if shift >= 64 {
+				return ErrIntOverflowTx
+			}
+			if iNdEx >= l {
+				return io.ErrUnexpectedEOF
+			}
+			b := dAtA[iNdEx]
+			iNdEx++
+			wire |= uint64(b&0x7F) << shift
+			if b < 0x80 {
+				break
+			}
+		}
+		fieldNum := int32(wire >> 3)
+		wireType := int(wire & 0x7)
+		if wireType == 4 {
+			return fmt.Errorf("proto: MsgTransferModuleOwnershipResponse: wiretype end group for non-group")
+		}
+		if fieldNum <= 0 {
+			return fmt.Errorf("proto: MsgTransferModuleOwnershipResponse: illegal tag %d (wire type %d)", fieldNum, wire)
+		}
+		switch fieldNum {
 		default:
 			iNdEx = preIndex
 			skippy, err := skipTx(dAtA[iNdEx:])

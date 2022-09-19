@@ -100,6 +100,51 @@ func (m *MsgSetAllocation) GetSigners() []sdk.AccAddress {
 	}
 }
 
+var _ sdk.Msg = &MsgTransferModuleOwnership{}
+
+var MsgTypeTransferModuleOwnership = "transfer_module_ownership"
+
+func NewMsgTransferModuleOwnership(
+	sender sdk.AccAddress,
+	newOwner string,
+) *MsgTransferModuleOwnership {
+	return &MsgTransferModuleOwnership{
+		Sender:   sender.String(),
+		NewOwner: newOwner,
+	}
+}
+
+func (m *MsgTransferModuleOwnership) Route() string {
+	return ModuleName
+}
+
+func (m *MsgTransferModuleOwnership) Type() string {
+	return MsgTypeSetAllocation
+}
+
+func (m *MsgTransferModuleOwnership) ValidateBasic() error {
+	if m.Sender == "" {
+		return ErrEmptyAddress
+	}
+
+	return nil
+}
+
+func (m *MsgTransferModuleOwnership) GetSignBytes() []byte {
+	bz := ModuleCdc.MustMarshalJSON(m)
+	return sdk.MustSortJSON(bz)
+}
+
+func (m *MsgTransferModuleOwnership) GetSigners() []sdk.AccAddress {
+	addr, err := sdk.AccAddressFromBech32(m.Sender)
+	if err != nil {
+		panic(err)
+	}
+	return []sdk.AccAddress{
+		addr,
+	}
+}
+
 var _ sdk.Msg = &MsgSignData{}
 
 var MsgTypeSignData = "sign_data"

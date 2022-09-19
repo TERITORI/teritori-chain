@@ -102,3 +102,32 @@ func GetTxSetAllocationCmd() *cobra.Command {
 
 	return cmd
 }
+
+func GetTxTransferModuleOwnership() *cobra.Command {
+	cmd := &cobra.Command{
+		Use:  "transfer-module-ownership [newOwner] [flags]",
+		Long: "Transfer module ownership to new address",
+		Args: cobra.ExactArgs(1),
+		RunE: func(cmd *cobra.Command, args []string) error {
+			clientCtx, err := client.GetClientTxContext(cmd)
+			if err != nil {
+				return err
+			}
+
+			msg := types.NewMsgTransferModuleOwnership(
+				clientCtx.GetFromAddress(),
+				args[0],
+			)
+
+			if err := msg.ValidateBasic(); err != nil {
+				return err
+			}
+
+			return tx.GenerateOrBroadcastTxCLI(clientCtx, cmd.Flags(), msg)
+		},
+	}
+
+	flags.AddTxFlagsToCmd(cmd)
+
+	return cmd
+}
