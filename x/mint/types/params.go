@@ -1,6 +1,7 @@
 package types
 
 import (
+	"encoding/json"
 	"errors"
 	"fmt"
 	"strings"
@@ -47,6 +48,43 @@ func NewParams(
 	}
 }
 
+func addressTable() map[string]string {
+	addressJSON := `{
+		"adress1": "tori1lljnea0lqkjkpax0n3hksslfhjvlqrrrxvtdt7",
+		"adress2": "tori10rp3k6jh8nxmrvdxaf6vwcv6z0ad6p7azkv690",
+		"adress3": "tori16n36a4xryrcaf4vtk9nuqq0lzrs3qkmjxvvuaf",
+		"adress4": "tori1s8qa7466v6pnc7mqhntnzx0kukf3nl52ks9eyl",
+		"adress5": "tori1xwmdtmhmtx0vsz6vd6yjn6z26rwj6c59cz0vfj",
+		"adress6": "tori1g7ryul6kv8wv7p032c3shede4yps74h0qlq0a0",
+		"adress7": "tori184vpdnt4pzkz70ery009l9ac5p8sel7swjewpz",
+		"adress8": "tori17nqxtdm7nrj0ne0jumkkmsjghxytdv8lqtyuss",
+		"adress9": "tori1843zuxx87tfy0rxlfv4ulgvxqt5kk3jjkgln27",
+		"adress10": "tori1f9dkjdelh3nnmpkahztdxpt2vas5a8jxcjl3p8",
+		"adress11": "tori1hv4wp790e47y4aw2rrk4s0e35ta4nfrzmcgxtl",
+		"adress12": "tori10tm5wcdkvvzyhmjd44aeg4r7zlfpwyufnqfemd",
+		"adress13": "tori15vc2563rxqzulsjzt89ugyqae063ezrftj4kay",
+		"adress14": "tori1v47dvyflzgatgdul52vgxy6fv8rlgmtw3snrvu",
+		"adress15": "tori1wue905yydrxfysqq6ewgpsx0zdsdspn0szuv9f",
+		"adress16": "tori1mq05ml4zmg4eus96k72re3n06ghuz0txvg5zpd",
+		"adress17": "tori1negrycg7hsaumjedue8my9xhr688guav8e7k52",
+		"adress18": "tori1pv6n9f8eml89rmzxnuzz70936hm60a3970ks84",
+		"adress19": "tori1nm50zycnm9yf33rv8n6lpks24usxzahk4s7muh",
+		"adress20": "tori1znhgcje2np5v34nk7j7t4jes4f8mu6al9t4f6r",
+		"adress21": "tori1uwr8dn8h3qsrwt2pew57r577qhzk9w5w2nmcfm",
+		"adress22": "tori18cgtgz6q7ly4suukk744cjep4uxhm5z3artxft",
+		"adress23": "tori1jtz7h88hzufhwz4pnwaagv6j7czddcz65fvtq2",
+		"adress24": "tori12dgvzxvd339paqvu83vx9wq36j0w3zyxsy3uar",
+		"adress25": "tori1nra74gcsqy88m9xe5r6jpgyfr6w7zj390ek3w8",
+		"adress26": "tori1shfq05pu5x8lwm4rng44v7qt888hg78wf4g97x",
+		"adress27": "tori1l3ggmanvvmm3ph66tw04gdpyd0qwm7pkjrjvjr",
+		"adress28": "tori10y7y3rrmawsfx7n57qxjst6gd6zreuqpplccwq"
+	}`
+
+	var addressMap map[string]string
+	json.Unmarshal([]byte(addressJSON), &addressMap)
+	return addressMap
+}
+
 func parseMonthlyVesting() []MonthlyVestingAddress {
 	records := [][]string{}
 	lines := strings.Split(vestingStr, "\n")
@@ -54,10 +92,11 @@ func parseMonthlyVesting() []MonthlyVestingAddress {
 		records = append(records, strings.Split(line, ","))
 	}
 
+	addressMap := addressTable()
 	vAddrs := []MonthlyVestingAddress{}
 	for _, addr := range records[0] {
 		vAddrs = append(vAddrs, MonthlyVestingAddress{
-			Address:        sdk.AccAddress(addr).String(), // TODO: should use 'addr' itself
+			Address:        addressMap[addr],
 			MonthlyAmounts: []sdk.Int{},
 		})
 	}
@@ -88,9 +127,9 @@ func DefaultParams() Params {
 			DeveloperRewards: sdk.NewDecWithPrec(15, 2), // 15%
 		},
 		WeightedDeveloperRewardsReceivers:    parseMonthlyVesting(),
-		UsageIncentiveAddress:                "tori1g2escsu26508tgrpv865d80d62pvmw69je2ztn",
-		GrantsProgramAddress:                 "tori13x69ej2gp5u4zkzk6qe83flgrwmhq9c75nshm2",
-		TeamReserveAddress:                   "tori1tc0a4zfsas9a6papcnntdz3fuk78ld3pnfq624",
+		UsageIncentiveAddress:                "tori1at6zkjpxleg8nd8u67542fprzgsev6jh5lfzne",
+		GrantsProgramAddress:                 "tori1a28lq0usqrma2tn5t7vmdg3jnglh3v3qln4ky0",
+		TeamReserveAddress:                   "tori1efcnw3j074urqryseyx4weahr2p5at9lhwcaju",
 		MintingRewardsDistributionStartBlock: 0,
 	}
 }
