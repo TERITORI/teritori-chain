@@ -30,9 +30,9 @@ Install few packages:
 apt install build-essential git curl gcc make jq -y
 ```
 
-Install Go 1.18+:  
+Install Go 1.19+:  
 ```shell
-wget -c https://go.dev/dl/go1.18.3.linux-amd64.tar.gz && rm -rf /usr/local/go && tar -C /usr/local -xzf go1.18.3.linux-amd64.tar.gz && rm -rf go1.18.3.linux-amd64.tar.gz
+wget -c https://go.dev/dl/go1.19.1.linux-amd64.tar.gz && rm -rf /usr/local/go && tar -C /usr/local -xzf go1.19.1.linux-amd64.tar.gz && rm -rf go1.19.1.linux-amd64.tar.gz
 ``` 
 
 Setup your environnement (you can skip this part if you already had go installed before):  
@@ -46,7 +46,7 @@ echo 'export PATH=$PATH:/usr/local/go/bin:$HOME/go/bin' >> $HOME/.bash_profile &
 Verify the installation:  
 ```shell
 go version
-#Should return go version go1.18.3 linux/amd64
+#Should return go version go1.19.1 linux/amd64
 ``` 
 
 ## Setup the chain  
@@ -204,7 +204,7 @@ Create an account:
 teritorid keys add <YOUR_KEY>
  ```  
  
- You can also you `--recover` flag to use an already existed key (but we recommend for security reason to use one key per chain to avoid total loss of funds in case one key is missing)  
+ You can also use `--recover` flag to retrieve an already existed key (but we recommend for security reason to use one key per chain to avoid total loss of funds in case one key is missing)  
 
 Join our [Discord](https://discord.gg/teritori) and request fund on the `Faucet` channel using this command:  
 ```shell
