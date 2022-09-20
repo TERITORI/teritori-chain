@@ -307,7 +307,7 @@ func PrepareGenesis(clientCtx client.Context, appState map[string]json.RawMessag
 	govGenState := govtypes.DefaultGenesisState()
 	defaultGovParams := govtypes.DefaultParams()
 	govGenState.DepositParams = defaultGovParams.DepositParams
-	govGenState.DepositParams.MinDeposit = sdk.Coins{sdk.NewInt64Coin(appparams.BaseCoinUnit, 100_000_000)} // 100 TORI
+	govGenState.DepositParams.MinDeposit = sdk.Coins{sdk.NewInt64Coin(appparams.BaseCoinUnit, 5000_000_000)} // 5000 TORI
 	govGenState.TallyParams = defaultGovParams.TallyParams
 	govGenState.VotingParams = defaultGovParams.VotingParams
 	govGenStateBz, err := cdc.MarshalJSON(govGenState)
