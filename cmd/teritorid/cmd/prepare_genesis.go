@@ -142,6 +142,7 @@ func PrepareGenesis(clientCtx client.Context, appState map[string]json.RawMessag
 	// airdrop module genesis
 	airdropGenState := airdroptypes.DefaultGenesis()
 	airdropGenState.Params = airdroptypes.DefaultParams()
+	airdropGenState.Params.Owner = "tori19ftk3lkfupgtnh38d7enc8c6jp7aljj3jmknnm" // POP's address
 	allocations, totalAirdropAllocation := parseAirdropAmount(path)
 	airdropGenState.Allocations = allocations
 	airdropGenStateBz, err := cdc.MarshalJSON(airdropGenState)
