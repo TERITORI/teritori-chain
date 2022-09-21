@@ -133,6 +133,7 @@ func PrepareGenesis(clientCtx client.Context, appState map[string]json.RawMessag
 	mintGenState := minttypes.DefaultGenesisState()
 	mintGenState.Params = minttypes.DefaultParams()
 	mintGenState.Params.MintDenom = appparams.BaseCoinUnit
+	mintGenState.Params.MintingRewardsDistributionStartBlock = 51840 // 3 days after launch - 86400s x 3 / 5s
 	mintGenStateBz, err := cdc.MarshalJSON(mintGenState)
 	if err != nil {
 		return nil, nil, fmt.Errorf("failed to marshal mint genesis state: %w", err)

@@ -122,6 +122,7 @@ func (suite *KeeperTestSuite) TestEndBlocker90MonthsCheckWithDefaultGenesis() {
 	suite.app.MintKeeper.SetTeamVestingMonthInfo(suite.ctx, monthInfo)
 
 	params := suite.app.MintKeeper.GetParams(suite.ctx)
+	params.MintingRewardsDistributionStartBlock = 10
 	dev1Addr, _ := sdk.AccAddressFromBech32(params.WeightedDeveloperRewardsReceivers[0].Address)
 	dev2Addr, _ := sdk.AccAddressFromBech32(params.WeightedDeveloperRewardsReceivers[1].Address)
 	suite.app.MintKeeper.SetParams(suite.ctx, params)
