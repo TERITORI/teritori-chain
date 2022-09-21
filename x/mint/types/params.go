@@ -50,7 +50,7 @@ func NewParams(
 
 func addressTable() map[string]string {
 	addressJSON := `{
-		"adress1": "tori1lljnea0lqkjkpax0n3hksslfhjvlqrrrxvtdt7",
+		"adress1": "tori1zyakv8ny9p5esrpv3rgls707rd9anjzla2q7vj",
 		"adress2": "tori10rp3k6jh8nxmrvdxaf6vwcv6z0ad6p7azkv690",
 		"adress3": "tori16n36a4xryrcaf4vtk9nuqq0lzrs3qkmjxvvuaf",
 		"adress4": "tori1s8qa7466v6pnc7mqhntnzx0kukf3nl52ks9eyl",

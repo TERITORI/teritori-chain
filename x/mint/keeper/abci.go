@@ -35,6 +35,10 @@ func (k Keeper) EndBlocker(ctx sdk.Context) {
 
 	// implement automatic monthInfo updates
 	monthInfo := k.GetTeamVestingMonthInfo(ctx)
+	if monthInfo.MonthStartedBlock < params.MintingRewardsDistributionStartBlock {
+		monthInfo.MonthStartedBlock = params.MintingRewardsDistributionStartBlock
+	}
+
 	if blockNumber >= monthInfo.OneMonthPeriodInBlocks+monthInfo.MonthStartedBlock {
 		monthInfo.MonthsSinceGenesis++
 		monthInfo.MonthStartedBlock = ctx.BlockHeight()
