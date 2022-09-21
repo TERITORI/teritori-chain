@@ -1,6 +1,6 @@
 module github.com/TERITORI/teritori-chain
 
-go 1.17
+go 1.19
 
 require (
 	github.com/CosmWasm/wasmd v0.27.0
@@ -24,6 +24,7 @@ require (
 	google.golang.org/genproto v0.0.0-20220407144326-9054f6ed7bac
 	google.golang.org/grpc v1.45.0
 	google.golang.org/protobuf v1.28.0
+	gopkg.in/yaml.v2 v2.4.0
 )
 
 require (
@@ -145,19 +146,19 @@ require (
 	golang.org/x/term v0.0.0-20210927222741-03fcf44c2211 // indirect
 	golang.org/x/text v0.3.7 // indirect
 	gopkg.in/ini.v1 v1.66.4 // indirect
-	gopkg.in/yaml.v2 v2.4.0 // indirect
 	gopkg.in/yaml.v3 v3.0.0-20210107192922-496545a6307b // indirect
 	nhooyr.io/websocket v1.8.6 // indirect
 )
 
 require (
-	github.com/cosmos/ibc-go/v2 v2.0.0
 	github.com/hdevalence/ed25519consensus v0.0.0-20220222234857-c00d1f31bab3 // indirect
 	github.com/strangelove-ventures/packet-forward-middleware/v2 v2.1.1
 )
 
 replace (
 	github.com/cosmos/iavl => github.com/cosmos/iavl v0.17.3
+        # enable support of new Ledger nano S Plus
+	github.com/cosmos/ledger-go => github.com/cosmos/ledger-go v0.9.3
 	github.com/gogo/protobuf => github.com/regen-network/protobuf v1.3.3-alpha.regen.1
 	google.golang.org/grpc => google.golang.org/grpc v1.33.2
 )
