@@ -7,6 +7,7 @@ import (
 	"os"
 
 	appparams "github.com/TERITORI/teritori-chain/app/params"
+	"github.com/TERITORI/teritori-chain/x/airdrop/types"
 	airdroptypes "github.com/TERITORI/teritori-chain/x/airdrop/types"
 	minttypes "github.com/TERITORI/teritori-chain/x/mint/types"
 	"github.com/cosmos/cosmos-sdk/client"
@@ -39,11 +40,11 @@ func PrepareGenesisCmd(defaultNodeHome string, mbm module.BasicManager) *cobra.C
 		Short: "Prepare a genesis file with initial setup",
 		Long: `Prepare a genesis file with initial setup.
 Example:
-	teritorid prepare-genesis teritori-1 cosmos_aidrop.csv evmos_orbital_ape.csv
+	teritorid prepare-genesis teritori-1 cosmos_aidrop.csv crew3_airdrop.csv evmos_orbital_ape.csv
 	- Check input genesis:
 		file is at ~/.teritorid/config/genesis.json
 `,
-		Args: cobra.ExactArgs(3),
+		Args: cobra.ExactArgs(4),
 		RunE: func(cmd *cobra.Command, args []string) error {
 			clientCtx := client.GetClientContextFromCmd(cmd)
 			depCdc := clientCtx.Codec
@@ -62,7 +63,7 @@ Example:
 			chainID := args[0]
 
 			// run Prepare Genesis
-			appState, genDoc, err = PrepareGenesis(clientCtx, appState, genDoc, chainID, args[1], args[2])
+			appState, genDoc, err = PrepareGenesis(clientCtx, appState, genDoc, chainID, args[1], args[2], args[3])
 			if err != nil {
 				return err
 			}
@@ -154,7 +155,27 @@ func parseEvmosOrbitalApeAirdropAmount(path string) ([]airdroptypes.AirdropAlloc
 	return allocations, sdk.NewCoin(appparams.BaseCoinUnit, totalAmount)
 }
 
-func PrepareGenesis(clientCtx client.Context, appState map[string]json.RawMessage, genDoc *tmtypes.GenesisDoc, chainID, cosmosAirdropPath, evmosOrbitalApePath string) (map[string]json.RawMessage, *tmtypes.GenesisDoc, error) {
+func combineAirdropAllocations(allocations1, allocations2 []airdroptypes.AirdropAllocation) []types.AirdropAllocation {
+	usedAllocation := map[string]bool{}
+	allocationIndex := map[string]int{}
+
+	for index, allo := range allocations1 {
+		usedAllocation[allo.Address] = true
+		allocationIndex[allo.Address] = index
+	}
+
+	allocations := allocations1
+	for _, allo := range allocations2 {
+		if usedAllocation[allo.Address] {
+			allocations[allocationIndex[allo.Address]].Amount = allocations[allocationIndex[allo.Address]].Amount.Add(allo.Amount)
+		} else {
+			allocations = append(allocations, allo)
+		}
+	}
+	return allocations
+}
+
+func PrepareGenesis(clientCtx client.Context, appState map[string]json.RawMessage, genDoc *tmtypes.GenesisDoc, chainID, cosmosAirdropPath, crew3AirdropPath, evmosOrbitalApePath string) (map[string]json.RawMessage, *tmtypes.GenesisDoc, error) {
 	depCdc := clientCtx.Codec
 	cdc := depCdc
 
@@ -177,6 +198,9 @@ func PrepareGenesis(clientCtx client.Context, appState map[string]json.RawMessag
 	airdropGenState.Params = airdroptypes.DefaultParams()
 	airdropGenState.Params.Owner = "tori19ftk3lkfupgtnh38d7enc8c6jp7aljj3jmknnm" // POP's address
 	cosmosAllocations, totalCosmosAirdropAllocation := parseCosmosAirdropAmount(cosmosAirdropPath)
+	crew3Allocations, totalCrew3AirdropAllocation := parseCosmosAirdropAmount(crew3AirdropPath)
+	cosmosAllocations = combineAirdropAllocations(cosmosAllocations, crew3Allocations)
+	totalCosmosAirdropAllocation = totalCosmosAirdropAllocation.Add(totalCrew3AirdropAllocation)
 	evmosOrbitalApeAllocations, totalEvmosAirdropAllocataion := parseEvmosOrbitalApeAirdropAmount(evmosOrbitalApePath)
 	allocations := append(cosmosAllocations, evmosOrbitalApeAllocations...)
 	airdropGenState.Allocations = allocations
