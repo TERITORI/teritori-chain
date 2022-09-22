@@ -39,11 +39,11 @@ func PrepareGenesisCmd(defaultNodeHome string, mbm module.BasicManager) *cobra.C
 		Short: "Prepare a genesis file with initial setup",
 		Long: `Prepare a genesis file with initial setup.
 Example:
-	teritorid prepare-genesis teritori-1 cosmos_aidrop.csv
+	teritorid prepare-genesis teritori-1 cosmos_aidrop.csv evmos_orbital_ape.csv
 	- Check input genesis:
 		file is at ~/.teritorid/config/genesis.json
 `,
-		Args: cobra.ExactArgs(2),
+		Args: cobra.ExactArgs(3),
 		RunE: func(cmd *cobra.Command, args []string) error {
 			clientCtx := client.GetClientContextFromCmd(cmd)
 			depCdc := clientCtx.Codec
@@ -62,7 +62,7 @@ Example:
 			chainID := args[0]
 
 			// run Prepare Genesis
-			appState, genDoc, err = PrepareGenesis(clientCtx, appState, genDoc, chainID, args[1])
+			appState, genDoc, err = PrepareGenesis(clientCtx, appState, genDoc, chainID, args[1], args[2])
 			if err != nil {
 				return err
 			}
@@ -90,7 +90,7 @@ Example:
 	return cmd
 }
 
-func parseAirdropAmount(path string) ([]airdroptypes.AirdropAllocation, sdk.Coin) {
+func parseCosmosAirdropAmount(path string) ([]airdroptypes.AirdropAllocation, sdk.Coin) {
 	f, err := os.Open(path)
 	if err != nil {
 		panic(err)
@@ -122,7 +122,39 @@ func parseAirdropAmount(path string) ([]airdroptypes.AirdropAllocation, sdk.Coin
 	return allocations, sdk.NewCoin(appparams.BaseCoinUnit, totalAmount)
 }
 
-func PrepareGenesis(clientCtx client.Context, appState map[string]json.RawMessage, genDoc *tmtypes.GenesisDoc, chainID, path string) (map[string]json.RawMessage, *tmtypes.GenesisDoc, error) {
+func parseEvmosOrbitalApeAirdropAmount(path string) ([]airdroptypes.AirdropAllocation, sdk.Coin) {
+	f, err := os.Open(path)
+	if err != nil {
+		panic(err)
+	}
+	defer f.Close()
+
+	csvReader := csv.NewReader(f)
+	records, err := csvReader.ReadAll()
+	if err != nil {
+		panic(err)
+	}
+
+	totalAmount := sdk.ZeroInt()
+	allocations := []airdroptypes.AirdropAllocation{}
+	for _, line := range records[1:] {
+		evmAddr, amountStr := line[0], line[1]
+		amountDec := sdk.MustNewDecFromStr(amountStr)
+		amountInt := amountDec.Mul(sdk.NewDec(1000_000)).TruncateInt()
+
+		allocations = append(allocations, airdroptypes.AirdropAllocation{
+			Chain:         "evm",
+			Address:       evmAddr,
+			Amount:        sdk.NewCoin(appparams.BaseCoinUnit, amountInt),
+			ClaimedAmount: sdk.NewInt64Coin(appparams.BaseCoinUnit, 0),
+		})
+		totalAmount = totalAmount.Add(amountInt)
+	}
+
+	return allocations, sdk.NewCoin(appparams.BaseCoinUnit, totalAmount)
+}
+
+func PrepareGenesis(clientCtx client.Context, appState map[string]json.RawMessage, genDoc *tmtypes.GenesisDoc, chainID, cosmosAirdropPath, evmosOrbitalApePath string) (map[string]json.RawMessage, *tmtypes.GenesisDoc, error) {
 	depCdc := clientCtx.Codec
 	cdc := depCdc
 
@@ -144,7 +176,9 @@ func PrepareGenesis(clientCtx client.Context, appState map[string]json.RawMessag
 	airdropGenState := airdroptypes.DefaultGenesis()
 	airdropGenState.Params = airdroptypes.DefaultParams()
 	airdropGenState.Params.Owner = "tori19ftk3lkfupgtnh38d7enc8c6jp7aljj3jmknnm" // POP's address
-	allocations, totalAirdropAllocation := parseAirdropAmount(path)
+	cosmosAllocations, totalCosmosAirdropAllocation := parseCosmosAirdropAmount(cosmosAirdropPath)
+	evmosOrbitalApeAllocations, totalEvmosAirdropAllocataion := parseEvmosOrbitalApeAirdropAmount(evmosOrbitalApePath)
+	allocations := append(cosmosAllocations, evmosOrbitalApeAllocations...)
 	airdropGenState.Allocations = allocations
 	airdropGenStateBz, err := cdc.MarshalJSON(airdropGenState)
 	if err != nil {
@@ -158,7 +192,7 @@ func PrepareGenesis(clientCtx client.Context, appState map[string]json.RawMessag
 
 	bankGenState.Supply = sdk.NewCoins(sdk.NewInt64Coin(appparams.BaseCoinUnit, 200_000_000_000_000)) // 200M TORI
 
-	airdropCoins := sdk.Coins{totalAirdropAllocation}
+	airdropCoins := sdk.Coins{totalCosmosAirdropAllocation.Add(totalEvmosAirdropAllocataion)}
 	communityPoolCoins := sdk.NewCoins(sdk.NewInt64Coin(appparams.BaseCoinUnit, 50_000_000_000_000)) // 50M TORI
 
 	seenBalances := make(map[string]bool)
@@ -232,7 +266,7 @@ func PrepareGenesis(clientCtx client.Context, appState map[string]json.RawMessag
 	// send 0.1 TORI to bech32 converted cosmos airdrop addresses
 	totalAirdropGasCoins := sdk.NewCoins()
 	airdropGasCoins := sdk.NewCoins(sdk.NewInt64Coin(appparams.BaseCoinUnit, 100_000))
-	for _, allocation := range allocations {
+	for _, allocation := range cosmosAllocations {
 		_, bz, err := bech32.DecodeAndConvert(allocation.Address)
 		if err != nil {
 			return nil, nil, err
