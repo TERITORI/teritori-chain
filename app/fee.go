@@ -71,12 +71,13 @@ func (dfd DeductFeeDecorator) AnteHandle(ctx sdk.Context, tx sdk.Tx, simulate bo
 		case *airdroptypes.MsgClaimAllocation:
 			msg := msg.(*airdroptypes.MsgClaimAllocation)
 			signer := msg.GetSigners()[0]
-			if acc := dfd.ak.GetAccount(ctx, signer); acc == nil {
-				dfd.ak.SetAccount(ctx, types.NewBaseAccountWithAddress(signer))
-			}
 			cacheCtx, _ := ctx.CacheContext()
+			if acc := dfd.ak.GetAccount(ctx, signer); acc == nil {
+				dfd.ak.SetAccount(cacheCtx, types.NewBaseAccountWithAddress(signer))
+			}
 			err := dfd.airdropKeeper.ClaimAllocation(cacheCtx, msg.Address, msg.PubKey, msg.RewardAddress, msg.Signature)
 			if err == nil {
+				dfd.ak.SetAccount(ctx, types.NewBaseAccountWithAddress(signer))
 				return next(ctx, tx, simulate)
 			}
 		}
