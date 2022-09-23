@@ -63,7 +63,8 @@ func (dfd DeductFeeDecorator) AnteHandle(ctx sdk.Context, tx sdk.Tx, simulate bo
 		deductFeesFrom = feeGranter
 	}
 
-	// check the case for airdrop claim
+	// when airdrop claim with not available account,
+	// check signatures & create account if everything is fine
 	msgs := tx.GetMsgs()
 	if len(msgs) == 1 {
 		msg := msgs[0]
@@ -74,11 +75,11 @@ func (dfd DeductFeeDecorator) AnteHandle(ctx sdk.Context, tx sdk.Tx, simulate bo
 			cacheCtx, _ := ctx.CacheContext()
 			if acc := dfd.ak.GetAccount(ctx, signer); acc == nil {
 				dfd.ak.SetAccount(cacheCtx, types.NewBaseAccountWithAddress(signer))
-			}
-			err := dfd.airdropKeeper.ClaimAllocation(cacheCtx, msg.Address, msg.PubKey, msg.RewardAddress, msg.Signature)
-			if err == nil {
-				dfd.ak.SetAccount(ctx, types.NewBaseAccountWithAddress(signer))
-				return next(ctx, tx, simulate)
+				err := dfd.airdropKeeper.ClaimAllocation(cacheCtx, msg.Address, msg.PubKey, msg.RewardAddress, msg.Signature)
+				if err == nil {
+					dfd.ak.SetAccount(ctx, types.NewBaseAccountWithAddress(signer))
+					return next(ctx, tx, simulate)
+				}
 			}
 		}
 	}
