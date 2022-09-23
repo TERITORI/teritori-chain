@@ -29,6 +29,10 @@ func NewHandler(k keeper.Keeper) sdk.Handler {
 			res, err := msgServer.TransferModuleOwnership(sdk.WrapSDKContext(ctx), msg)
 			return sdk.WrapServiceResult(ctx, res, err)
 
+		case *types.MsgDepositTokens:
+			res, err := msgServer.DepositTokens(sdk.WrapSDKContext(ctx), msg)
+			return sdk.WrapServiceResult(ctx, res, err)
+
 		default:
 			errMsg := fmt.Sprintf("unrecognized %s message type: %T", types.ModuleName, msg)
 			return nil, sdkerrors.Wrap(sdkerrors.ErrUnknownRequest, errMsg)

@@ -24,6 +24,7 @@ func GetTxCmd() *cobra.Command {
 	txCmd.AddCommand(
 		GetTxClaimAllocationCmd(),
 		GetTxSetAllocationCmd(),
+		GetTxDepositTokensCmd(),
 	)
 
 	return txCmd
@@ -117,6 +118,39 @@ func GetTxTransferModuleOwnership() *cobra.Command {
 			msg := types.NewMsgTransferModuleOwnership(
 				clientCtx.GetFromAddress(),
 				args[0],
+			)
+
+			if err := msg.ValidateBasic(); err != nil {
+				return err
+			}
+
+			return tx.GenerateOrBroadcastTxCLI(clientCtx, cmd.Flags(), msg)
+		},
+	}
+
+	flags.AddTxFlagsToCmd(cmd)
+
+	return cmd
+}
+
+func GetTxDepositTokensCmd() *cobra.Command {
+	cmd := &cobra.Command{
+		Use:  "deposit-tokens [amount] [flags]",
+		Long: "Deposit tokens to airdrop module",
+		Args: cobra.ExactArgs(1),
+		RunE: func(cmd *cobra.Command, args []string) error {
+			clientCtx, err := client.GetClientTxContext(cmd)
+			if err != nil {
+				return err
+			}
+
+			amount, err := sdk.ParseCoinsNormalized(args[0])
+			if err != nil {
+				return err
+			}
+			msg := types.NewMsgDepositTokens(
+				clientCtx.GetFromAddress(),
+				amount,
 			)
 
 			if err := msg.ValidateBasic(); err != nil {

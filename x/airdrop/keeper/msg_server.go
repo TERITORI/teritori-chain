@@ -50,3 +50,19 @@ func (m msgServer) TransferModuleOwnership(goCtx context.Context, msg *types.Msg
 
 	return &types.MsgTransferModuleOwnershipResponse{}, nil
 }
+
+func (m msgServer) DepositTokens(goCtx context.Context, msg *types.MsgDepositTokens) (*types.MsgDepositTokensResponse, error) {
+	ctx := sdk.UnwrapSDKContext(goCtx)
+
+	sender, err := sdk.AccAddressFromBech32(msg.Sender)
+	if err != nil {
+		return nil, err
+	}
+
+	err = m.keeper.bankKeeper.SendCoinsFromAccountToModule(ctx, sender, types.ModuleName, msg.Amount)
+	if err != nil {
+		return nil, err
+	}
+
+	return &types.MsgDepositTokensResponse{}, nil
+}

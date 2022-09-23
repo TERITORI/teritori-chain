@@ -178,3 +178,48 @@ func (m *MsgSignData) GetSignBytes() []byte {
 func (m *MsgSignData) GetSigners() []sdk.AccAddress {
 	return []sdk.AccAddress{}
 }
+
+var _ sdk.Msg = &MsgDepositTokens{}
+
+var MsgTypeDepositTokens = "deposit_tokens"
+
+func NewMsgDepositTokens(
+	sender sdk.AccAddress,
+	amount sdk.Coins,
+) *MsgDepositTokens {
+	return &MsgDepositTokens{
+		Sender: sender.String(),
+		Amount: amount,
+	}
+}
+
+func (m *MsgDepositTokens) Route() string {
+	return ModuleName
+}
+
+func (m *MsgDepositTokens) Type() string {
+	return MsgTypeDepositTokens
+}
+
+func (m *MsgDepositTokens) ValidateBasic() error {
+	if m.Sender == "" {
+		return ErrEmptyAddress
+	}
+
+	return nil
+}
+
+func (m *MsgDepositTokens) GetSignBytes() []byte {
+	bz := ModuleCdc.MustMarshalJSON(m)
+	return sdk.MustSortJSON(bz)
+}
+
+func (m *MsgDepositTokens) GetSigners() []sdk.AccAddress {
+	addr, err := sdk.AccAddressFromBech32(m.Sender)
+	if err != nil {
+		panic(err)
+	}
+	return []sdk.AccAddress{
+		addr,
+	}
+}
