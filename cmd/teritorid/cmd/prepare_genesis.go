@@ -261,9 +261,51 @@ func PrepareGenesis(clientCtx client.Context, appState map[string]json.RawMessag
 	}
 	genAccounts = append(genAccounts, authtypes.NewBaseAccount(addrStrategicReserve, nil, 0, 0))
 
-	// TODO: send 10 TORI to genesis validators
+	// send 10 TORI to genesis validators
 	genesisValidators := []string{
 		"tori1534tslwra4hrvt8k8tdwh5aghmc74hvtl7xfnc", // gopher
+		"tori1uechzauku6mhj2je8jmyrkq6d0ydm3g4q470r0", // metahuahua
+		"tori1t7cyvydpp4lklprksnrjy2y3xzv3q2l0n4qqvn", // activenodes
+		"tori1utr8j9685hfxyza3wnu8pa9lpu8360knym0vjc", // alxvoy
+		"tori17vx59a9897ltpyw6dwr7jvcjk8wyxhc08svtzj", // aurie
+		"tori19pg5t5adjese84q5azjuv46rtz7jt2yqrrfueg", // berty
+		"tori16czx9ukfcelsxmjpyt90fprjx5qjw5anhpr7vk", // chillvalidation
+		"tori1c22uwrtvadcp2a8rjn2l00kmuuqdcu2t3qttty", // crosnest
+		"tori1jfw63tylcc4gscayv68prsu275q6te4wmpwmp7", // dibugnodes
+		"tori1a7taydvzhkd5vrndlykqtj7nsk2erdp2c06ljz", // ericet
+		"tori15n624eajd04jjhnlvza2fvft3lmf69aed78yde", // interblockchainservices
+		"tori1gspqsgxm8s4e9uza78met67x2eted2cdcfqefg", // goldenratiostaking
+		"tori1ttgzvn4lwkqe33drcvjxrefu8j9u5x9qvf22vc", // hashquark
+		"tori1lgy98shrs4uyrqnmgh38su3gm08uh3srhsmlzf", // ibrahimarslan
+		"tori1xpyql3vw67h8l99n3sswy5ev94ntwt9ce8fdj9", // icosmosdao
+		"tori1shtyw4f5pdhvx7gsrsknwrryy9ulqvvyjflv2j", // kalianetwork
+		"tori1rly8ah6hffkt28hy3ka8ue2h32mqknyxka5tgk", // landeros
+		"tori140l6y2gp3gxvay6qtn70re7z2s0gn57zwdyda3", // lavenderfive
+		"tori1kunzrdg6u8gql4faj33lstghhqdtp59e25th6f", // lesnik_utsa
+		"tori1e6ajryqxefpxuhjg2y9wk4y2dzq48uz4gvuy4q", // maethstro
+		"tori18wjuryzyuwpg5f0wukgjey3za28s4fm9mujyrh", // munris
+		"tori1p5z27dj7zrxue8pe5t0m39q8mmgavdclwerqqw", // n0ok
+		"tori18t2j2kc08su2l2dafcanq43yxj9akpwpl66y3z", // nodejumper
+		"tori1nrgahzmlr4nrnumlu0ud99qslsdvay8ah5k6c8", // noderunners
+		"tori1phzay7cf4ayk9dsvt0q5nlc8qehlwlpxs3p957", // nodesblocks
+		"tori1w3wse8cx2al5947ke0hnd2tgphjt43dyq6dvay", // nodesguru
+		"tori1nuh2h60wlvzvk58xll3d8gz2wpqjt6gw8tgsc0", // nysa_network
+		"tori1azdfljp04ptlazs95e5gscweavmaszw58fwpth", // oni
+		"tori18je2ph09a7flemkkzmvenz2eeyw5pdge93gxyt", // orbitalapes
+		"tori1gp957czryfgyvxwn3tfnyy2f0t9g2p4p8e683y", // polkachu
+		"tori1fyyl63zqylda0qrkqdzeyag28eyh9swrkusuls", // rhino
+		"tori1qy38xmcrnht0kt5c5fryvl8llrpdwer6ce9dx3", // romanv
+		"tori1267l9z6yeua438mct5ee2mnm53yn3n9wlqvdl7", // samourai-world
+		"tori167xwmhtrn7n8ftexu6luhh4luvhpy435nuxmma", // silknodes
+		"tori1xu736l4vt6l2pg9k2yk66fq7zq6y4aj5rfw97d", // stakelab
+		"tori1cm3hmw63a9wugawf9jn2jv0savynkgu9ra9ggm", // stakingcabin
+		"tori1sqk72uwf6tg867ssuu7whxfu9pfcyrpe9u76c4", // stavr
+		"tori1lrq8sl2jq7246yjplutv5lul8ykrhqcr9frjz3", // stingray
+		"tori1gtz5v838vf7ucnn0jnqr3crs5099g9p2fnpe9p", // teritori-core-1
+		"tori1vxmq5epj83z8en5h0zul624nrmfxzmhkmwmmtl", // teritori-core-2
+		"tori1x6vfjy754fvzrlug2kxsp6s54yfj753sheqpay", // web34ever
+		"tori1dfnzup7nppxvlpwnmzjnuet0tn4t9cnwhqx54s", // wetez
+		"tori1tjh6wpj6d9kpkfrcyglksevkhhtk9gm7auaxy3", // whispernode
 	}
 
 	totalValidatorInitialCoins := sdk.NewCoins()
