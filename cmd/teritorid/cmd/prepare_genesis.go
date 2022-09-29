@@ -263,7 +263,6 @@ func PrepareGenesis(clientCtx client.Context, appState map[string]json.RawMessag
 
 	// send 10 TORI to genesis validators
 	genesisValidators := []string{
-		"tori1534tslwra4hrvt8k8tdwh5aghmc74hvtl7xfnc", // gopher
 		"tori1uechzauku6mhj2je8jmyrkq6d0ydm3g4q470r0", // metahuahua
 		"tori1t7cyvydpp4lklprksnrjy2y3xzv3q2l0n4qqvn", // activenodes
 		"tori1utr8j9685hfxyza3wnu8pa9lpu8360knym0vjc", // alxvoy
@@ -273,12 +272,18 @@ func PrepareGenesis(clientCtx client.Context, appState map[string]json.RawMessag
 		"tori1c22uwrtvadcp2a8rjn2l00kmuuqdcu2t3qttty", // crosnest
 		"tori1jfw63tylcc4gscayv68prsu275q6te4wmpwmp7", // dibugnodes
 		"tori1a7taydvzhkd5vrndlykqtj7nsk2erdp2c06ljz", // ericet
+		"tori138664l4407d7hfwe8a82q25fk4vht53jqkuwtg", // forbole
+		"tori15fh88a6kx6n6cgx35cxf2edzyjwq3rwyqxcmn9", // freemint
+		"tori1dyduggaqthztgm8tnk59flkeu3l3qvpzj9w997", // gatadao
 		"tori15n624eajd04jjhnlvza2fvft3lmf69aed78yde", // interblockchainservices
 		"tori1gspqsgxm8s4e9uza78met67x2eted2cdcfqefg", // goldenratiostaking
+		"tori1534tslwra4hrvt8k8tdwh5aghmc74hvtl7xfnc", // gopher
 		"tori1ttgzvn4lwkqe33drcvjxrefu8j9u5x9qvf22vc", // hashquark
+		"tori16dzaxgnq9zlac7yl3ar3zp4y2zgr9fm0suhjzg", // highstakes
 		"tori1lgy98shrs4uyrqnmgh38su3gm08uh3srhsmlzf", // ibrahimarslan
 		"tori1xpyql3vw67h8l99n3sswy5ev94ntwt9ce8fdj9", // icosmosdao
 		"tori1shtyw4f5pdhvx7gsrsknwrryy9ulqvvyjflv2j", // kalianetwork
+		"tori184ln03hkpt75uhrrr26f66kvcqvf4yn4k2feqk", // kjnodes
 		"tori1rly8ah6hffkt28hy3ka8ue2h32mqknyxka5tgk", // landeros
 		"tori140l6y2gp3gxvay6qtn70re7z2s0gn57zwdyda3", // lavenderfive
 		"tori1kunzrdg6u8gql4faj33lstghhqdtp59e25th6f", // lesnik_utsa
@@ -289,7 +294,9 @@ func PrepareGenesis(clientCtx client.Context, appState map[string]json.RawMessag
 		"tori1nrgahzmlr4nrnumlu0ud99qslsdvay8ah5k6c8", // noderunners
 		"tori1phzay7cf4ayk9dsvt0q5nlc8qehlwlpxs3p957", // nodesblocks
 		"tori1w3wse8cx2al5947ke0hnd2tgphjt43dyq6dvay", // nodesguru
+		"tori16mzm5w3ys2va5mv00g0qnafnev4erc5k7ag009", // nxtpop
 		"tori1nuh2h60wlvzvk58xll3d8gz2wpqjt6gw8tgsc0", // nysa_network
+		"tori18hgz56rlcpvc2y6l97n0gz248nmy86h3lugkd4", // onblocnode
 		"tori1azdfljp04ptlazs95e5gscweavmaszw58fwpth", // oni
 		"tori18je2ph09a7flemkkzmvenz2eeyw5pdge93gxyt", // orbitalapes
 		"tori1gp957czryfgyvxwn3tfnyy2f0t9g2p4p8e683y", // polkachu
