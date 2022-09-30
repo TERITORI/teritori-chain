@@ -40,7 +40,10 @@ func VerifySignature(chain string, address string, pubKey string, rewardAddr str
 
 	switch chain {
 	case "solana":
-		pubkey := solana.MustPublicKeyFromBase58(address)
+		pubkey, err := solana.PublicKeyFromBase58(address)
+		if err != nil {
+			return false
+		}
 		signatureData, err := hex.DecodeString(signatureBytes[2:])
 		if err != nil {
 			return false
@@ -48,7 +51,13 @@ func VerifySignature(chain string, address string, pubKey string, rewardAddr str
 		signature := solana.SignatureFromBytes(signatureData)
 		return signature.Verify(pubkey, signBytes)
 	case "evm":
-		signatureData := hexutil.MustDecode(signatureBytes)
+		signatureData, err := hexutil.Decode(signatureBytes)
+		if err != nil {
+			return false
+		}
+		if len(signatureData) != crypto.SignatureLength {
+			return false
+		}
 		signatureData[crypto.RecoveryIDOffset] -= 27 // Transform yellow paper V from 27/28 to 0/1
 		recovered, err := crypto.SigToPub(accounts.TextHash(signBytes), signatureData)
 		if err != nil {
@@ -57,7 +66,10 @@ func VerifySignature(chain string, address string, pubKey string, rewardAddr str
 		recoveredAddr := crypto.PubkeyToAddress(*recovered)
 		return recoveredAddr.String() == address
 	case "terra":
-		pubKeyBytes := hexutil.MustDecode(pubKey)
+		pubKeyBytes, err := hexutil.Decode(pubKey)
+		if err != nil {
+			return false
+		}
 		secp256k1PubKey := secp256k1.PubKey{Key: pubKeyBytes}
 		terraAddr, err := bech32.ConvertAndEncode("terra", secp256k1PubKey.Address())
 		if err != nil {
@@ -67,10 +79,16 @@ func VerifySignature(chain string, address string, pubKey string, rewardAddr str
 			return false
 		}
 
-		signatureData := hexutil.MustDecode(signatureBytes)
+		signatureData, err := hexutil.Decode(signatureBytes)
+		if err != nil {
+			return false
+		}
 		return secp256k1PubKey.VerifySignature(signBytes, signatureData)
 	case "secret":
-		pubKeyBytes := hexutil.MustDecode(pubKey)
+		pubKeyBytes, err := hexutil.Decode(pubKey)
+		if err != nil {
+			return false
+		}
 		secp256k1PubKey := secp256k1.PubKey{Key: pubKeyBytes}
 		secretAddr, err := bech32.ConvertAndEncode("secret", secp256k1PubKey.Address())
 		if err != nil {
@@ -80,7 +98,10 @@ func VerifySignature(chain string, address string, pubKey string, rewardAddr str
 			return false
 		}
 
-		signatureData := hexutil.MustDecode(signatureBytes)
+		signatureData, err := hexutil.Decode(signatureBytes)
+		if err != nil {
+			return false
+		}
 		return secp256k1PubKey.VerifySignature(keplrSignBytes, signatureData)
 	case "stargaze":
 		_, bz, err := bech32.DecodeAndConvert(address)
