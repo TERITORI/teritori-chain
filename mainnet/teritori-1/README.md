@@ -2,12 +2,12 @@
 
 ## Server Configuration
 
-Here is the configuration of the server we are using:
+Server requirements:
 
-- No. of CPUs: 2
-- Memory: 2GB
-- Disk: 80GB SSD
-- OS: Ubuntu 18.04 LTS
+- No. of CPUs: 16
+- Memory: 32GB
+- Disk: 500GB
+- OS: Ubuntu 22.04 LTS
 
 Allow all incoming connections from TCP port 26656 and 26657
 
