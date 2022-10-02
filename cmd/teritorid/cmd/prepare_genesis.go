@@ -5,6 +5,7 @@ import (
 	"encoding/json"
 	"fmt"
 	"os"
+	"time"
 
 	appparams "github.com/TERITORI/teritori-chain/app/params"
 	"github.com/TERITORI/teritori-chain/x/airdrop/types"
@@ -181,6 +182,10 @@ func PrepareGenesis(clientCtx client.Context, appState map[string]json.RawMessag
 
 	// chain params genesis
 	genDoc.ChainID = chainID
+	genDoc.GenesisTime = time.Unix(1664802000, 0) // Mon Oct 03 2022 13:00:00 GMT+0000
+	genDoc.ConsensusParams = tmtypes.DefaultConsensusParams()
+	genDoc.ConsensusParams.Block.MaxBytes = 21 * 1024 * 1024
+	genDoc.ConsensusParams.Block.MaxGas = 300_000_000
 
 	// mint module genesis
 	mintGenState := minttypes.DefaultGenesisState()
@@ -405,6 +410,8 @@ func PrepareGenesis(clientCtx client.Context, appState map[string]json.RawMessag
 	// distribution module genesis
 	distributionGenState := distributiontypes.DefaultGenesisState()
 	distributionGenState.Params = distributiontypes.DefaultParams()
+	distributionGenState.Params.BaseProposerReward = sdk.ZeroDec()
+	distributionGenState.Params.BonusProposerReward = sdk.ZeroDec()
 	distributionGenState.FeePool.CommunityPool = sdk.NewDecCoinsFromCoins(communityPoolCoins...)
 	distributionGenStateBz, err := cdc.MarshalJSON(distributionGenState)
 	if err != nil {
@@ -416,9 +423,10 @@ func PrepareGenesis(clientCtx client.Context, appState map[string]json.RawMessag
 	govGenState := govtypes.DefaultGenesisState()
 	defaultGovParams := govtypes.DefaultParams()
 	govGenState.DepositParams = defaultGovParams.DepositParams
-	govGenState.DepositParams.MinDeposit = sdk.Coins{sdk.NewInt64Coin(appparams.BaseCoinUnit, 5000_000_000)} // 5000 TORI
+	govGenState.DepositParams.MinDeposit = sdk.Coins{sdk.NewInt64Coin(appparams.BaseCoinUnit, 500_000_000)} // 500 TORI
 	govGenState.TallyParams = defaultGovParams.TallyParams
 	govGenState.VotingParams = defaultGovParams.VotingParams
+	govGenState.VotingParams.VotingPeriod = time.Hour * 24 * 2 // 2 days
 	govGenStateBz, err := cdc.MarshalJSON(govGenState)
 	if err != nil {
 		return nil, nil, fmt.Errorf("failed to marshal gov genesis state: %w", err)
@@ -443,6 +451,34 @@ func PrepareGenesis(clientCtx client.Context, appState map[string]json.RawMessag
 		return nil, nil, fmt.Errorf("failed to marshal crisis genesis state: %w", err)
 	}
 	appState[crisistypes.ModuleName] = crisisGenStateBz
+
+	// ica module genesis
+	icaGenState := icatypes.DefaultGenesis()
+	icaGenState.HostGenesisState.Params.AllowMessages = []string{
+		"/cosmos.bank.v1beta1.MsgSend",
+		"/cosmos.bank.v1beta1.MsgMultiSend",
+		"/cosmos.distribution.v1beta1.MsgSetWithdrawAddress",
+		"/cosmos.distribution.v1beta1.MsgWithdrawValidatorCommission",
+		"/cosmos.distribution.v1beta1.MsgFundCommunityPool",
+		"/cosmos.distribution.v1beta1.MsgWithdrawDelegatorReward",
+		"/cosmos.feegrant.v1beta1.MsgGrantAllowance",
+		"/cosmos.feegrant.v1beta1.MsgRevokeAllowance",
+		"/cosmos.gov.v1beta1.MsgVoteWeighted",
+		"/cosmos.gov.v1beta1.MsgSubmitProposal",
+		"/cosmos.gov.v1beta1.MsgDeposit",
+		"/cosmos.gov.v1beta1.MsgVote",
+		"/cosmos.staking.v1beta1.MsgEditValidator",
+		"/cosmos.staking.v1beta1.MsgDelegate",
+		"/cosmos.staking.v1beta1.MsgUndelegate",
+		"/cosmos.staking.v1beta1.MsgBeginRedelegate",
+		"/cosmos.staking.v1beta1.MsgCreateValidator",
+		"/ibc.applications.transfer.v1.MsgTransfer",
+	}
+	icaGenStateBz, err := cdc.MarshalJSON(icaGenState)
+	if err != nil {
+		return nil, nil, fmt.Errorf("failed to marshal crisis genesis state: %w", err)
+	}
+	appState[icatypes.ModuleName] = icaGenStateBz
 
 	// return appState and genDoc
 	return appState, genDoc, nil
