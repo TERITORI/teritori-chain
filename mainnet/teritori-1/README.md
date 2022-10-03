@@ -84,7 +84,7 @@ sed -i.bak 's/persistent_peers =.*/persistent_peers = ""/' $HOME/.teritorid/conf
 Download the genesis file:
 
 ```shell
-wget -O ~/.teritorid/config/genesis.json https://media.githubusercontent.com/media/TERITORI/teritori-chain/v1.1.0/genesis.json
+wget -O ~/.teritorid/config/genesis.json https://media.githubusercontent.com/media/TERITORI/teritori-chain/v1.1.0/mainnet/teritori-1/genesis.json
 ```
 
 ## Launch the node
