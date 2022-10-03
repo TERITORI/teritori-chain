@@ -59,7 +59,7 @@ go version
 Clone the Teritori repository and install mainnet binary:
 
 ```shell
-git clone https://github.com/TERITORI/teritori-chain && cd teritori-chain && git checkout mainnet && make install
+git clone https://github.com/TERITORI/teritori-chain && cd teritori-chain && git checkout v1.1.0 && make install
 ```
 
 Verify the installation:
@@ -84,7 +84,7 @@ sed -i.bak 's/persistent_peers =.*/persistent_peers = ""/' $HOME/.teritorid/conf
 Download the genesis file:
 
 ```shell
-wget -O ~/.teritorid/config/genesis.json https://media.githubusercontent.com/media/TERITORI/teritori-mainnet-genesis/main/genesis.json
+wget -O ~/.teritorid/config/genesis.json https://media.githubusercontent.com/media/TERITORI/teritori-chain/v1.1.0/genesis.json
 ```
 
 ## Launch the node
