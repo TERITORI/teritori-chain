@@ -1,4 +1,4 @@
-# [COMING]
+# [ACTIVE]
 
 ## Server Configuration
 
@@ -35,7 +35,7 @@ apt install build-essential git curl gcc make jq -y
 Install Go 1.18+:
 
 ```shell
-wget -c https://go.dev/dl/go1.18.3.linux-amd64.tar.gz && rm -rf /usr/local/go && tar -C /usr/local -xzf go1.18.3.linux-amd64.tar.gz && rm -rf go1.18.3.linux-amd64.tar.gz
+wget -c https://go.dev/dl/go1.19.1.linux-amd64.tar.gz && rm -rf /usr/local/go && tar -C /usr/local -xzf go1.19.1.linux-amd64.tar.gz && rm -rf go1.19.1.linux-amd64.tar.gz
 ```
 
 Setup your environnement (you can skip this part if you already had go installed before):
@@ -51,7 +51,7 @@ Verify the installation:
 
 ```shell
 go version
-# Should return go version go1.18.3 linux/amd64
+# Should return go version go1.19.1 linux/amd64
 ```
 
 ## Setup the chain
@@ -78,13 +78,13 @@ teritorid init <YOUR_MONIKER> --chain-id teritori-1
 Add peers in the config file:
 
 ```shell
-sed -i.bak 's/persistent_peers =.*/persistent_peers = ""/' $HOME/.teritorid/config/config.toml
+sed -i.bak 's/persistent_peers =.*/persistent_peers = "3069b058b5ed85c3cdb2cf18fb1d255d966b53af@193.149.187.8:26656,a06fbbb9ace823ae28a696a91daa2d0644653c28@65.21.32.200:26756"/' $HOME/.teritorid/config/config.toml
 ```
 
 Download the genesis file:
 
 ```shell
-wget -O ~/.teritorid/config/genesis.json https://media.githubusercontent.com/media/TERITORI/teritori-chain/v1.1.2/mainnet/teritori-1/genesis.json
+wget -O ~/.teritorid/config/genesis.json https://media.githubusercontent.com/media/TERITORI/teritori-chain/mainnet/teritori-1/genesis.json
 ```
 
 ## Launch the node
@@ -164,7 +164,7 @@ go install github.com/cosmos/cosmos-sdk/cosmovisor/cmd/cosmovisor@latest
 
 ```shell
 export DAEMON_NAME=teritorid
-export DAEMON_HOME=$HOME/.teritori
+export DAEMON_HOME=$HOME/.teritorid
 source ~/.profile
 ```
 
@@ -186,12 +186,12 @@ After=network-online.target
 
 [Service]
 User=$USER
-ExecStart=/home/$USER/go/bin/cosmovisor start
+ExecStart=/home/$USER/go/bin/cosmovisor run start
 Restart=always
 RestartSec=3
 LimitNOFILE=4096
 Environment="DAEMON_NAME=teritorid"
-Environment="DAEMON_HOME=/home/$USER/.teritori"
+Environment="DAEMON_HOME=/home/$USER/.teritorid"
 Environment="DAEMON_ALLOW_DOWNLOAD_BINARIES=false"
 Environment="DAEMON_RESTART_AFTER_UPGRADE=true"
 Environment="DAEMON_LOG_BUFFER_SIZE=512"
@@ -229,13 +229,8 @@ teritorid keys add <YOUR_KEY>
 
 You can also you `--recover` flag to use an already existed key (but we recommend for security reason to use one key per chain to avoid total loss of funds in case one key is missing)
 
-Join our [Discord](https://discord.gg/teritori) and request fund on the `Faucet` channel using this command:
 
-```shell
-$request <YOUR_TERITORI_ADDRESS>
-```
-
-You can check if you have received fund once your node will be synched using this CLI command:
+You can check if you have fund on your address using this CLI command:
 
 ```shell
 teritorid query bank balances <YOUR_TERITORI_ADDRESS> --chain-id teritori-1
