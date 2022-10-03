@@ -51,7 +51,7 @@ Verify the installation:
 
 ```shell
 go version
-#Should return go version go1.18.3 linux/amd64
+# Should return go version go1.18.3 linux/amd64
 ```
 
 ## Setup the chain
@@ -59,14 +59,14 @@ go version
 Clone the Teritori repository and install mainnet binary:
 
 ```shell
-git clone https://github.com/TERITORI/teritori-chain && cd teritori-chain && git checkout v1.1.1 && make install
+git clone https://github.com/TERITORI/teritori-chain && cd teritori-chain && git checkout v1.1.2 && make install
 ```
 
 Verify the installation:
 
 ```shell
 teritorid version
-#Should return  mainnet-9bc209964838de9f93be332e07a842bcf1297fbe
+# Should return v1.1.2
 ```
 
 Init the chain:
@@ -84,7 +84,7 @@ sed -i.bak 's/persistent_peers =.*/persistent_peers = ""/' $HOME/.teritorid/conf
 Download the genesis file:
 
 ```shell
-wget -O ~/.teritorid/config/genesis.json https://media.githubusercontent.com/media/TERITORI/teritori-chain/v1.1.1/mainnet/teritori-1/genesis.json
+wget -O ~/.teritorid/config/genesis.json https://media.githubusercontent.com/media/TERITORI/teritori-chain/v1.1.2/mainnet/teritori-1/genesis.json
 ```
 
 ## Launch the node
