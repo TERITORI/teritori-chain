@@ -1,0 +1,2 @@
+testnet/teritori-testnet-v3/genesis.json filter=lfs diff=lfs merge=lfs -text
+mainnet/teritori-1/genesis.json filter=lfs diff=lfs merge=lfs -text

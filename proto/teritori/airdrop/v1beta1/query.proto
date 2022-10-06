@@ -5,6 +5,7 @@ import "gogoproto/gogo.proto";
 import "google/api/annotations.proto";
 import "cosmos/base/v1beta1/coin.proto";
 import "teritori/airdrop/v1beta1/allocation.proto";
+import "teritori/airdrop/v1beta1/params.proto";
 
 option go_package = "github.com/TERITORI/teritori-chain/x/airdrop/types";
 
@@ -13,6 +14,9 @@ service Query {
   rpc Allocation(QueryAllocationRequest) returns (QueryAllocationResponse) {
     option (google.api.http).get =
         "/teritori/airdrop/v1beta1/allocation/{address}";
+  }
+  rpc Params(QueryParamsRequest) returns (QueryParamsResponse) {
+    option (google.api.http).get = "/teritori/airdrop/v1beta1/params";
   }
 }
 
@@ -26,4 +30,10 @@ message QueryAllocationRequest {
 
 message QueryAllocationResponse {
   AirdropAllocation allocation = 1;
+}
+
+message QueryParamsRequest {}
+
+message QueryParamsResponse {
+  Params params = 1 [ (gogoproto.nullable) = false ];
 }

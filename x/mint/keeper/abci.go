@@ -35,6 +35,10 @@ func (k Keeper) EndBlocker(ctx sdk.Context) {
 
 	// implement automatic monthInfo updates
 	monthInfo := k.GetTeamVestingMonthInfo(ctx)
+	if monthInfo.MonthStartedBlock < params.MintingRewardsDistributionStartBlock {
+		monthInfo.MonthStartedBlock = params.MintingRewardsDistributionStartBlock
+	}
+
 	if blockNumber >= monthInfo.OneMonthPeriodInBlocks+monthInfo.MonthStartedBlock {
 		monthInfo.MonthsSinceGenesis++
 		monthInfo.MonthStartedBlock = ctx.BlockHeight()
@@ -45,7 +49,6 @@ func (k Keeper) EndBlocker(ctx sdk.Context) {
 	mintedCoin := minter.BlockProvision(params)
 	mintedCoins := sdk.NewCoins(mintedCoin)
 
-	fmt.Println("mintedCoins", mintedCoin)
 	// We over-allocate by the developer vesting portion, and burn this later
 	err := k.MintCoins(ctx, mintedCoins)
 	if err != nil {

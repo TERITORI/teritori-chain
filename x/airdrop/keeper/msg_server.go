@@ -38,3 +38,31 @@ func (k msgServer) SetAllocation(goCtx context.Context, msg *types.MsgSetAllocat
 	k.keeper.SetAllocation(ctx, msg.Allocation)
 	return &types.MsgSetAllocationResponse{}, nil
 }
+
+func (m msgServer) TransferModuleOwnership(goCtx context.Context, msg *types.MsgTransferModuleOwnership) (*types.MsgTransferModuleOwnershipResponse, error) {
+	ctx := sdk.UnwrapSDKContext(goCtx)
+	params := m.keeper.GetParamSet(ctx)
+	if msg.Sender != params.Owner {
+		return nil, types.ErrNotEnoughPermission
+	}
+	params.Owner = msg.NewOwner
+	m.keeper.SetParamSet(ctx, params)
+
+	return &types.MsgTransferModuleOwnershipResponse{}, nil
+}
+
+func (m msgServer) DepositTokens(goCtx context.Context, msg *types.MsgDepositTokens) (*types.MsgDepositTokensResponse, error) {
+	ctx := sdk.UnwrapSDKContext(goCtx)
+
+	sender, err := sdk.AccAddressFromBech32(msg.Sender)
+	if err != nil {
+		return nil, err
+	}
+
+	err = m.keeper.bankKeeper.SendCoinsFromAccountToModule(ctx, sender, types.ModuleName, msg.Amount)
+	if err != nil {
+		return nil, err
+	}
+
+	return &types.MsgDepositTokensResponse{}, nil
+}

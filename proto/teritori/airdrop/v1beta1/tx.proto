@@ -13,6 +13,10 @@ service Msg {
     rpc ClaimAllocation(MsgClaimAllocation) returns (MsgClaimAllocationResponse);
     // SetAllocation defines a method to set allocation
     rpc SetAllocation(MsgSetAllocation) returns (MsgSetAllocationResponse);
+    // TransferModuleOwnership defines a method to transfer module ownership to other address
+    rpc TransferModuleOwnership(MsgTransferModuleOwnership) returns (MsgTransferModuleOwnershipResponse);
+    // DepositTokens defines a method to deposit tokens to the module
+    rpc DepositTokens(MsgDepositTokens) returns (MsgDepositTokensResponse);
 }
 
 // MsgSetAllocation defines an sdk.Msg type that set airdrop allocation
@@ -45,3 +49,18 @@ message MsgSignData {
     // data represents the raw bytes of the content that is signed (text, json, etc)
     bytes data = 2 [(gogoproto.jsontag) = "data"];
 }
+
+message MsgTransferModuleOwnership {
+  string sender = 1;
+  string new_owner = 2;
+}
+message MsgTransferModuleOwnershipResponse {}
+
+message MsgDepositTokens {
+  string sender = 1;
+  repeated string amount = 2 [
+    (gogoproto.customtype) = "github.com/cosmos/cosmos-sdk/types.Coin",
+    (gogoproto.nullable) = false
+  ];
+}
+message MsgDepositTokensResponse {}

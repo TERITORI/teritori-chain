@@ -1,5 +1,8 @@
 #!/usr/bin/env bash
 
+# query params
+teritorid query airdrop params
+
 # query allocation for XXX address
 teritorid query airdrop allocation XXX --home=/Users/admin/.teritorid
 
@@ -16,6 +19,7 @@ teritorid tx airdrop set-allocation terra BW5D1Dv7pydTYZ8rSByEqNXYVRnGpm4qcEhkfH
 teritorid tx airdrop set-allocation cosmos cosmos19ftk3lkfupgtnh38d7enc8c6jp7aljj3s0p6gt 100000000utori 0utori --from=node0 --keyring-backend=test --home=nodehome --chain-id=chain-JskdwJ --broadcast-mode=block --yes
 teritorid tx airdrop set-allocation osmosis osmo19ftk3lkfupgtnh38d7enc8c6jp7aljj3c5j27e 100000000utori 0utori --from=node0 --keyring-backend=test --home=nodehome --chain-id=chain-JskdwJ --broadcast-mode=block --yes
 teritorid tx airdrop set-allocation juno juno19ftk3lkfupgtnh38d7enc8c6jp7aljj3xazp0h 100000000utori 0utori --from=node0 --keyring-backend=test --home=nodehome --chain-id=chain-JskdwJ --broadcast-mode=block --yes
+teritorid tx airdrop deposit-tokens 1000000000000utori --from=<account> --keyring-backend=test --home=nodehome --chain-id=teritori-testnet-v3 --broadcast-mode=block --yes
 
 teritorid tx bank send node0 pop19ftk3lkfupgtnh38d7enc8c6jp7aljj3qspa84 1stake --keyring-backend=test --home=nodehome --chain-id=chain-JskdwJ --broadcast-mode=block --yes
 teritorid tx bank send node0 pop1hwf62gw7h39xmd69st3p487r8x3sphm29dftfh 1stake --keyring-backend=test --home=nodehome --chain-id=chain-JskdwJ --broadcast-mode=block --yes
