@@ -1,24 +1,25 @@
-# Teritori  
+# Using teritorid command line client
 
-![Banner!](assets/banner.png)
+## Download go
 
-[![Discord](https://badgen.net/badge/icon/discord?icon=discord&label)](https://discord.gg/teritori)
-[![Go Report
-Card](https://goreportcard.com/badge/github.com/TERITORI/teritori-chain?style=flat-square)](https://goreportcard.com/report/github.com/TERITORI/teritori-chain)
-[![Version](https://img.shields.io/github/tag/TERITORI/teritori-chain.svg?style=flat-square)](https://github.com/TERITORI/teritori-chain/releases/latest)
-[![Lines Of
-Code](https://img.shields.io/tokei/lines/github/TERITORI/teritori-chain?style=flat-square)](https://github.com/TERITORI/teritori-chain)
+Download go from [here](https://go.dev/dl/) and install it.
 
-Teritori is a Cosmos SDK based blockchain here to enhance Web3 individuals, communities & builders experience through an all-in-one hub of dApps.  
+## Build teritorid binary
 
-# Testnet  
+Run `go build` in this directory. A binary file named `teritorid` will be created in this directory.
 
-## All the testnet chains:  
-[*DEPRECIATED*] - [teritori-testnet-v1](https://github.com/TERITORI/teritori-chain/tree/main/testnet/teritori-testnet-v1)  
-[*DEPRECIATED*] - [teritori-testnet-v2](https://github.com/TERITORI/teritori-chain/tree/main/testnet/teritori-testnet-v2)  
-[__ACTIVE__] - [teritori-testnet-v3](https://github.com/TERITORI/teritori-chain/tree/main/testnet/teritori-testnet-v3)  
+## Usage of teritorid
 
-# Mainnet  
+The following are some examples of how you can use teritorid to interact with Teritori network. Every subcommand can be explored by: `teritorid <subcommand> --help`
 
-## All the mainnet chains:  
-[__ACTIVE__] - [teritori-1](https://github.com/TERITORI/teritori-chain/tree/main/mainnet/teritori-1)  
+### Creating wallet
+
+This will create a new Teritori wallet locally on your computer `teritorid keys add <WALLET_NAME>`
+
+### Querying an address on mainnet
+
+`teritorid query account <ADDRESS> --node "https://rpc.mainnet.teritori.com:443" --chain-id "teritori-1"` 
+
+### Staking to a specific validator
+
+`teritorid tx staking  delegate <VALIDATOR_ADDRESS> "<amount>utori" --from <WALLET_NAME> --node "https://rpc.mainnet.teritori.com:443" --chain-id "teritori-1"`
