@@ -26,6 +26,7 @@ func GetTxCmd() *cobra.Command {
 		GetTxSetAllocationCmd(),
 		GetTxDepositTokensCmd(),
 		AllocateFurtherAirdropCmd(),
+		FetchAndRemoveAirdropCmd(),
 	)
 
 	return txCmd
