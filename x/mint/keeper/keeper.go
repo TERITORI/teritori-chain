@@ -32,15 +32,6 @@ func (e invalidRatioError) Error() string {
 	return fmt.Sprintf("mint allocation ratio (%s) is greater than 1", e.ActualRatio)
 }
 
-type insufficientDevVestingBalanceError struct {
-	ActualBalance         sdk.Int
-	AttemptedDistribution sdk.Int
-}
-
-func (e insufficientDevVestingBalanceError) Error() string {
-	return fmt.Sprintf("developer vesting balance (%s) is smaller than requested distribution of (%s)", e.ActualBalance, e.AttemptedDistribution)
-}
-
 const emptyAddressReceiver = ""
 
 // NewKeeper creates a new mint Keeper instance.

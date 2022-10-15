@@ -40,6 +40,9 @@ func GetTxClaimAllocationCmd() *cobra.Command {
 		Args:  cobra.ExactArgs(2),
 		RunE: func(cmd *cobra.Command, args []string) error {
 			clientCtx, err := client.GetClientTxContext(cmd)
+			if err != nil {
+				return err
+			}
 
 			msg := types.NewMsgClaimAllocation(
 				args[0],
@@ -70,6 +73,9 @@ func GetTxSetAllocationCmd() *cobra.Command {
 		Args:  cobra.ExactArgs(4),
 		RunE: func(cmd *cobra.Command, args []string) error {
 			clientCtx, err := client.GetClientTxContext(cmd)
+			if err != nil {
+				return err
+			}
 
 			amount, err := sdk.ParseCoinNormalized(args[2])
 			if err != nil {
