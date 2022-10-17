@@ -712,6 +712,8 @@ func NewTeritoriApp(
 				SignModeHandler: encodingConfig.TxConfig.SignModeHandler(),
 				SigGasConsumer:  ante.DefaultSigVerificationGasConsumer,
 			},
+			StakingKeeper:     app.StakingKeeper,
+			BankKeeper:        app.BankKeeper,
 			AirdropKeeper:     &app.AirdropKeeper,
 			IBCKeeper:         app.IBCKeeper,
 			TxCounterStoreKey: keys[wasm.StoreKey],
