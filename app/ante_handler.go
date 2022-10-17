@@ -145,13 +145,13 @@ func (min MinCommissionDecorator) AnteHandle(
 }
 
 // getValidator returns the validator belonging to a given bech32 validator address
-func (vcd MinCommissionDecorator) getValidator(ctx sdk.Context, bech32ValAddr string) (stakingtypes.Validator, error) {
+func (min MinCommissionDecorator) getValidator(ctx sdk.Context, bech32ValAddr string) (stakingtypes.Validator, error) {
 	valAddr, err := sdk.ValAddressFromBech32(bech32ValAddr)
 	if err != nil {
 		return stakingtypes.Validator{}, sdkerrors.Wrap(sdkerrors.ErrInvalidAddress, bech32ValAddr)
 	}
 
-	val, found := vcd.sk.GetValidator(ctx, valAddr)
+	val, found := min.sk.GetValidator(ctx, valAddr)
 	if !found {
 		return stakingtypes.Validator{}, disttypes.ErrNoValidatorExists
 	}
@@ -159,21 +159,21 @@ func (vcd MinCommissionDecorator) getValidator(ctx sdk.Context, bech32ValAddr st
 	return val, nil
 }
 
-func (vcd MinCommissionDecorator) getTotalDelegatedTokens(ctx sdk.Context) sdk.Int {
-	bondDenom := vcd.sk.BondDenom(ctx)
-	bondedPool := vcd.sk.GetBondedPool(ctx)
-	notBondedPool := vcd.sk.GetNotBondedPool(ctx)
+func (min MinCommissionDecorator) getTotalDelegatedTokens(ctx sdk.Context) sdk.Int {
+	bondDenom := min.sk.BondDenom(ctx)
+	bondedPool := min.sk.GetBondedPool(ctx)
+	notBondedPool := min.sk.GetNotBondedPool(ctx)
 
-	notBondedAmount := vcd.bk.GetBalance(ctx, notBondedPool.GetAddress(), bondDenom).Amount
-	bondedAmount := vcd.bk.GetBalance(ctx, bondedPool.GetAddress(), bondDenom).Amount
+	notBondedAmount := min.bk.GetBalance(ctx, notBondedPool.GetAddress(), bondDenom).Amount
+	bondedAmount := min.bk.GetBalance(ctx, bondedPool.GetAddress(), bondDenom).Amount
 
 	return notBondedAmount.Add(bondedAmount)
 }
 
 // Returns the projected voting power as a percentage (not a fraction)
-func (vcd MinCommissionDecorator) CalculateDelegateProjectedVotingPower(ctx sdk.Context, validator stakingtypes.ValidatorI, delegateAmount sdk.Dec) sdk.Dec {
+func (min MinCommissionDecorator) CalculateDelegateProjectedVotingPower(ctx sdk.Context, validator stakingtypes.ValidatorI, delegateAmount sdk.Dec) sdk.Dec {
 	validatorTokens := sdk.NewDecFromInt(validator.GetTokens())
-	totalDelegatedTokens := sdk.NewDecFromInt(vcd.getTotalDelegatedTokens(ctx))
+	totalDelegatedTokens := sdk.NewDecFromInt(min.getTotalDelegatedTokens(ctx))
 
 	projectedTotalDelegatedTokens := totalDelegatedTokens.Add(delegateAmount)
 	projectedValidatorTokens := validatorTokens.Add(delegateAmount)
@@ -182,9 +182,9 @@ func (vcd MinCommissionDecorator) CalculateDelegateProjectedVotingPower(ctx sdk.
 }
 
 // Returns the projected voting power as a percentage (not a fraction)
-func (vcd MinCommissionDecorator) CalculateRedelegateProjectedVotingPower(ctx sdk.Context, validator stakingtypes.ValidatorI, delegateAmount sdk.Dec) sdk.Dec {
+func (min MinCommissionDecorator) CalculateRedelegateProjectedVotingPower(ctx sdk.Context, validator stakingtypes.ValidatorI, delegateAmount sdk.Dec) sdk.Dec {
 	validatorTokens := sdk.NewDecFromInt(validator.GetTokens())
-	projectedTotalDelegatedTokens := sdk.NewDecFromInt(vcd.getTotalDelegatedTokens(ctx)) // no additional delegated tokens
+	projectedTotalDelegatedTokens := sdk.NewDecFromInt(min.getTotalDelegatedTokens(ctx)) // no additional delegated tokens
 
 	projectedValidatorTokens := validatorTokens.Add(delegateAmount)
 
