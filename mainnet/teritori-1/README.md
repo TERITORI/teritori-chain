@@ -59,14 +59,14 @@ go version
 Clone the Teritori repository and install mainnet binary:
 
 ```shell
-git clone https://github.com/TERITORI/teritori-chain && cd teritori-chain && git checkout v1.1.2 && make install
+git clone https://github.com/TERITORI/teritori-chain && cd teritori-chain && git checkout v1.2.0 && make install
 ```
 
 Verify the installation:
 
 ```shell
 teritorid version
-# Should return v1.1.2
+# Should return v1.2.0
 ```
 
 Init the chain:
@@ -84,7 +84,7 @@ sed -i.bak 's/persistent_peers =.*/persistent_peers = "3069b058b5ed85c3cdb2cf18f
 Download the genesis file:
 
 ```shell
-wget -O ~/.teritorid/config/genesis.json https://media.githubusercontent.com/media/TERITORI/teritori-chain/mainnet/teritori-1/genesis.json
+wget -O ~/.teritorid/config/genesis.json https://media.githubusercontent.com/media/TERITORI/teritori-chain/main/mainnet/teritori-1/genesis.json
 ```
 
 ## Launch the node
@@ -228,7 +228,6 @@ teritorid keys add <YOUR_KEY>
 ```
 
 You can also you `--recover` flag to use an already existed key (but we recommend for security reason to use one key per chain to avoid total loss of funds in case one key is missing)
-
 
 You can check if you have fund on your address using this CLI command:
 
