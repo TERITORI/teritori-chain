@@ -7,6 +7,7 @@ import (
 	"github.com/TERITORI/teritori-chain/x/airdrop/types"
 	"github.com/cosmos/cosmos-sdk/client"
 	"github.com/cosmos/cosmos-sdk/client/flags"
+	authtypes "github.com/cosmos/cosmos-sdk/x/auth/types"
 	"github.com/spf13/cobra"
 )
 
@@ -23,6 +24,7 @@ func GetQueryCmd() *cobra.Command {
 	queryCmd.AddCommand(
 		GetCmdQueryAllocation(),
 		GetCmdQueryParams(),
+		GetCmdQueryAirdropModuleAccount(),
 	)
 
 	return queryCmd
@@ -45,6 +47,23 @@ func GetCmdQueryAllocation() *cobra.Command {
 			}
 
 			return clientCtx.PrintProto(res.Allocation)
+		},
+	}
+
+	flags.AddQueryFlagsToCmd(cmd)
+
+	return cmd
+}
+
+func GetCmdQueryAirdropModuleAccount() *cobra.Command {
+	cmd := &cobra.Command{
+		Use:   "module-account",
+		Short: "Query airdrop module account address",
+		Args:  cobra.ExactArgs(0),
+		RunE: func(cmd *cobra.Command, args []string) error {
+			moduleAddr := authtypes.NewModuleAddress(types.ModuleName)
+			fmt.Println(moduleAddr.String())
+			return nil
 		},
 	}
 
