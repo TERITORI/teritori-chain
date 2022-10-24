@@ -48,7 +48,7 @@ Example:
 			}
 
 			newAllocations := []airdroptypes.AirdropAllocation{}
-			allocationRecords := parseCosmosFurtherAirdropAmount(args[0])
+			allocationRecords := parseStarsAirdropAmount(args[0])
 			for _, line := range allocationRecords[1:] {
 				starsAddr, amountStr := line[0], line[1]
 				amountDec := sdk.MustNewDecFromStr(amountStr)
@@ -61,7 +61,6 @@ Example:
 					ClaimedAmount: sdk.NewInt64Coin(appparams.BaseCoinUnit, 0),
 				}
 
-				allocation.Amount.Amount = allocation.Amount.Amount.Add(amount)
 				newAllocations = append(newAllocations, allocation)
 			}
 
