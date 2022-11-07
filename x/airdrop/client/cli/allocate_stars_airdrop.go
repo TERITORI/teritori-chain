@@ -1,6 +1,7 @@
 package cli
 
 import (
+	"context"
 	"encoding/csv"
 	"fmt"
 	"os"
@@ -38,7 +39,7 @@ func AllocateStarsAirdropCmd() *cobra.Command {
 		Short: "Allocate stars airdrop",
 		Long: `Allocate stars airdrop.
 Example:
-	teritorid tx airdrop allocate-stars-airdrop stars_airdrop.csv 0 600 --from=validator --keyring-backend=test --chain-id=testing --home=$HOME/.teritorid/ --yes --broadcast-mode=block --gas=10000000
+	teritorid tx airdrop allocate-stars-airdrop Airdrop_HuahuaPunks_Feuille_1.csv 0 500 --from=validator --keyring-backend=test --chain-id=testing --home=$HOME/.teritorid/ --yes --broadcast-mode=block --gas=10000000
 `,
 		Args: cobra.ExactArgs(3),
 		RunE: func(cmd *cobra.Command, args []string) error {
@@ -54,13 +55,23 @@ Example:
 				amountDec := sdk.MustNewDecFromStr(amountStr)
 				amount := amountDec.Mul(sdk.NewDec(1000_000)).TruncateInt()
 
+				params := &airdroptypes.QueryAllocationRequest{Address: starsAddr}
+
 				allocation := airdroptypes.AirdropAllocation{
 					Chain:         "stargaze",
 					Address:       starsAddr,
-					Amount:        sdk.NewCoin(appparams.BaseCoinUnit, amount),
+					Amount:        sdk.NewInt64Coin(appparams.BaseCoinUnit, 0),
 					ClaimedAmount: sdk.NewInt64Coin(appparams.BaseCoinUnit, 0),
 				}
 
+				// get previous allocation if exists
+				queryClient := airdroptypes.NewQueryClient(clientCtx)
+				res, err := queryClient.Allocation(context.Background(), params)
+				if err == nil && res.Allocation != nil {
+					allocation = *res.Allocation
+				}
+
+				allocation.Amount.Amount = allocation.Amount.Amount.Add(amount)
 				newAllocations = append(newAllocations, allocation)
 			}
 
