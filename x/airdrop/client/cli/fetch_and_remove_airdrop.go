@@ -42,6 +42,9 @@ func saveAllocation(path string, allocations []airdroptypes.AirdropAllocation) {
 	}
 
 	f, err := os.Create(path)
+	if err != nil {
+		panic(err)
+	}
 	defer f.Close()
 
 	if err != nil {
