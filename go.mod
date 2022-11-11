@@ -5,6 +5,7 @@ go 1.19
 require (
 	github.com/CosmWasm/wasmd v0.29.2
 	github.com/cosmos/cosmos-sdk v0.45.11
+	github.com/strangelove-ventures/packet-forward-middleware/v2 v2.1.1
 	github.com/cosmos/ibc-go/v3 v3.4.0
 	github.com/ethereum/go-ethereum v1.10.16
 	github.com/gagliardetto/solana-go v1.2.0
@@ -154,7 +155,6 @@ require (
 
 require (
 	github.com/hdevalence/ed25519consensus v0.0.0-20220222234857-c00d1f31bab3 // indirect
-	github.com/strangelove-ventures/packet-forward-middleware/v2 v2.1.1
 )
 
 replace (
