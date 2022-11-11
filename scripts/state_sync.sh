@@ -13,21 +13,13 @@ go mod edit -replace github.com/tendermint/tm-db=github.com/baabeetaa/tm-db@pebb
 go mod tidy
 go install -ldflags '-w -s -X github.com/cosmos/cosmos-sdk/types.DBBackend=pebbledb -X github.com/tendermint/tm-db.ForceSync=1' -tags pebbledb ./...
 
-# go install ./...
-
-# NOTE: ABOVE YOU CAN USE ALTERNATIVE DATABASES, HERE ARE THE EXACT COMMANDS
-# go install -ldflags '-w -s -X github.com/cosmos/cosmos-sdk/types.DBBackend=rocksdb' -tags rocksdb ./...
-# go install -ldflags '-w -s -X github.com/cosmos/cosmos-sdk/types.DBBackend=badgerdb' -tags badgerdb ./...
-# go install -ldflags '-w -s -X github.com/cosmos/cosmos-sdk/types.DBBackend=boltdb' -tags boltdb ./...
-
-rm  ~/.teritorid/config/genesis.json
 
 # Initialize chain.
 teritorid init test
 teritorid config chain-id teritori-1
 
 # Get Genesis
-wget https://github.com/TERITORI/teritori-chain/blob/main/mainnet/teritori-1/genesis.json?raw=true -O genesis.json
+wget https://github.com/TERITORI/teritori-chain/raw/mainnet/mainnet/teritori-1/genesis.json -O genesis.json
 mv genesis.json ~/.teritorid/config/genesis.json
 
 
@@ -49,7 +41,7 @@ export TERITORID_STATESYNC_TRUST_HEIGHT=$BLOCK_HEIGHT
 export TERITORID_STATESYNC_TRUST_HASH=$TRUST_HASH
 
 # Fetch and set list of seeds from chain registry.
-export TERITORID_P2P_SEEDS=$(curl -s https://raw.githubusercontent.com/cosmos/chain-registry/master/teritori/chain.json | jq -r '[foreach .peers.seeds[] as $item (""; "\($item.id)@\($item.address)")] | join(",")')
+export TERITORID_P2P_SEEDS="ade4d8bc8cbe014af6ebdf3cb7b1e9ad36f412c0@seeds.polkachu.com:15956"
 
 # Start chain.
 teritorid start --x-crisis-skip-assert-invariants --db_backend pebbledb
