@@ -81,7 +81,10 @@ func addressTable() map[string]string {
 	}`
 
 	var addressMap map[string]string
-	json.Unmarshal([]byte(addressJSON), &addressMap)
+	err := json.Unmarshal([]byte(addressJSON), &addressMap)
+	if err != nil {
+		panic(err)
+	}
 	return addressMap
 }
 
