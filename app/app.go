@@ -109,9 +109,9 @@ import (
 	tmos "github.com/tendermint/tendermint/libs/os"
 	dbm "github.com/tendermint/tm-db"
 
-	intertx "github.com/TERITORI/teritori-chain/x/inter-tx"
-	intertxkeeper "github.com/TERITORI/teritori-chain/x/inter-tx/keeper"
-	intertxtypes "github.com/TERITORI/teritori-chain/x/inter-tx/types"
+	intertx "github.com/TERITORI/teritori-chain/x/intertx"
+	intertxkeeper "github.com/TERITORI/teritori-chain/x/intertx/keeper"
+	intertxtypes "github.com/TERITORI/teritori-chain/x/intertx/types"
 
 	teritoriappparams "github.com/TERITORI/teritori-chain/app/params"
 	"github.com/strangelove-ventures/packet-forward-middleware/v2/router"
@@ -642,7 +642,7 @@ func NewTeritoriApp(
 		routertypes.ModuleName,
 		airdroptypes.ModuleName,
 		wasm.ModuleName,
-		intertx.ModuleName,
+		intertxtypes.ModuleName,
 	)
 	app.mm.SetOrderEndBlockers(
 		distrtypes.ModuleName,
@@ -667,7 +667,7 @@ func NewTeritoriApp(
 		authz.ModuleName,
 		airdroptypes.ModuleName,
 		wasm.ModuleName,
-		intertx.ModuleName,
+		intertxtypes.ModuleName,
 	)
 
 	// NOTE: The genutils module must occur after staking so that pools are
@@ -698,7 +698,7 @@ func NewTeritoriApp(
 		routertypes.ModuleName,
 		airdroptypes.ModuleName,
 		wasm.ModuleName,
-		intertx.ModuleName,
+		intertxtypes.ModuleName,
 	)
 
 	app.mm.RegisterInvariants(&app.CrisisKeeper)
