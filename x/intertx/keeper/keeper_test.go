@@ -14,7 +14,8 @@ import (
 	channeltypes "github.com/cosmos/ibc-go/v3/modules/core/04-channel/types"
 	ibctesting "github.com/cosmos/ibc-go/v3/testing"
 
-	icaapp "github.com/cosmos/interchain-accounts/app"
+	icaapp "github.com/TERITORI/teritori-chain/app"
+	"github.com/cosmos/cosmos-sdk/simapp"
 )
 
 var (
@@ -40,8 +41,8 @@ func init() {
 func SetupICATestingApp() (ibctesting.TestingApp, map[string]json.RawMessage) {
 	db := dbm.NewMemDB()
 	encCdc := icaapp.MakeEncodingConfig()
-	app := icaapp.New(log.NewNopLogger(), db, nil, true, map[int64]bool{}, icaapp.DefaultNodeHome, 5, encCdc, icaapp.EmptyAppOptions{})
-	return app, icaapp.NewDefaultGenesisState(encCdc.Marshaler)
+	app := icaapp.NewTeritoriApp(log.NewNopLogger(), db, nil, true, map[int64]bool{}, icaapp.DefaultNodeHome, 5, encCdc, simapp.EmptyAppOptions{})
+	return app, icaapp.NewDefaultGenesisState()
 }
 
 // KeeperTestSuite is a testing suite to test keeper functions
@@ -55,10 +56,10 @@ type KeeperTestSuite struct {
 	chainB *ibctesting.TestChain
 }
 
-func (suite *KeeperTestSuite) GetICAApp(chain *ibctesting.TestChain) *icaapp.App {
-	app, ok := chain.App.(*icaapp.App)
+func (suite *KeeperTestSuite) GetICAApp(chain *ibctesting.TestChain) *icaapp.TeritoriApp {
+	app, ok := chain.App.(*icaapp.TeritoriApp)
 	if !ok {
-		panic("not ica app")
+		panic("not teritori app")
 	}
 
 	return app
