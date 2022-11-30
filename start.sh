@@ -17,11 +17,17 @@ sed -i '' -e 's/"voting_period": "172800s"/"voting_period": "20s"/g' $HOME/.teri
 sed -i '' -e 's/enabled-unsafe-cors = false/enabled-unsafe-cors = true/g' $HOME/.teritorid/config/app.toml 
 sed -i '' -e 's/enable = false/enable = true/g' $HOME/.teritorid/config/app.toml 
 sed -i '' -e 's/cors_allowed_origins = \[\]/cors_allowed_origins = ["*"]/g' $HOME/.teritorid/config/config.toml 
+jq '.app_state.gov.voting_params.voting_period = "20s"'  $HOME/.teritorid/config/genesis.json > temp.json ; mv temp.json $HOME/.teritorid/config/genesis.json;
 
 teritorid start --home=$HOME/.teritorid
 
-# teritorid tx bank send validator tori17wwqmzwqrksz2jrzy6zk2x2qhd0u77d8ryq6pv 10000000utori --keyring-backend=test --chain-id=testing --home=$HOME/.teritorid/ --yes --broadcast-mode=block
-# teritorid tx airdrop claim-allocation 0x9d967594Cc61453aFEfD657313e5F05be7c6F88F 0xb89733c05568385a861fa20f5c4abe53c23a13962515bf5510638b4e3947b1236963b53de549ae762bbd45427dbd3712ae7d169a935d21e44e7da86b1c552f471b --from=validator --keyring-backend=test --chain-id=testing --home=$HOME/.teritorid/ --yes  --broadcast-mode=block
-# teritorid tx gov submit-proposal software-upgrade "v1.3.0" --upgrade-height=12 --title="title" --description="description" --from=validator --keyring-backend=test --chain-id=testing --home=$HOME/.teritorid/ --yes --broadcast-mode=block --deposit="100000000stake"
+# git checkout v1.3.0
+# go install ./cmd/teritorid
+# sh start.sh
+# teritorid tx gov submit-proposal software-upgrade "v1.4.0" --upgrade-height=12 --title="title" --description="description" --from=validator --keyring-backend=test --chain-id=testing --home=$HOME/.teritorid/ --yes --broadcast-mode=block --deposit="100000000stake"
 # teritorid tx gov vote 1 Yes --from=validator --keyring-backend=test --chain-id=testing --home=$HOME/.teritorid/ --yes  --broadcast-mode=block
 # teritorid query gov proposals
+# git checkout ica_controller
+# go install ./cmd/teritorid
+# teritorid start
+# teritorid query interchain-accounts controller params
