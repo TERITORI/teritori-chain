@@ -7,10 +7,8 @@ import (
 )
 
 func (suite *KeeperTestSuite) TestParamsGetSet() {
-	params := suite.app.MintKeeper.GetParams(suite.ctx)
-
 	addr := sdk.AccAddress(ed25519.GenPrivKey().PubKey().Address().Bytes())
-	params = types.Params{
+	params := types.Params{
 		MintDenom:               "utori",
 		GenesisBlockProvisions:  sdk.NewDec(1000),
 		ReductionPeriodInBlocks: 86400,

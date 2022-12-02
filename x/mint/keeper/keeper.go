@@ -32,11 +32,13 @@ func (e invalidRatioError) Error() string {
 	return fmt.Sprintf("mint allocation ratio (%s) is greater than 1", e.ActualRatio)
 }
 
+// nolint: unused
 type insufficientDevVestingBalanceError struct {
 	ActualBalance         sdk.Int
 	AttemptedDistribution sdk.Int
 }
 
+// nolint: unused
 func (e insufficientDevVestingBalanceError) Error() string {
 	return fmt.Sprintf("developer vesting balance (%s) is smaller than requested distribution of (%s)", e.ActualBalance, e.AttemptedDistribution)
 }

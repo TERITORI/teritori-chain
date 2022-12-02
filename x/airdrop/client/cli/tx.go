@@ -40,15 +40,14 @@ func GetTxClaimAllocationCmd() *cobra.Command {
 		Short: "Claim reward allocation",
 		Args:  cobra.ExactArgs(2),
 		RunE: func(cmd *cobra.Command, args []string) error {
-			clientCtx, err := client.GetClientTxContext(cmd)
-
+			clientCtx, _ := client.GetClientTxContext(cmd)
 			msg := types.NewMsgClaimAllocation(
 				args[0],
 				clientCtx.FromAddress,
 				args[1],
 			)
 
-			err = msg.ValidateBasic()
+			err := msg.ValidateBasic()
 			if err != nil {
 				return err
 			}
@@ -70,7 +69,7 @@ func GetTxSetAllocationCmd() *cobra.Command {
 		Short: "Set allocation",
 		Args:  cobra.ExactArgs(4),
 		RunE: func(cmd *cobra.Command, args []string) error {
-			clientCtx, err := client.GetClientTxContext(cmd)
+			clientCtx, _ := client.GetClientTxContext(cmd)
 
 			amount, err := sdk.ParseCoinNormalized(args[2])
 			if err != nil {

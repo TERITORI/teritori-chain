@@ -160,6 +160,7 @@ func GetWasmOpts(appOpts servertypes.AppOptions) []wasm.Option {
 	return wasmOpts
 }
 
+// nolint: unused
 func getGovProposalHandlers() []govclient.ProposalHandler {
 	var govProposalHandlers []govclient.ProposalHandler
 	govProposalHandlers = wasmclient.ProposalHandlers
