@@ -241,3 +241,34 @@ proto-gen:
 	@echo "Generating Protobuf files"
 	@if docker ps -a --format '{{.Names}}' | grep -Eq "^${containerProtoGen}$$"; then docker start -a $(containerProtoGen); else docker run --name $(containerProtoGen) -v $(CURDIR):/workspace --workdir /workspace $(protoImageName) \
 		sh ./scripts/protocgen.sh; fi
+
+init-hermes: kill-dev install 
+	@echo "Initializing both blockchains..."
+	./network/init.sh
+	./network/start.sh
+	@echo "Initializing relayer..." 
+	./network/hermes/restore-keys.sh
+	./network/hermes/create-conn.sh
+
+init-golang-rly: kill-dev install
+	@echo "Initializing both blockchains..."
+	./network/init.sh
+	./network/start.sh
+	@echo "Initializing relayer..."
+	./network/relayer/interchain-acc-config/rly.sh
+
+start: 
+	@echo "Starting up test network"
+	./network/start.sh
+
+start-hermes:
+	./network/hermes/start.sh
+
+start-rly:
+	./network/hermes/start.sh
+
+kill-dev:
+	@echo "Killing icad and removing previous data"
+	-@rm -rf ./data
+	-@killall icad 2>/dev/null
+	-@killall teritorid 2>/dev/null
