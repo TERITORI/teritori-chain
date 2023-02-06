@@ -11,6 +11,7 @@ import (
 
 	"github.com/TERITORI/teritori-chain/app/upgrades"
 	v130 "github.com/TERITORI/teritori-chain/app/upgrades/v130"
+	v131 "github.com/TERITORI/teritori-chain/app/upgrades/v131"
 	airdrop "github.com/TERITORI/teritori-chain/x/airdrop"
 	airdropkeeper "github.com/TERITORI/teritori-chain/x/airdrop/keeper"
 	airdroptypes "github.com/TERITORI/teritori-chain/x/airdrop/types"
@@ -180,7 +181,7 @@ var (
 	// DefaultNodeHome default home directories for the application daemon
 	DefaultNodeHome string
 
-	Upgrades = []upgrades.Upgrade{v130.Upgrade}
+	Upgrades = []upgrades.Upgrade{v130.Upgrade, v131.Upgrade}
 
 	// ModuleBasics defines the module BasicManager is in charge of setting up basic,
 	// non-dependant module elements, such as codec registration
