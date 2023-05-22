@@ -1,0 +1,24 @@
+syntax = "proto3";
+package teritori.mint.v1beta1;
+
+import "gogoproto/gogo.proto";
+import "google/protobuf/any.proto";
+
+option go_package = "github.com/TERITORI/teritori-chain/x/mint/types";
+
+// Msg defines the mint Msg service.
+service Msg {
+  // BurnTokens defines a method to burn tokens
+  rpc BurnTokens(MsgBurnTokens) returns (MsgBurnTokensResponse);
+}
+
+// MsgBurnTokens defines an sdk.Msg type that burn tokens
+message MsgBurnTokens {
+  string sender = 1;
+  repeated string amount = 2 [
+    (gogoproto.customtype) = "github.com/cosmos/cosmos-sdk/types.Coin",
+    (gogoproto.nullable) = false
+  ];
+}
+// MsgBurnTokensResponse defines the Msg/BurnTokens response type.
+message MsgBurnTokensResponse {}
