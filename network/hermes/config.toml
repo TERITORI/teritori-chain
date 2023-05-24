@@ -101,7 +101,7 @@ store_prefix = 'ibc'
 default_gas = 100000
 max_gas = 3000000
 gas_price = { price = 0.001, denom = 'stake' }
-gas_adjustment = 0.1
+gas_multiplier = 1.1
 max_msg_num = 30
 max_tx_size = 2097152
 clock_drift = '5s'
@@ -111,7 +111,7 @@ trust_threshold = { numerator = '1', denominator = '3' }
 address_type = { derivation = 'cosmos' }
 
 [[chains]]
-id = 'test-2'
+id = 'testing'
 rpc_addr = 'http://127.0.0.1:26657'
 grpc_addr = 'http://127.0.0.1:9090'
 websocket_addr = 'ws://127.0.0.1:26657/websocket'
@@ -122,7 +122,7 @@ store_prefix = 'ibc'
 default_gas = 100000
 max_gas = 3000000
 gas_price = { price = 0.001, denom = 'stake' }
-gas_adjustment = 0.1
+gas_multiplier = 1.1
 max_msg_num = 30
 max_tx_size = 2097152
 clock_drift = '5s'
