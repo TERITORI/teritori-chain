@@ -11,6 +11,7 @@ import (
 	"github.com/TERITORI/teritori-chain/x/airdrop/types"
 	airdroptypes "github.com/TERITORI/teritori-chain/x/airdrop/types"
 	minttypes "github.com/TERITORI/teritori-chain/x/mint/types"
+	tmtypes "github.com/cometbft/cometbft/types"
 	"github.com/cosmos/cosmos-sdk/client"
 	"github.com/cosmos/cosmos-sdk/client/flags"
 	"github.com/cosmos/cosmos-sdk/server"
@@ -27,11 +28,9 @@ import (
 	govtypes "github.com/cosmos/cosmos-sdk/x/gov/types"
 	slashingtypes "github.com/cosmos/cosmos-sdk/x/slashing/types"
 	stakingtypes "github.com/cosmos/cosmos-sdk/x/staking/types"
-	icatypes "github.com/cosmos/ibc-go/v3/modules/apps/27-interchain-accounts/types"
-	ibctransfertypes "github.com/cosmos/ibc-go/v3/modules/apps/transfer/types"
-	liquiditytypes "github.com/gravity-devs/liquidity/x/liquidity/types"
+	icatypes "github.com/cosmos/ibc-go/v7/modules/apps/27-interchain-accounts/types"
+	ibctransfertypes "github.com/cosmos/ibc-go/v7/modules/apps/transfer/types"
 	"github.com/spf13/cobra"
-	tmtypes "github.com/tendermint/tendermint/types"
 )
 
 // PrepareGenesisCmd returns prepare-genesis cobra Command.
@@ -234,7 +233,6 @@ func PrepareGenesis(clientCtx client.Context, appState map[string]json.RawMessag
 		stakingtypes.BondedPoolName,
 		stakingtypes.NotBondedPoolName,
 		govtypes.ModuleName,
-		liquiditytypes.ModuleName,
 		ibctransfertypes.ModuleName,
 		airdroptypes.ModuleName,
 	}

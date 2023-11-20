@@ -3,20 +3,17 @@ package teritori
 import (
 	"encoding/json"
 
-	bam "github.com/cosmos/cosmos-sdk/baseapp"
-	servertypes "github.com/cosmos/cosmos-sdk/server/types"
-	"github.com/cosmos/cosmos-sdk/simapp"
-	storetypes "github.com/cosmos/cosmos-sdk/store/types"
-	"github.com/cosmos/cosmos-sdk/testutil/network"
-	abci "github.com/tendermint/tendermint/abci/types"
-	"github.com/tendermint/tendermint/libs/log"
-	dbm "github.com/tendermint/tm-db"
+	dbm "github.com/cometbft/cometbft-db"
+	abci "github.com/cometbft/cometbft/abci/types"
+	"github.com/cometbft/cometbft/libs/log"
+	simtestutil "github.com/cosmos/cosmos-sdk/testutil/sims"
 )
 
 func setup(withGenesis bool, invCheckPeriod uint) (*TeritoriApp, GenesisState) {
 	db := dbm.NewMemDB()
 	encCdc := MakeEncodingConfig()
-	app := NewTeritoriApp(log.NewNopLogger(), db, nil, true, map[int64]bool{}, DefaultNodeHome, invCheckPeriod, encCdc, simapp.EmptyAppOptions{})
+	appOptions := make(simtestutil.AppOptionsMap, 0)
+	app := NewTeritoriApp(log.NewNopLogger(), db, nil, true, map[int64]bool{}, DefaultNodeHome, encCdc, appOptions)
 	if withGenesis {
 		return app, NewDefaultGenesisState()
 	}
@@ -37,32 +34,11 @@ func Setup(isCheckTx bool) *TeritoriApp {
 		app.InitChain(
 			abci.RequestInitChain{
 				Validators:      []abci.ValidatorUpdate{},
-				ConsensusParams: simapp.DefaultConsensusParams,
+				ConsensusParams: simtestutil.DefaultConsensusParams,
 				AppStateBytes:   stateBytes,
 			},
 		)
 	}
 
 	return app
-}
-
-func SimAppConstructor(val network.Validator) servertypes.Application {
-	return NewTeritoriApp(
-		val.Ctx.Logger, dbm.NewMemDB(), nil, true, make(map[int64]bool),
-		val.Ctx.Config.RootDir, 0, MakeEncodingConfig(), simapp.EmptyAppOptions{},
-		bam.SetPruning(storetypes.NewPruningOptionsFromString(val.AppConfig.Pruning)),
-		bam.SetMinGasPrices(val.AppConfig.MinGasPrices),
-	)
-}
-
-func NewConfig() network.Config {
-	cfg := network.DefaultConfig()
-	encCfg := MakeEncodingConfig()
-	cfg.Codec = encCfg.Marshaler
-	cfg.TxConfig = encCfg.TxConfig
-	cfg.LegacyAmino = encCfg.Amino
-	cfg.InterfaceRegistry = encCfg.InterfaceRegistry
-	cfg.AppConstructor = SimAppConstructor
-	cfg.GenesisState = NewDefaultGenesisState()
-	return cfg
 }

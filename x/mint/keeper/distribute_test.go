@@ -2,9 +2,9 @@ package keeper_test
 
 import (
 	"github.com/TERITORI/teritori-chain/x/mint/types"
+	"github.com/cometbft/cometbft/crypto/ed25519"
 	sdk "github.com/cosmos/cosmos-sdk/types"
 	authtypes "github.com/cosmos/cosmos-sdk/x/auth/types"
-	"github.com/tendermint/tendermint/crypto/ed25519"
 )
 
 func (suite *KeeperTestSuite) TestDistributeMintedCoin() {

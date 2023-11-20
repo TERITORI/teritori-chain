@@ -5,7 +5,7 @@ import (
 
 	"github.com/TERITORI/teritori-chain/app/upgrades"
 	intertxtypes "github.com/TERITORI/teritori-chain/x/intertx/types"
-	icacontrollertypes "github.com/cosmos/ibc-go/v3/modules/apps/27-interchain-accounts/controller/types"
+	icacontrollertypes "github.com/cosmos/ibc-go/v7/modules/apps/27-interchain-accounts/controller/types"
 )
 
 const (
