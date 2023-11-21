@@ -7,6 +7,7 @@ import (
 
 	"github.com/TERITORI/teritori-chain/x/airdrop/types"
 	"github.com/cosmos/cosmos-sdk/codec"
+	storetypes "github.com/cosmos/cosmos-sdk/store/types"
 	sdk "github.com/cosmos/cosmos-sdk/types"
 	paramstypes "github.com/cosmos/cosmos-sdk/x/params/types"
 )
@@ -14,7 +15,7 @@ import (
 // Keeper struct
 type Keeper struct {
 	cdc           codec.Codec
-	storeKey      sdk.StoreKey
+	storeKey      storetypes.StoreKey
 	paramSpace    paramstypes.Subspace
 	bankKeeper    types.BankKeeper
 	stakingKeeper types.StakingKeeper
@@ -24,7 +25,7 @@ type Keeper struct {
 // NewKeeper returns keeper
 func NewKeeper(
 	cdc codec.Codec,
-	storeKey sdk.StoreKey,
+	storeKey storetypes.StoreKey,
 	paramSpace paramstypes.Subspace,
 	bk types.BankKeeper, sk types.StakingKeeper, ak types.AccountKeeper) *Keeper {
 	if !paramSpace.HasKeyTable() {

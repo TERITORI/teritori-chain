@@ -8,6 +8,7 @@ import (
 	"github.com/TERITORI/teritori-chain/x/mint/types"
 
 	"github.com/cosmos/cosmos-sdk/codec"
+	storetypes "github.com/cosmos/cosmos-sdk/store/types"
 	sdk "github.com/cosmos/cosmos-sdk/types"
 	paramtypes "github.com/cosmos/cosmos-sdk/x/params/types"
 )
@@ -15,7 +16,7 @@ import (
 // Keeper of the mint store.
 type Keeper struct {
 	cdc                 codec.BinaryCodec
-	storeKey            sdk.StoreKey
+	storeKey            storetypes.StoreKey
 	paramSpace          paramtypes.Subspace
 	accountKeeper       types.AccountKeeper
 	bankKeeper          types.BankKeeper
@@ -45,7 +46,7 @@ const emptyAddressReceiver = ""
 
 // NewKeeper creates a new mint Keeper instance.
 func NewKeeper(
-	cdc codec.BinaryCodec, key sdk.StoreKey, paramSpace paramtypes.Subspace,
+	cdc codec.BinaryCodec, key storetypes.StoreKey, paramSpace paramtypes.Subspace,
 	ak types.AccountKeeper, bk types.BankKeeper, ck types.CommunityPoolKeeper,
 	feeCollectorName string,
 ) Keeper {
