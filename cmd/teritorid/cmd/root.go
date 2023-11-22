@@ -47,10 +47,11 @@ func NewRootCmd() (*cobra.Command, params.EncodingConfig) {
 		WithAccountRetriever(types.AccountRetriever{}).
 		WithHomeDir(teritori.DefaultNodeHome).
 		WithViper("")
+	initClientCtx.Viper.AutomaticEnv()
 
 	rootCmd := &cobra.Command{
 		Use:   "teritorid",
-		Short: "Stargate Cosmos Hub App",
+		Short: "Teritori Network",
 		PersistentPreRunE: func(cmd *cobra.Command, _ []string) error {
 			initClientCtx, err := client.ReadPersistentCommandFlags(initClientCtx, cmd.Flags())
 			if err != nil {
