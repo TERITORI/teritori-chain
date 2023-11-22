@@ -27,7 +27,7 @@ type HandlerOptions struct {
 	ante.HandlerOptions
 
 	BankKeeper        bankkeeper.Keeper
-	StakingKeeper     stakingkeeper.Keeper
+	StakingKeeper     *stakingkeeper.Keeper
 	AirdropKeeper     *airdropkeeper.Keeper
 	IBCKeeper         *ibckeeper.Keeper
 	TxCounterStoreKey storetypes.StoreKey
@@ -37,11 +37,11 @@ type HandlerOptions struct {
 
 type MinCommissionDecorator struct {
 	cdc codec.BinaryCodec
-	sk  stakingkeeper.Keeper
+	sk  *stakingkeeper.Keeper
 	bk  bankkeeper.Keeper
 }
 
-func NewMinCommissionDecorator(cdc codec.BinaryCodec, sk stakingkeeper.Keeper, bk bankkeeper.Keeper) MinCommissionDecorator {
+func NewMinCommissionDecorator(cdc codec.BinaryCodec, sk *stakingkeeper.Keeper, bk bankkeeper.Keeper) MinCommissionDecorator {
 	return MinCommissionDecorator{
 		cdc: cdc,
 		sk:  sk,

@@ -27,8 +27,8 @@ import (
 	tmos "github.com/cometbft/cometbft/libs/os"
 	"github.com/cosmos/cosmos-sdk/baseapp"
 	"github.com/cosmos/cosmos-sdk/client"
+	nodeservice "github.com/cosmos/cosmos-sdk/client/grpc/node"
 	"github.com/cosmos/cosmos-sdk/client/grpc/tmservice"
-	"github.com/cosmos/cosmos-sdk/client/rpc"
 	"github.com/cosmos/cosmos-sdk/codec"
 	"github.com/cosmos/cosmos-sdk/codec/types"
 	"github.com/cosmos/cosmos-sdk/runtime"
@@ -78,6 +78,7 @@ import (
 	govclient "github.com/cosmos/cosmos-sdk/x/gov/client"
 	govkeeper "github.com/cosmos/cosmos-sdk/x/gov/keeper"
 	govtypes "github.com/cosmos/cosmos-sdk/x/gov/types"
+	govv1 "github.com/cosmos/cosmos-sdk/x/gov/types/v1"
 	govv1beta1 "github.com/cosmos/cosmos-sdk/x/gov/types/v1beta1"
 	"github.com/cosmos/cosmos-sdk/x/params"
 	paramsclient "github.com/cosmos/cosmos-sdk/x/params/client"
@@ -102,6 +103,9 @@ import (
 	icahostkeeper "github.com/cosmos/ibc-go/v7/modules/apps/27-interchain-accounts/host/keeper"
 	icahosttypes "github.com/cosmos/ibc-go/v7/modules/apps/27-interchain-accounts/host/types"
 	icatypes "github.com/cosmos/ibc-go/v7/modules/apps/27-interchain-accounts/types"
+	ibcfee "github.com/cosmos/ibc-go/v7/modules/apps/29-fee"
+	ibcfeekeeper "github.com/cosmos/ibc-go/v7/modules/apps/29-fee/keeper"
+	ibcfeetypes "github.com/cosmos/ibc-go/v7/modules/apps/29-fee/types"
 	"github.com/cosmos/ibc-go/v7/modules/apps/transfer"
 	ibctransferkeeper "github.com/cosmos/ibc-go/v7/modules/apps/transfer/keeper"
 	ibctransfertypes "github.com/cosmos/ibc-go/v7/modules/apps/transfer/types"
@@ -221,6 +225,7 @@ var (
 		consensus.AppModuleBasic{},
 		packetforward.AppModuleBasic{},
 		wasm.AppModuleBasic{},
+		ibcfee.AppModuleBasic{},
 		ica.AppModuleBasic{},
 		intertx.AppModule{},
 	)
@@ -236,6 +241,7 @@ var (
 		govtypes.ModuleName:            {authtypes.Burner},
 		ibctransfertypes.ModuleName:    {authtypes.Minter, authtypes.Burner},
 		airdroptypes.ModuleName:        nil,
+		ibcfeetypes.ModuleName:         nil,
 	}
 )
 
@@ -305,6 +311,7 @@ func NewTeritoriApp(
 		evidencetypes.StoreKey, ibctransfertypes.StoreKey,
 		capabilitytypes.StoreKey, feegrant.StoreKey, authzkeeper.StoreKey, packetforwardtypes.StoreKey,
 		icacontrollertypes.StoreKey,
+		ibcfeetypes.StoreKey,
 		icahosttypes.StoreKey,
 		airdroptypes.StoreKey,
 		wasm.StoreKey,
@@ -385,12 +392,11 @@ func NewTeritoriApp(
 	app.DistrKeeper = distrkeeper.NewKeeper(
 		appCodec,
 		keys[distrtypes.StoreKey],
-		app.GetSubspace(distrtypes.ModuleName),
 		app.AccountKeeper,
 		app.BankKeeper,
-		&stakingKeeper,
+		app.StakingKeeper,
 		authtypes.FeeCollectorName,
-		app.ModuleAccountAddrs(),
+		authtypes.NewModuleAddress(govtypes.ModuleName).String(),
 	)
 	app.MintKeeper = mintkeeper.NewKeeper(
 		appCodec,
@@ -445,6 +451,15 @@ func NewTeritoriApp(
 		app.UpgradeKeeper,
 		scopedIBCKeeper,
 	)
+	app.IBCFeeKeeper = ibcfeekeeper.NewKeeper(
+		appCodec,
+		keys[ibcfeetypes.StoreKey],
+		app.IBCKeeper.ChannelKeeper,
+		app.IBCKeeper.ChannelKeeper,
+		&app.IBCKeeper.PortKeeper,
+		app.AccountKeeper,
+		app.BankKeeper,
+	)
 
 	govConfig := govtypes.DefaultConfig()
 	govKeeper := govkeeper.NewKeeper(
@@ -463,7 +478,6 @@ func NewTeritoriApp(
 	govRouter.
 		AddRoute(govtypes.RouterKey, govv1beta1.ProposalHandler).
 		AddRoute(paramproposal.RouterKey, params.NewParamChangeProposalHandler(app.ParamsKeeper)).
-		AddRoute(distrtypes.RouterKey, distr.NewCommunityPoolSpendProposalHandler(app.DistrKeeper)).
 		AddRoute(upgradetypes.RouterKey, upgrade.NewSoftwareUpgradeProposalHandler(app.UpgradeKeeper)).
 		AddRoute(ibcclienttypes.RouterKey, ibcclient.NewClientProposalHandler(app.IBCKeeper.ClientKeeper))
 
@@ -471,7 +485,7 @@ func NewTeritoriApp(
 		appCodec,
 		keys[ibctransfertypes.StoreKey],
 		app.GetSubspace(ibctransfertypes.ModuleName),
-		app.IBCKeeper.ChannelKeeper,
+		app.IBCFeeKeeper,
 		app.IBCKeeper.ChannelKeeper,
 		&app.IBCKeeper.PortKeeper,
 		app.AccountKeeper,
@@ -483,7 +497,7 @@ func NewTeritoriApp(
 
 	app.ICAControllerKeeper = icacontrollerkeeper.NewKeeper(
 		appCodec, keys[icacontrollertypes.StoreKey], app.GetSubspace(icacontrollertypes.SubModuleName),
-		app.IBCKeeper.ChannelKeeper, // may be replaced with middleware such as ics29 fee
+		app.IBCFeeKeeper, // may be replaced with middleware such as ics29 fee
 		app.IBCKeeper.ChannelKeeper, &app.IBCKeeper.PortKeeper,
 		scopedICAControllerKeeper, app.MsgServiceRouter(),
 	)
@@ -491,7 +505,7 @@ func NewTeritoriApp(
 		appCodec,
 		keys[icahosttypes.StoreKey],
 		app.GetSubspace(icahosttypes.SubModuleName),
-		app.IBCKeeper.ChannelKeeper, // use ics29 fee as ics4Wrapper in middleware stack
+		app.IBCFeeKeeper, // use ics29 fee as ics4Wrapper in middleware stack
 		app.IBCKeeper.ChannelKeeper,
 		&app.IBCKeeper.PortKeeper,
 		app.AccountKeeper,
@@ -502,20 +516,26 @@ func NewTeritoriApp(
 
 	app.InterTxKeeper = intertxkeeper.NewKeeper(appCodec, keys[intertxtypes.StoreKey], app.ICAControllerKeeper, scopedInterTxKeeper)
 	interTxModule := intertx.NewAppModule(appCodec, app.InterTxKeeper)
-	interTxIBCModule := intertx.NewIBCModule(app.InterTxKeeper)
 
-	icaControllerIBCModule := icacontroller.NewIBCModule(app.ICAControllerKeeper, interTxIBCModule)
 	icaHostIBCModule := icahost.NewIBCModule(app.ICAHostKeeper)
+
+	var icaControllerStack ibcporttypes.IBCModule
+	icaControllerStack = intertx.NewIBCModule(app.InterTxKeeper)
+	icaControllerStack = icacontroller.NewIBCMiddleware(icaControllerStack, app.ICAControllerKeeper)
+	icaControllerStack = ibcfee.NewIBCMiddleware(icaControllerStack, app.IBCFeeKeeper)
 
 	app.PacketForwardKeeper = packetforwardkeeper.NewKeeper(
 		appCodec,
 		keys[packetforwardtypes.StoreKey],
-		app.GetSubspace(packetforwardtypes.ModuleName),
 		app.TransferKeeper,
+		app.IBCKeeper.ChannelKeeper,
 		app.DistrKeeper,
+		app.BankKeeper,
+		app.IBCFeeKeeper,
+		authtypes.NewModuleAddress(govtypes.ModuleName).String(),
 	)
 
-	packetforwardModule := packetforward.NewAppModule(app.PacketForwardKeeper, transferIBCModule)
+	packetforwardModule := packetforward.NewAppModule(app.PacketForwardKeeper, app.GetSubspace(packetforwardtypes.ModuleName))
 
 	// create evidence keeper with router
 	evidenceKeeper := evidencekeeper.NewKeeper(
@@ -547,7 +567,7 @@ func NewTeritoriApp(
 		app.BankKeeper,
 		app.StakingKeeper,
 		nil,
-		app.IBCKeeper.ChannelKeeper, // ISC4 Wrapper: fee IBC middleware
+		app.IBCFeeKeeper, // ISC4 Wrapper: fee IBC middleware
 		app.IBCKeeper.ChannelKeeper,
 		&app.IBCKeeper.PortKeeper,
 		scopedWasmKeeper,
@@ -569,13 +589,14 @@ func NewTeritoriApp(
 
 	var wasmStack ibcporttypes.IBCModule
 	wasmStack = wasm.NewIBCHandler(app.WasmKeeper, app.IBCKeeper.ChannelKeeper, app.IBCFeeKeeper)
+	wasmStack = ibcfee.NewIBCMiddleware(wasmStack, app.IBCFeeKeeper)
 
 	// Create static IBC router, add transfer route, then set and seal it
 	ibcRouter := porttypes.NewRouter()
-	ibcRouter.AddRoute(icacontrollertypes.SubModuleName, icaControllerIBCModule).
+	ibcRouter.AddRoute(icacontrollertypes.SubModuleName, icaControllerStack).
 		AddRoute(icahosttypes.SubModuleName, icaHostIBCModule).
 		AddRoute(ibctransfertypes.ModuleName, transferIBCModule).
-		AddRoute(intertxtypes.ModuleName, icaControllerIBCModule).
+		AddRoute(intertxtypes.ModuleName, icaControllerStack).
 		AddRoute(wasm.ModuleName, wasmStack)
 	app.IBCKeeper.SetRouter(ibcRouter)
 
@@ -605,8 +626,7 @@ func NewTeritoriApp(
 		gov.NewAppModule(appCodec, &app.GovKeeper, app.AccountKeeper, app.BankKeeper, app.GetSubspace(govtypes.ModuleName)),
 		mint.NewAppModule(appCodec, app.MintKeeper, app.AccountKeeper, app.BankKeeper),
 		slashing.NewAppModule(appCodec, app.SlashingKeeper, app.AccountKeeper, app.BankKeeper, app.StakingKeeper, app.GetSubspace(slashingtypes.ModuleName)),
-		distr.NewAppModule(appCodec, app.DistrKeeper, app.AccountKeeper, app.BankKeeper, app.StakingKeeper),
-		staking.NewAppModule(appCodec, app.StakingKeeper, app.AccountKeeper, app.BankKeeper, app.GetSubspace(stakingtypes.ModuleName)),
+		distr.NewAppModule(appCodec, app.DistrKeeper, app.AccountKeeper, app.BankKeeper, app.StakingKeeper, app.GetSubspace(distrtypes.ModuleName)), staking.NewAppModule(appCodec, app.StakingKeeper, app.AccountKeeper, app.BankKeeper, app.GetSubspace(stakingtypes.ModuleName)),
 		upgrade.NewAppModule(app.UpgradeKeeper),
 		evidence.NewAppModule(app.EvidenceKeeper),
 		feegrantmodule.NewAppModule(appCodec, app.AccountKeeper, app.BankKeeper, app.FeeGrantKeeper, app.interfaceRegistry),
@@ -615,7 +635,7 @@ func NewTeritoriApp(
 		params.NewAppModule(app.ParamsKeeper),
 		transferModule,
 		icaModule,
-		wasm.NewAppModule(appCodec, &app.WasmKeeper, app.StakingKeeper, app.AccountKeeper, app.BankKeeper, app.MsgServiceRouter(), app.GetSubspace(wasmmoduletypes.ModuleName)),
+		wasm.NewAppModule(appCodec, &app.WasmKeeper, app.StakingKeeper, app.AccountKeeper, app.BankKeeper, app.MsgServiceRouter(), app.GetSubspace(wasm.ModuleName)),
 		consensus.NewAppModule(appCodec, app.ConsensusParamsKeeper),
 		packetforwardModule,
 		interTxModule,
@@ -711,7 +731,6 @@ func NewTeritoriApp(
 	)
 
 	app.mm.RegisterInvariants(app.CrisisKeeper)
-	app.mm.RegisterRoutes(app.Router(), app.QueryRouter(), encodingConfig.Amino)
 
 	app.configurator = module.NewConfigurator(app.appCodec, app.MsgServiceRouter(), app.GRPCQueryRouter())
 	app.mm.RegisterServices(app.configurator)
@@ -870,21 +889,21 @@ func (app *TeritoriApp) InterfaceRegistry() types.InterfaceRegistry {
 // GetKey returns the KVStoreKey for the provided store key.
 //
 // NOTE: This is solely to be used for testing purposes.
-func (app *TeritoriApp) GetKey(storeKey string) *sdk.KVStoreKey {
+func (app *TeritoriApp) GetKey(storeKey string) *storetypes.KVStoreKey {
 	return app.keys[storeKey]
 }
 
 // GetTKey returns the TransientStoreKey for the provided store key.
 //
 // NOTE: This is solely to be used for testing purposes.
-func (app *TeritoriApp) GetTKey(storeKey string) *sdk.TransientStoreKey {
+func (app *TeritoriApp) GetTKey(storeKey string) *storetypes.TransientStoreKey {
 	return app.tkeys[storeKey]
 }
 
 // GetMemKey returns the MemStoreKey for the provided mem key.
 //
 // NOTE: This is solely used for testing purposes.
-func (app *TeritoriApp) GetMemKey(storeKey string) *sdk.MemoryStoreKey {
+func (app *TeritoriApp) GetMemKey(storeKey string) *storetypes.MemoryStoreKey {
 	return app.memKeys[storeKey]
 }
 
@@ -905,20 +924,15 @@ func (app *TeritoriApp) SimulationManager() *module.SimulationManager {
 // API server.
 func (app *TeritoriApp) RegisterAPIRoutes(apiSvr *api.Server, apiConfig config.APIConfig) {
 	clientCtx := apiSvr.ClientCtx
-	rpc.RegisterRoutes(clientCtx, apiSvr.Router)
 	// Register new tx routes from grpc-gateway.
 	authtx.RegisterGRPCGatewayRoutes(clientCtx, apiSvr.GRPCGatewayRouter)
 	// Register new tendermint queries routes from grpc-gateway.
 	tmservice.RegisterGRPCGatewayRoutes(clientCtx, apiSvr.GRPCGatewayRouter)
+	// Register node gRPC service for grpc-gateway.
+	nodeservice.RegisterGRPCGatewayRoutes(clientCtx, apiSvr.GRPCGatewayRouter)
 
-	// Register legacy and grpc-gateway routes for all modules.
-	ModuleBasics.RegisterRESTRoutes(clientCtx, apiSvr.Router)
+	// Register grpc-gateway routes for all modules.
 	ModuleBasics.RegisterGRPCGatewayRoutes(clientCtx, apiSvr.GRPCGatewayRouter)
-
-	// register swagger API from root so that other applications can override easily
-	if apiConfig.Swagger {
-		RegisterSwaggerAPI(apiSvr.Router)
-	}
 }
 
 // RegisterTxService implements the Application.RegisterTxService method.
@@ -928,7 +942,16 @@ func (app *TeritoriApp) RegisterTxService(clientCtx client.Context) {
 
 // RegisterTendermintService implements the Application.RegisterTendermintService method.
 func (app *TeritoriApp) RegisterTendermintService(clientCtx client.Context) {
-	tmservice.RegisterTendermintService(app.BaseApp.GRPCQueryRouter(), clientCtx, app.interfaceRegistry)
+	tmservice.RegisterTendermintService(
+		clientCtx,
+		app.BaseApp.GRPCQueryRouter(),
+		app.interfaceRegistry,
+		app.Query,
+	)
+}
+
+func (app *TeritoriApp) RegisterNodeService(clientCtx client.Context) {
+	nodeservice.RegisterNodeService(clientCtx, app.GRPCQueryRouter())
 }
 
 // GetBaseApp implements the BaseApp
@@ -937,7 +960,7 @@ func (app *TeritoriApp) GetBaseApp() *baseapp.BaseApp {
 }
 
 // GetBaseApp implements the StakingKeeper
-func (app *TeritoriApp) GetStakingKeeper() stakingkeeper.Keeper {
+func (app *TeritoriApp) GetStakingKeeper() *stakingkeeper.Keeper {
 	return app.StakingKeeper
 }
 
@@ -986,7 +1009,7 @@ func initParamsKeeper(appCodec codec.BinaryCodec, legacyAmino *codec.LegacyAmino
 	paramsKeeper.Subspace(minttypes.ModuleName)
 	paramsKeeper.Subspace(distrtypes.ModuleName)
 	paramsKeeper.Subspace(slashingtypes.ModuleName)
-	paramsKeeper.Subspace(govtypes.ModuleName).WithKeyTable(govtypes.ParamKeyTable())
+	paramsKeeper.Subspace(govtypes.ModuleName).WithKeyTable(govv1.ParamKeyTable())
 	paramsKeeper.Subspace(crisistypes.ModuleName)
 	paramsKeeper.Subspace(ibctransfertypes.ModuleName)
 	paramsKeeper.Subspace(ibcexported.ModuleName)
