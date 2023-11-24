@@ -185,9 +185,9 @@ Example:
 			for _, acc := range sortedArr {
 				csvRecords = append(csvRecords, []string{
 					acc.Address,
-					acc.Balance.ToDec().Quo(decimal).String(),
-					acc.StakedBalance.ToDec().Quo(decimal).String(),
-					acc.TotalBalance.ToDec().Quo(decimal).String(),
+					sdk.NewDecFromInt(acc.Balance).Quo(decimal).String(),
+					sdk.NewDecFromInt(acc.StakedBalance).Quo(decimal).String(),
+					sdk.NewDecFromInt(acc.TotalBalance).Quo(decimal).String(),
 				})
 			}
 

@@ -145,5 +145,5 @@ func getProportions(mintedCoin sdk.Coin, ratio sdk.Dec) (sdk.Coin, error) {
 	if ratio.GT(sdk.OneDec()) {
 		return sdk.Coin{}, invalidRatioError{ratio}
 	}
-	return sdk.NewCoin(mintedCoin.Denom, mintedCoin.Amount.ToDec().Mul(ratio).TruncateInt()), nil
+	return sdk.NewCoin(mintedCoin.Denom, sdk.NewDecFromInt(mintedCoin.Amount).Mul(ratio).TruncateInt()), nil
 }

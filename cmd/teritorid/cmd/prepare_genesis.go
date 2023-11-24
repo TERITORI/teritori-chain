@@ -26,8 +26,10 @@ import (
 	"github.com/cosmos/cosmos-sdk/x/genutil"
 	genutiltypes "github.com/cosmos/cosmos-sdk/x/genutil/types"
 	govtypes "github.com/cosmos/cosmos-sdk/x/gov/types"
+	govv1 "github.com/cosmos/cosmos-sdk/x/gov/types/v1"
 	slashingtypes "github.com/cosmos/cosmos-sdk/x/slashing/types"
 	stakingtypes "github.com/cosmos/cosmos-sdk/x/staking/types"
+	icagenesistypes "github.com/cosmos/ibc-go/v7/modules/apps/27-interchain-accounts/genesis/types"
 	icatypes "github.com/cosmos/ibc-go/v7/modules/apps/27-interchain-accounts/types"
 	ibctransfertypes "github.com/cosmos/ibc-go/v7/modules/apps/transfer/types"
 	"github.com/spf13/cobra"
@@ -370,7 +372,7 @@ func PrepareGenesis(clientCtx client.Context, appState map[string]json.RawMessag
 	// strategic reserve = 200M - 50M - airdropCoins
 	bankGenState.Balances = append(bankGenState.Balances, banktypes.Balance{
 		Address: addrStrategicReserve.String(),
-		Coins:   bankGenState.Supply.Sub(airdropCoins).Sub(communityPoolCoins).Sub(totalAirdropGasCoins).Sub(totalValidatorInitialCoins),
+		Coins:   bankGenState.Supply.Sub(airdropCoins...).Sub(communityPoolCoins...).Sub(totalAirdropGasCoins...).Sub(totalValidatorInitialCoins...),
 	})
 
 	bankGenStateBz, err := cdc.MarshalJSON(bankGenState)
@@ -418,13 +420,10 @@ func PrepareGenesis(clientCtx client.Context, appState map[string]json.RawMessag
 	appState[distributiontypes.ModuleName] = distributionGenStateBz
 
 	// gov module genesis
-	govGenState := govtypes.DefaultGenesisState()
-	defaultGovParams := govtypes.DefaultParams()
-	govGenState.DepositParams = defaultGovParams.DepositParams
+	govGenState := govv1.DefaultGenesisState()
 	govGenState.DepositParams.MinDeposit = sdk.Coins{sdk.NewInt64Coin(appparams.BaseCoinUnit, 500_000_000)} // 500 TORI
-	govGenState.TallyParams = defaultGovParams.TallyParams
-	govGenState.VotingParams = defaultGovParams.VotingParams
-	govGenState.VotingParams.VotingPeriod = time.Hour * 24 * 2 // 2 days
+	duration := time.Hour * 24 * 2
+	govGenState.VotingParams.VotingPeriod = &duration // 2 days
 	govGenStateBz, err := cdc.MarshalJSON(govGenState)
 	if err != nil {
 		return nil, nil, fmt.Errorf("failed to marshal gov genesis state: %w", err)
@@ -451,7 +450,7 @@ func PrepareGenesis(clientCtx client.Context, appState map[string]json.RawMessag
 	appState[crisistypes.ModuleName] = crisisGenStateBz
 
 	// ica module genesis
-	icaGenState := icatypes.DefaultGenesis()
+	icaGenState := icagenesistypes.DefaultGenesis()
 	icaGenState.HostGenesisState.Params.AllowMessages = []string{
 		"/cosmos.bank.v1beta1.MsgSend",
 		"/cosmos.bank.v1beta1.MsgMultiSend",

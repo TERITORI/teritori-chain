@@ -117,7 +117,7 @@ import (
 	porttypes "github.com/cosmos/ibc-go/v7/modules/core/05-port/types"
 	ibcexported "github.com/cosmos/ibc-go/v7/modules/core/exported"
 	ibckeeper "github.com/cosmos/ibc-go/v7/modules/core/keeper"
-	wasmbindingstypes "github.com/elys-network/elys/wasmbindings/types"
+	ibctestingtypes "github.com/cosmos/ibc-go/v7/testing/types"
 	"github.com/gorilla/mux"
 	"github.com/rakyll/statik/fs"
 	"github.com/spf13/cast"
@@ -558,7 +558,7 @@ func NewTeritoriApp(
 
 	// The last arguments can contain custom message handlers, and custom query handlers,
 	// if we want to allow any custom callbacks
-	availableCapabilities := strings.Join(wasmbindingstypes.AllCapabilities(), ",")
+	availableCapabilities := "iterator,staking,stargate,cosmwasm_1_1,cosmwasm_1_2"
 	wasmOpts := GetWasmOpts(appOpts)
 	app.WasmKeeper = wasm.NewKeeper(
 		appCodec,
@@ -960,7 +960,7 @@ func (app *TeritoriApp) GetBaseApp() *baseapp.BaseApp {
 }
 
 // GetBaseApp implements the StakingKeeper
-func (app *TeritoriApp) GetStakingKeeper() *stakingkeeper.Keeper {
+func (app *TeritoriApp) GetStakingKeeper() ibctestingtypes.StakingKeeper {
 	return app.StakingKeeper
 }
 
