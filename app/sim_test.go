@@ -150,7 +150,7 @@ func TestAppStateDeterminism(t *testing.T) {
 				simtestutil.AppStateFn(
 					app.AppCodec(),
 					app.SimulationManager(),
-					app.NewDefaultGenesisState(app.AppCodec()),
+					teritori.NewDefaultGenesisState(),
 				),
 				simulation2.RandomAccounts, // Replace with own random account function if using keys other than secp256k1
 				simtestutil.SimulationOperations(app, app.AppCodec(), config),
