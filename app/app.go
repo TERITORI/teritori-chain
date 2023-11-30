@@ -317,6 +317,7 @@ func NewTeritoriApp(
 		wasm.StoreKey,
 		consensusparamtypes.StoreKey,
 		intertxtypes.StoreKey,
+		crisistypes.StoreKey,
 	)
 	tkeys := sdk.NewTransientStoreKeys(paramstypes.TStoreKey)
 	memKeys := sdk.NewMemoryStoreKeys(capabilitytypes.MemStoreKey)
@@ -394,7 +395,7 @@ func NewTeritoriApp(
 		keys[distrtypes.StoreKey],
 		app.AccountKeeper,
 		app.BankKeeper,
-		app.StakingKeeper,
+		stakingKeeper,
 		authtypes.FeeCollectorName,
 		authtypes.NewModuleAddress(govtypes.ModuleName).String(),
 	)

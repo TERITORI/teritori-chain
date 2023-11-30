@@ -62,7 +62,7 @@ func (k msgServer) SubmitTx(goCtx context.Context, msg *types.MsgSubmitTx) (*typ
 	if !found {
 		return nil, sdkerrors.Wrap(channeltypes.ErrChannelCapabilityNotFound, "module does not own channel capability")
 	}
-	data, err := SerializeCosmosTx(k.Keeper.cdc, []*cosmostypes.Any{msg.Msg})
+	data, err := SerializeCosmosTx(k.Keeper.cdc, msg.Msgs)
 	if err != nil {
 		return nil, err
 	}
