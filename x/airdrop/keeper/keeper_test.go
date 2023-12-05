@@ -14,7 +14,7 @@ import (
 )
 
 const (
-	isCheckTx = false
+	initChain = true
 )
 
 type KeeperTestSuite struct {
@@ -26,10 +26,10 @@ type KeeperTestSuite struct {
 }
 
 func (suite *KeeperTestSuite) SetupTest() {
-	app := simapp.Setup(isCheckTx)
+	app := simapp.Setup(initChain)
 
 	suite.legacyAmino = app.LegacyAmino()
-	suite.ctx = app.BaseApp.NewContext(isCheckTx, tmproto.Header{})
+	suite.ctx = app.BaseApp.NewContext(initChain, tmproto.Header{})
 	suite.app = app
 }
 
