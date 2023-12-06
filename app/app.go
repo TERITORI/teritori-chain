@@ -80,6 +80,9 @@ import (
 	govtypes "github.com/cosmos/cosmos-sdk/x/gov/types"
 	govv1 "github.com/cosmos/cosmos-sdk/x/gov/types/v1"
 	govv1beta1 "github.com/cosmos/cosmos-sdk/x/gov/types/v1beta1"
+	"github.com/cosmos/cosmos-sdk/x/group"
+	groupkeeper "github.com/cosmos/cosmos-sdk/x/group/keeper"
+	groupmodule "github.com/cosmos/cosmos-sdk/x/group/module"
 	"github.com/cosmos/cosmos-sdk/x/params"
 	paramsclient "github.com/cosmos/cosmos-sdk/x/params/client"
 	paramskeeper "github.com/cosmos/cosmos-sdk/x/params/keeper"
@@ -218,6 +221,7 @@ var (
 		slashing.AppModuleBasic{},
 		feegrantmodule.AppModuleBasic{},
 		authzmodule.AppModuleBasic{},
+		groupmodule.AppModuleBasic{},
 		ibc.AppModuleBasic{},
 		ibctm.AppModuleBasic{},
 		upgrade.AppModuleBasic{},
@@ -312,7 +316,7 @@ func NewTeritoriApp(
 		govtypes.StoreKey, paramstypes.StoreKey, ibcexported.StoreKey, upgradetypes.StoreKey,
 		evidencetypes.StoreKey, ibctransfertypes.StoreKey,
 		capabilitytypes.StoreKey, feegrant.StoreKey, authzkeeper.StoreKey, packetforwardtypes.StoreKey,
-		icacontrollertypes.StoreKey,
+		icacontrollertypes.StoreKey, group.StoreKey,
 		ibcfeetypes.StoreKey,
 		icahosttypes.StoreKey,
 		airdroptypes.StoreKey,
@@ -380,6 +384,9 @@ func NewTeritoriApp(
 		app.MsgServiceRouter(),
 		app.AccountKeeper,
 	)
+	groupConfig := group.DefaultConfig()
+	app.GroupKeeper = groupkeeper.NewKeeper(keys[group.StoreKey], appCodec, app.MsgServiceRouter(), app.AccountKeeper, groupConfig)
+
 	app.FeeGrantKeeper = feegrantkeeper.NewKeeper(
 		appCodec,
 		keys[feegrant.StoreKey],
@@ -636,6 +643,7 @@ func NewTeritoriApp(
 		authzmodule.NewAppModule(appCodec, app.AuthzKeeper, app.AccountKeeper, app.BankKeeper, app.interfaceRegistry),
 		ibc.NewAppModule(app.IBCKeeper),
 		params.NewAppModule(app.ParamsKeeper),
+		groupmodule.NewAppModule(appCodec, app.GroupKeeper, app.AccountKeeper, app.BankKeeper, app.interfaceRegistry),
 		transferModule,
 		icaModule,
 		wasm.NewAppModule(appCodec, &app.WasmKeeper, app.StakingKeeper, app.AccountKeeper, app.BankKeeper, app.MsgServiceRouter(), app.GetSubspace(wasm.ModuleName)),
@@ -668,6 +676,7 @@ func NewTeritoriApp(
 		evidencetypes.ModuleName,
 		stakingtypes.ModuleName,
 		ibcexported.ModuleName,
+		group.ModuleName,
 		icatypes.ModuleName,
 		packetforwardtypes.ModuleName,
 		airdroptypes.ModuleName,
@@ -689,6 +698,7 @@ func NewTeritoriApp(
 		authtypes.ModuleName,
 		banktypes.ModuleName,
 		ibcexported.ModuleName,
+		group.ModuleName,
 		icatypes.ModuleName,
 		packetforwardtypes.ModuleName,
 		crisistypes.ModuleName,
@@ -708,6 +718,7 @@ func NewTeritoriApp(
 	// can do so safely.
 	app.mm.SetOrderInitGenesis(
 		upgradetypes.ModuleName,
+		group.ModuleName,
 		paramstypes.ModuleName,
 		vestingtypes.ModuleName,
 		consensusparamtypes.ModuleName,
