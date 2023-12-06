@@ -102,7 +102,7 @@ func initAppConfig() (string, interface{}) {
 	srvCfg := serverconfig.DefaultConfig()
 	srvCfg.StateSync.SnapshotInterval = 1000
 	srvCfg.StateSync.SnapshotKeepRecent = 10
-
+	srvCfg.MinGasPrices = "0stake"
 	appCfg := CustomAppConfig{Config: *srvCfg}
 
 	appTemplate := serverconfig.DefaultConfigTemplate
