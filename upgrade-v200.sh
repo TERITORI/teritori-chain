@@ -23,3 +23,4 @@ teritorid200 start --home=$HOME/.teritorid
 # Check newly added queries
 # - inflation
 # - stakingAPR
+# IBC transfer test
