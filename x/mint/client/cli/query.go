@@ -25,6 +25,8 @@ func GetQueryCmd() *cobra.Command {
 	mintingQueryCmd.AddCommand(
 		GetCmdQueryParams(),
 		GetCmdQueryBlockProvisions(),
+		GetCmdQueryInflation(),
+		GetCmdQueryStakingAPR(),
 	)
 
 	return mintingQueryCmd
@@ -85,5 +87,59 @@ func GetCmdQueryBlockProvisions() *cobra.Command {
 
 	flags.AddQueryFlagsToCmd(cmd)
 
+	return cmd
+}
+
+// GetCmdQueryInflation implements a command to returns inflation of the mint module.
+func GetCmdQueryInflation() *cobra.Command {
+	cmd := &cobra.Command{
+		Use:   "inflation",
+		Short: "Query the inflation of the mint module",
+		Args:  cobra.NoArgs,
+		RunE: func(cmd *cobra.Command, args []string) error {
+			clientCtx, err := client.GetClientQueryContext(cmd)
+			if err != nil {
+				return err
+			}
+			queryClient := types.NewQueryClient(clientCtx)
+
+			params := &types.QueryBlockProvisionsRequest{}
+			res, err := queryClient.BlockProvisions(context.Background(), params)
+			if err != nil {
+				return err
+			}
+
+			return clientCtx.PrintString(fmt.Sprintf("%s\n", res.BlockProvisions))
+		},
+	}
+
+	flags.AddQueryFlagsToCmd(cmd)
+	return cmd
+}
+
+// GetCmdQueryStakingAPR implements a command to returns current staking APR value.
+func GetCmdQueryStakingAPR() *cobra.Command {
+	cmd := &cobra.Command{
+		Use:   "staking-apr",
+		Short: "Query the current staking APR value",
+		Args:  cobra.NoArgs,
+		RunE: func(cmd *cobra.Command, args []string) error {
+			clientCtx, err := client.GetClientQueryContext(cmd)
+			if err != nil {
+				return err
+			}
+			queryClient := types.NewQueryClient(clientCtx)
+
+			params := &types.QueryBlockProvisionsRequest{}
+			res, err := queryClient.BlockProvisions(context.Background(), params)
+			if err != nil {
+				return err
+			}
+
+			return clientCtx.PrintString(fmt.Sprintf("%s\n", res.BlockProvisions))
+		},
+	}
+
+	flags.AddQueryFlagsToCmd(cmd)
 	return cmd
 }

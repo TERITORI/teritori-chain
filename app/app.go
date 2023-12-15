@@ -14,6 +14,7 @@ import (
 	v130 "github.com/TERITORI/teritori-chain/app/upgrades/v130"
 	v131 "github.com/TERITORI/teritori-chain/app/upgrades/v131"
 	v140 "github.com/TERITORI/teritori-chain/app/upgrades/v140"
+	v200 "github.com/TERITORI/teritori-chain/app/upgrades/v200"
 	airdrop "github.com/TERITORI/teritori-chain/x/airdrop"
 	airdropkeeper "github.com/TERITORI/teritori-chain/x/airdrop/keeper"
 	airdroptypes "github.com/TERITORI/teritori-chain/x/airdrop/types"
@@ -201,7 +202,7 @@ var (
 	// DefaultNodeHome default home directories for the application daemon
 	DefaultNodeHome string
 
-	Upgrades = []upgrades.Upgrade{v130.Upgrade, v131.Upgrade, v140.Upgrade}
+	Upgrades = []upgrades.Upgrade{v130.Upgrade, v131.Upgrade, v140.Upgrade, v200.Upgrade}
 
 	// ModuleBasics defines the module BasicManager is in charge of setting up basic,
 	// non-dependant module elements, such as codec registration
@@ -414,6 +415,7 @@ func NewTeritoriApp(
 		app.GetSubspace(minttypes.ModuleName),
 		app.AccountKeeper,
 		app.BankKeeper,
+		app.StakingKeeper,
 		app.DistrKeeper,
 		authtypes.FeeCollectorName,
 	)

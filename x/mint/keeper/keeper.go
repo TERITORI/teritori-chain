@@ -20,6 +20,7 @@ type Keeper struct {
 	paramSpace          paramtypes.Subspace
 	accountKeeper       types.AccountKeeper
 	bankKeeper          types.BankKeeper
+	stakingKeeper       types.StakingKeeper
 	communityPoolKeeper types.CommunityPoolKeeper
 	hooks               types.MintHooks
 	feeCollectorName    string
@@ -47,8 +48,8 @@ const emptyAddressReceiver = ""
 // NewKeeper creates a new mint Keeper instance.
 func NewKeeper(
 	cdc codec.BinaryCodec, key storetypes.StoreKey, paramSpace paramtypes.Subspace,
-	ak types.AccountKeeper, bk types.BankKeeper, ck types.CommunityPoolKeeper,
-	feeCollectorName string,
+	ak types.AccountKeeper, bk types.BankKeeper, sk types.StakingKeeper,
+	ck types.CommunityPoolKeeper, feeCollectorName string,
 ) Keeper {
 	// ensure mint module account is set
 	if addr := ak.GetModuleAddress(types.ModuleName); addr == nil {
@@ -66,6 +67,7 @@ func NewKeeper(
 		paramSpace:          paramSpace,
 		accountKeeper:       ak,
 		bankKeeper:          bk,
+		stakingKeeper:       sk,
 		communityPoolKeeper: ck,
 		feeCollectorName:    feeCollectorName,
 	}
