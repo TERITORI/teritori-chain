@@ -103,13 +103,13 @@ func GetCmdQueryInflation() *cobra.Command {
 			}
 			queryClient := types.NewQueryClient(clientCtx)
 
-			params := &types.QueryBlockProvisionsRequest{}
-			res, err := queryClient.BlockProvisions(context.Background(), params)
+			params := &types.QueryInflationRequest{}
+			res, err := queryClient.Inflation(context.Background(), params)
 			if err != nil {
 				return err
 			}
 
-			return clientCtx.PrintString(fmt.Sprintf("%s\n", res.BlockProvisions))
+			return clientCtx.PrintString(fmt.Sprintf("%s\n", res.Inflation))
 		},
 	}
 
@@ -130,13 +130,13 @@ func GetCmdQueryStakingAPR() *cobra.Command {
 			}
 			queryClient := types.NewQueryClient(clientCtx)
 
-			params := &types.QueryBlockProvisionsRequest{}
-			res, err := queryClient.BlockProvisions(context.Background(), params)
+			params := &types.QueryStakingAPRRequest{}
+			res, err := queryClient.StakingAPR(context.Background(), params)
 			if err != nil {
 				return err
 			}
 
-			return clientCtx.PrintString(fmt.Sprintf("%s\n", res.BlockProvisions))
+			return clientCtx.PrintString(fmt.Sprintf("%s\n", res.Apr))
 		},
 	}
 

@@ -7,7 +7,7 @@ teritorid131 tx gov submit-proposal software-upgrade "v1.4.0" \
 --chain-id=testing --home=$HOME/.teritorid --yes -b block --deposit="100000000stake"
 
 teritorid131 tx gov vote 1 yes --from validator --chain-id testing \
---home $HOME/.teritorid -b block -y --keyring-backend test
+--home $HOME/.teritorid -b block -y --keyring-backend=test
 
 teritorid131 query gov proposals
 
@@ -19,7 +19,7 @@ teritorid140 start --home=$HOME/.teritorid
 
 # teritorid140 query ica controller params
 # teritorid140 query bank balances $(teritorid140 keys show -a validator --keyring-backend=test)
-# teritorid140 tx mint burn-tokens 500000000stake --from validator --chain-id testing --home $HOME/.teritorid -b block -y --keyring-backend test
+# teritorid140 tx mint burn-tokens 500000000stake --from validator --chain-id testing --home $HOME/.teritorid -b block -y --keyring-backend=test
 
 # Restore keys to hermes relayer
 hermes --config ./network/hermes/config.toml keys delete --chain test-1 --all
@@ -37,7 +37,7 @@ hermes --config ./network/hermes/config.toml keys add --chain testing --mnemonic
 
 
 teritorid140 tx bank send validator tori17dtl0mjt3t77kpuhg2edqzjpszulwhgz7xjkfq 10000000stake --chain-id testing \
---home $HOME/.teritorid -b block -y --keyring-backend test
+--home $HOME/.teritorid -b block -y --keyring-backend=test
 
 hermes --config ./network/hermes/config.toml create client --host-chain test-1 --reference-chain testing
 hermes --config ./network/hermes/config.toml create client --host-chain testing --reference-chain test-1
@@ -46,9 +46,9 @@ hermes --config ./network/hermes/config.toml create channel --a-chain test-1 --b
 hermes --config ./network/hermes/config.toml start
 
 teritorid140 tx intertx register --connection-id=connection-0 --from validator --chain-id testing \
---home $HOME/.teritorid -b block -y --keyring-backend test
+--home $HOME/.teritorid -b block -y --keyring-backend=test
 
-export VALIDATOR=$(teritorid keys show -a validator --home $HOME/.teritorid --keyring-backend test)
+export VALIDATOR=$(teritorid keys show -a validator --home $HOME/.teritorid --keyring-backend=test)
 teritorid query intertx interchainaccounts connection-0 $VALIDATOR
 INTERCHAIN_ACCOUNT=cosmos1w8glpvlszm9ets53facn4hl69nnmvuyx4w7lykk4nd44354e6c2qasdsq3
 
@@ -68,4 +68,4 @@ teritorid tx intertx submit \
         }
     ]
 }' --connection-id connection-0 --from validator --chain-id testing \
---home $HOME/.teritorid -b block -y --keyring-backend test
+--home $HOME/.teritorid -b block -y --keyring-backend=test

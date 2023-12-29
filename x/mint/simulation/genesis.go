@@ -66,10 +66,10 @@ func RandomizedGenState(simState *module.SimulationState) {
 		func(r *rand.Rand) { reductionPeriodInBlocks = genReductionPeriodInBlocks(r) },
 	)
 
-	var mintintRewardsDistributionStartBlock int64
+	var mintingRewardsDistributionStartBlock int64
 	simState.AppParams.GetOrGenerate(
-		simState.Cdc, MintingRewardsDistributionStartBlockKey, &mintintRewardsDistributionStartBlock, simState.Rand,
-		func(r *rand.Rand) { mintintRewardsDistributionStartBlock = genMintintRewardsDistributionStartBlock(r) },
+		simState.Cdc, MintingRewardsDistributionStartBlockKey, &mintingRewardsDistributionStartBlock, simState.Rand,
+		func(r *rand.Rand) { mintingRewardsDistributionStartBlock = genMintingRewardsDistributionStartBlock(r) },
 	)
 
 	reductionStartedBlock := genReductionStartedBlock(simState.Rand)
@@ -82,7 +82,10 @@ func RandomizedGenState(simState *module.SimulationState) {
 		reductionPeriodInBlocks,
 		distributionProportions,
 		weightedDevRewardReceivers,
-		mintintRewardsDistributionStartBlock)
+		mintingRewardsDistributionStartBlock,
+		5733818,
+		[]sdk.Coin{},
+	)
 
 	minter := types.NewMinter(blockProvisions)
 
@@ -103,7 +106,7 @@ func genReductionPeriodInBlocks(r *rand.Rand) int64 {
 	return int64(r.Intn(maxInt64))
 }
 
-func genMintintRewardsDistributionStartBlock(r *rand.Rand) int64 {
+func genMintingRewardsDistributionStartBlock(r *rand.Rand) int64 {
 	return int64(r.Intn(maxInt64))
 }
 

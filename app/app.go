@@ -415,7 +415,7 @@ func NewTeritoriApp(
 		app.GetSubspace(minttypes.ModuleName),
 		app.AccountKeeper,
 		app.BankKeeper,
-		app.StakingKeeper,
+		stakingKeeper,
 		app.DistrKeeper,
 		authtypes.FeeCollectorName,
 	)
