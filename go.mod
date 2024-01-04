@@ -1,12 +1,11 @@
 module github.com/TERITORI/teritori-chain
 
-go 1.17
+go 1.19
 
 require (
 	github.com/CosmWasm/wasmd v0.28.0
 	github.com/cosmos/cosmos-sdk v0.45.10
 	github.com/cosmos/ibc-go/v3 v3.4.0
-	github.com/cosmos/interchain-accounts v0.1.0
 	github.com/ethereum/go-ethereum v1.10.16
 	github.com/gagliardetto/solana-go v1.2.0
 	github.com/gogo/protobuf v1.3.3
