@@ -9,6 +9,7 @@ import (
 	"path/filepath"
 	"strings"
 
+	wasmtypes "github.com/CosmWasm/wasmd/x/wasm/types"
 	"github.com/TERITORI/teritori-chain/app/keepers"
 	"github.com/TERITORI/teritori-chain/app/upgrades"
 	v130 "github.com/TERITORI/teritori-chain/app/upgrades/v130"
@@ -249,6 +250,7 @@ var (
 		ibctransfertypes.ModuleName:    {authtypes.Minter, authtypes.Burner},
 		airdroptypes.ModuleName:        nil,
 		ibcfeetypes.ModuleName:         nil,
+		wasmtypes.ModuleName:           {authtypes.Burner},
 	}
 )
 

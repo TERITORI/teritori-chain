@@ -271,3 +271,10 @@ kill-dev:
 	-@rm -rf ./data
 	-@killall icad 2>/dev/null
 	-@killall teritorid 2>/dev/null
+	
+IMAGE_TAG=rg.nl-ams.scw.cloud/teritori/teritorid:${shell git describe --tags 2>/dev/null || echo dev-$(git rev-parse HEAD)}
+
+.PHONY: docker.publish
+docker.publish:
+	docker build . --platform linux/amd64 -t $(IMAGE_TAG)
+	docker push $(IMAGE_TAG)
