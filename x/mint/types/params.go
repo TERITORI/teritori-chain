@@ -6,6 +6,7 @@ import (
 	"fmt"
 	"strings"
 
+	"cosmossdk.io/math"
 	yaml "gopkg.in/yaml.v2"
 
 	sdk "github.com/cosmos/cosmos-sdk/types"
@@ -24,6 +25,8 @@ var (
 	KeyUsageIncentiveAddress                = []byte("UsageIncentiveAddress")
 	KeyGrantsProgramAddress                 = []byte("GrantsProgramAddress")
 	KeyTeamReserveAddress                   = []byte("TeamReserveAddress")
+	KeyBlocksPerYear                        = []byte("BlocksPerYear")
+	KeyTotalBurntAmount                     = []byte("TotalBurntAmount")
 )
 
 // ParamTable for minting module.
@@ -36,6 +39,7 @@ func NewParams(
 	mintDenom string, genesisBlockProvisions sdk.Dec,
 	ReductionFactor sdk.Dec, reductionPeriodInBlocks int64, distrProportions DistributionProportions,
 	weightedDevRewardsReceivers []MonthlyVestingAddress, MintingRewardsDistributionStartBlock int64,
+	blocksPerYear uint64, totalBurntAmount sdk.Coins,
 ) Params {
 	return Params{
 		MintDenom:                            mintDenom,
@@ -45,6 +49,8 @@ func NewParams(
 		DistributionProportions:              distrProportions,
 		WeightedDeveloperRewardsReceivers:    weightedDevRewardsReceivers,
 		MintingRewardsDistributionStartBlock: MintingRewardsDistributionStartBlock,
+		BlocksPerYear:                        blocksPerYear,
+		TotalBurntAmount:                     totalBurntAmount,
 	}
 }
 
@@ -97,7 +103,7 @@ func parseMonthlyVesting() []MonthlyVestingAddress {
 	for _, addr := range records[0] {
 		vAddrs = append(vAddrs, MonthlyVestingAddress{
 			Address:        addressMap[addr],
-			MonthlyAmounts: []sdk.Int{},
+			MonthlyAmounts: []math.Int{},
 		})
 	}
 
@@ -131,6 +137,8 @@ func DefaultParams() Params {
 		GrantsProgramAddress:                 "tori1a28lq0usqrma2tn5t7vmdg3jnglh3v3qln4ky0",
 		TeamReserveAddress:                   "tori1efcnw3j074urqryseyx4weahr2p5at9lhwcaju",
 		MintingRewardsDistributionStartBlock: 0,
+		BlocksPerYear:                        5733818,
+		TotalBurntAmount:                     sdk.Coins{},
 	}
 }
 
@@ -172,6 +180,13 @@ func (p Params) Validate() error {
 		return err
 	}
 
+	if err := validateBlocksPerYear(p.BlocksPerYear); err != nil {
+		return err
+	}
+
+	if err := validateTotalBurntAmount(p.TotalBurntAmount); err != nil {
+		return err
+	}
 	return nil
 }
 
@@ -195,6 +210,8 @@ func (p *Params) ParamSetPairs() paramtypes.ParamSetPairs {
 		paramtypes.NewParamSetPair(KeyGrantsProgramAddress, &p.GrantsProgramAddress, validateAddress),
 		paramtypes.NewParamSetPair(KeyTeamReserveAddress, &p.TeamReserveAddress, validateAddress),
 		paramtypes.NewParamSetPair(KeyMintingRewardsDistributionStartBlock, &p.MintingRewardsDistributionStartBlock, validateMintingRewardsDistributionStartBlock),
+		paramtypes.NewParamSetPair(KeyBlocksPerYear, &p.BlocksPerYear, validateBlocksPerYear),
+		paramtypes.NewParamSetPair(KeyTotalBurntAmount, &p.TotalBurntAmount, validateTotalBurntAmount),
 	}
 }
 
@@ -328,4 +345,26 @@ func validateAddress(i interface{}) error {
 	_, err := sdk.AccAddressFromBech32(v)
 
 	return err
+}
+
+func validateBlocksPerYear(i interface{}) error {
+	v, ok := i.(uint64)
+	if !ok {
+		return fmt.Errorf("invalid parameter type: %T", i)
+	}
+
+	if v <= 0 {
+		return fmt.Errorf("number of blocks per year should be positive")
+	}
+
+	return nil
+}
+
+func validateTotalBurntAmount(i interface{}) error {
+	_, ok := i.([]sdk.Coin)
+	if !ok {
+		return fmt.Errorf("invalid parameter type: %T", i)
+	}
+
+	return nil
 }

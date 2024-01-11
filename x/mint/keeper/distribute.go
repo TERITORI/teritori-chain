@@ -1,6 +1,7 @@
 package keeper
 
 import (
+	"cosmossdk.io/math"
 	"github.com/TERITORI/teritori-chain/x/mint/types"
 	sdk "github.com/cosmos/cosmos-sdk/types"
 )
@@ -59,41 +60,41 @@ func (k Keeper) DistributeMintedCoin(ctx sdk.Context, mintedCoin sdk.Coin) error
 }
 
 // distributeToModule distributes mintedCoin multiplied by proportion to the recepient account.
-func (k Keeper) distributeToAddress(ctx sdk.Context, recipientAddr string, mintedCoin sdk.Coin, proportion sdk.Dec) (sdk.Int, error) {
+func (k Keeper) distributeToAddress(ctx sdk.Context, recipientAddr string, mintedCoin sdk.Coin, proportion sdk.Dec) (math.Int, error) {
 	distributionCoin, err := getProportions(mintedCoin, proportion)
 	if err != nil {
-		return sdk.Int{}, err
+		return math.Int{}, err
 	}
 
 	recipient, err := sdk.AccAddressFromBech32(recipientAddr)
 	if err != nil {
-		return sdk.Int{}, err
+		return math.Int{}, err
 	}
 
 	if err := k.bankKeeper.SendCoinsFromModuleToAccount(ctx, types.ModuleName, recipient, sdk.NewCoins(distributionCoin)); err != nil {
-		return sdk.Int{}, err
+		return math.Int{}, err
 	}
 	return distributionCoin.Amount, nil
 }
 
 // distributeToModule distributes mintedCoin multiplied by proportion to the recepientModule account.
-func (k Keeper) distributeToModule(ctx sdk.Context, recipientModule string, mintedCoin sdk.Coin, proportion sdk.Dec) (sdk.Int, error) {
+func (k Keeper) distributeToModule(ctx sdk.Context, recipientModule string, mintedCoin sdk.Coin, proportion sdk.Dec) (math.Int, error) {
 	distributionCoin, err := getProportions(mintedCoin, proportion)
 	if err != nil {
-		return sdk.Int{}, err
+		return math.Int{}, err
 	}
 	if err := k.bankKeeper.SendCoinsFromModuleToModule(ctx, types.ModuleName, recipientModule, sdk.NewCoins(distributionCoin)); err != nil {
-		return sdk.Int{}, err
+		return math.Int{}, err
 	}
 	return distributionCoin.Amount, nil
 }
 
-func (k Keeper) distributeDeveloperRewards(ctx sdk.Context, totalMintedCoin sdk.Coin, developerRewardsProportion sdk.Dec, developerRewardsReceivers []types.MonthlyVestingAddress) (sdk.Int, error) {
+func (k Keeper) distributeDeveloperRewards(ctx sdk.Context, totalMintedCoin sdk.Coin, developerRewardsProportion sdk.Dec, developerRewardsReceivers []types.MonthlyVestingAddress) (math.Int, error) {
 
 	params := k.GetParams(ctx)
 	totalDevRewards, err := getProportions(totalMintedCoin, developerRewardsProportion)
 	if err != nil {
-		return sdk.Int{}, err
+		return math.Int{}, err
 	}
 
 	vestedAmount := sdk.ZeroInt()
@@ -112,11 +113,11 @@ func (k Keeper) distributeDeveloperRewards(ctx sdk.Context, totalMintedCoin sdk.
 		if w.Address != emptyAddressReceiver {
 			devRewardsAddr, err := sdk.AccAddressFromBech32(w.Address)
 			if err != nil {
-				return sdk.Int{}, err
+				return math.Int{}, err
 			}
 			err = k.bankKeeper.SendCoinsFromModuleToAccount(ctx, types.ModuleName, devRewardsAddr, devRewardPortionCoins)
 			if err != nil {
-				return sdk.Int{}, err
+				return math.Int{}, err
 			}
 
 			vestedAmount = vestedAmount.Add(devPortionAmount)
@@ -134,7 +135,7 @@ func (k Keeper) distributeDeveloperRewards(ctx sdk.Context, totalMintedCoin sdk.
 		err = k.bankKeeper.SendCoinsFromModuleToAccount(
 			ctx, types.ModuleName, reserve, sdk.Coins{remainingCoins})
 		if err != nil {
-			return sdk.Int{}, err
+			return math.Int{}, err
 		}
 	}
 
@@ -145,5 +146,5 @@ func getProportions(mintedCoin sdk.Coin, ratio sdk.Dec) (sdk.Coin, error) {
 	if ratio.GT(sdk.OneDec()) {
 		return sdk.Coin{}, invalidRatioError{ratio}
 	}
-	return sdk.NewCoin(mintedCoin.Denom, mintedCoin.Amount.ToDec().Mul(ratio).TruncateInt()), nil
+	return sdk.NewCoin(mintedCoin.Denom, sdk.NewDecFromInt(mintedCoin.Amount).Mul(ratio).TruncateInt()), nil
 }

@@ -4,12 +4,17 @@ import (
 	"context"
 	"time"
 
+	"cosmossdk.io/errors"
 	"github.com/TERITORI/teritori-chain/x/intertx/types"
+	"github.com/cosmos/cosmos-sdk/codec"
+	cosmostypes "github.com/cosmos/cosmos-sdk/codec/types"
 	sdk "github.com/cosmos/cosmos-sdk/types"
 	sdkerrors "github.com/cosmos/cosmos-sdk/types/errors"
-	icatypes "github.com/cosmos/ibc-go/v3/modules/apps/27-interchain-accounts/types"
-	channeltypes "github.com/cosmos/ibc-go/v3/modules/core/04-channel/types"
-	host "github.com/cosmos/ibc-go/v3/modules/core/24-host"
+	icacontrollerkeeper "github.com/cosmos/ibc-go/v7/modules/apps/27-interchain-accounts/controller/keeper"
+	icacontrollertypes "github.com/cosmos/ibc-go/v7/modules/apps/27-interchain-accounts/controller/types"
+	icatypes "github.com/cosmos/ibc-go/v7/modules/apps/27-interchain-accounts/types"
+	channeltypes "github.com/cosmos/ibc-go/v7/modules/core/04-channel/types"
+	host "github.com/cosmos/ibc-go/v7/modules/core/24-host"
 )
 
 var _ types.MsgServer = msgServer{}
@@ -26,8 +31,13 @@ func NewMsgServerImpl(keeper Keeper) types.MsgServer {
 // RegisterAccount implements the Msg/RegisterAccount interface
 func (k msgServer) RegisterAccount(goCtx context.Context, msg *types.MsgRegisterAccount) (*types.MsgRegisterAccountResponse, error) {
 	ctx := sdk.UnwrapSDKContext(goCtx)
+	msgRegister := icacontrollertypes.NewMsgRegisterInterchainAccount(msg.ConnectionId, msg.Owner, "")
+	icaMsgServer := icacontrollerkeeper.NewMsgServerImpl(&k.Keeper.icaControllerKeeper)
 
-	if err := k.icaControllerKeeper.RegisterInterchainAccount(ctx, msg.ConnectionId, msg.Owner); err != nil {
+	if _, err := icaMsgServer.RegisterInterchainAccount(
+		sdk.WrapSDKContext(ctx),
+		msgRegister,
+	); err != nil {
 		return nil, err
 	}
 
@@ -52,8 +62,7 @@ func (k msgServer) SubmitTx(goCtx context.Context, msg *types.MsgSubmitTx) (*typ
 	if !found {
 		return nil, sdkerrors.Wrap(channeltypes.ErrChannelCapabilityNotFound, "module does not own channel capability")
 	}
-
-	data, err := icatypes.SerializeCosmosTx(k.cdc, []sdk.Msg{msg.GetTxMsg()})
+	data, err := SerializeCosmosTx(k.Keeper.cdc, msg.Msgs)
 	if err != nil {
 		return nil, err
 	}
@@ -72,4 +81,22 @@ func (k msgServer) SubmitTx(goCtx context.Context, msg *types.MsgSubmitTx) (*typ
 	}
 
 	return &types.MsgSubmitTxResponse{}, nil
+}
+
+func SerializeCosmosTx(cdc codec.BinaryCodec, msgs []*cosmostypes.Any) (bz []byte, err error) {
+	// only ProtoCodec is supported
+	if _, ok := cdc.(*codec.ProtoCodec); !ok {
+		return nil, errors.Wrap(err, "only ProtoCodec is supported on host chain")
+	}
+
+	cosmosTx := &icatypes.CosmosTx{
+		Messages: msgs,
+	}
+
+	bz, err = cdc.Marshal(cosmosTx)
+	if err != nil {
+		return nil, err
+	}
+
+	return bz, nil
 }

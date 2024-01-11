@@ -1,10 +1,11 @@
 package keeper_test
 
 import (
+	"cosmossdk.io/math"
 	"github.com/TERITORI/teritori-chain/x/mint/types"
+	"github.com/cometbft/cometbft/crypto/ed25519"
 	sdk "github.com/cosmos/cosmos-sdk/types"
 	authtypes "github.com/cosmos/cosmos-sdk/x/auth/types"
-	"github.com/tendermint/tendermint/crypto/ed25519"
 )
 
 func (suite *KeeperTestSuite) TestDistributeMintedCoin() {
@@ -28,17 +29,19 @@ func (suite *KeeperTestSuite) TestDistributeMintedCoin() {
 		WeightedDeveloperRewardsReceivers: []types.MonthlyVestingAddress{
 			{
 				Address:        dev1Addr.String(),
-				MonthlyAmounts: []sdk.Int{sdk.NewInt(7000000), sdk.NewInt(7000000), sdk.NewInt(7000000)},
+				MonthlyAmounts: []math.Int{sdk.NewInt(7000000), sdk.NewInt(7000000), sdk.NewInt(7000000)},
 			},
 			{
 				Address:        dev2Addr.String(),
-				MonthlyAmounts: []sdk.Int{sdk.NewInt(3000000), sdk.NewInt(3000000), sdk.NewInt(3000000)},
+				MonthlyAmounts: []math.Int{sdk.NewInt(3000000), sdk.NewInt(3000000), sdk.NewInt(3000000)},
 			},
 		},
 		UsageIncentiveAddress:                usageIncentiveAddr.String(),
 		GrantsProgramAddress:                 grantsAddr.String(),
 		TeamReserveAddress:                   teamReserveAddr.String(),
 		MintingRewardsDistributionStartBlock: 1,
+		BlocksPerYear:                        5733818,
+		TotalBurntAmount:                     sdk.Coins{},
 	}
 
 	tests := []struct {

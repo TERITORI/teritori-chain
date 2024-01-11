@@ -33,5 +33,9 @@ func (k msgServer) BurnTokens(goCtx context.Context, msg *types.MsgBurnTokens) (
 		return nil, err
 	}
 
+	params := k.GetParams(ctx)
+	params.TotalBurntAmount = sdk.Coins(params.TotalBurntAmount).Add(msg.Amount...)
+	k.SetParams(ctx, params)
+
 	return &types.MsgBurnTokensResponse{}, nil
 }

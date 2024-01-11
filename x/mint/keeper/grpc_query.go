@@ -3,9 +3,9 @@ package keeper
 import (
 	"context"
 
-	sdk "github.com/cosmos/cosmos-sdk/types"
-
+	"cosmossdk.io/math"
 	"github.com/TERITORI/teritori-chain/x/mint/types"
+	sdk "github.com/cosmos/cosmos-sdk/types"
 )
 
 var _ types.QueryServer = Querier{}
@@ -34,4 +34,33 @@ func (q Querier) BlockProvisions(c context.Context, _ *types.QueryBlockProvision
 	minter := q.Keeper.GetMinter(ctx)
 
 	return &types.QueryBlockProvisionsResponse{BlockProvisions: minter.BlockProvisions}, nil
+}
+
+// Inflation returns minter.Inflation of the mint module.
+func (q Querier) Inflation(c context.Context, _ *types.QueryInflationRequest) (*types.QueryInflationResponse, error) {
+	ctx := sdk.UnwrapSDKContext(c)
+	minter := q.Keeper.GetMinter(ctx)
+	params := q.Keeper.GetParams(ctx)
+	mintDenomSupply := q.bankKeeper.GetSupply(ctx, params.MintDenom).Amount
+
+	inflation := minter.BlockProvisions.
+		Mul(math.LegacyNewDec(int64(params.BlocksPerYear))).
+		Quo(math.LegacyNewDecFromInt(mintDenomSupply))
+
+	return &types.QueryInflationResponse{Inflation: inflation}, nil
+}
+
+// StakingAPR returns the current staking APR value.
+func (q Querier) StakingAPR(c context.Context, _ *types.QueryStakingAPRRequest) (*types.QueryStakingAPRResponse, error) {
+	ctx := sdk.UnwrapSDKContext(c)
+	minter := q.Keeper.GetMinter(ctx)
+	params := q.Keeper.GetParams(ctx)
+	totalStaked := q.stakingKeeper.TotalBondedTokens(ctx)
+
+	stakingApr := minter.BlockProvisions.
+		Mul(math.LegacyNewDec(int64(params.BlocksPerYear))).
+		Mul(params.DistributionProportions.Staking).
+		Quo(math.LegacyNewDecFromInt(totalStaked))
+
+	return &types.QueryStakingAPRResponse{Apr: stakingApr}, nil
 }

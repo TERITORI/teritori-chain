@@ -3,11 +3,13 @@ package keeper
 import (
 	"fmt"
 
-	"github.com/tendermint/tendermint/libs/log"
+	"cosmossdk.io/math"
+	"github.com/cometbft/cometbft/libs/log"
 
 	"github.com/TERITORI/teritori-chain/x/mint/types"
 
 	"github.com/cosmos/cosmos-sdk/codec"
+	storetypes "github.com/cosmos/cosmos-sdk/store/types"
 	sdk "github.com/cosmos/cosmos-sdk/types"
 	paramtypes "github.com/cosmos/cosmos-sdk/x/params/types"
 )
@@ -15,10 +17,11 @@ import (
 // Keeper of the mint store.
 type Keeper struct {
 	cdc                 codec.BinaryCodec
-	storeKey            sdk.StoreKey
+	storeKey            storetypes.StoreKey
 	paramSpace          paramtypes.Subspace
 	accountKeeper       types.AccountKeeper
 	bankKeeper          types.BankKeeper
+	stakingKeeper       types.StakingKeeper
 	communityPoolKeeper types.CommunityPoolKeeper
 	hooks               types.MintHooks
 	feeCollectorName    string
@@ -33,8 +36,8 @@ func (e invalidRatioError) Error() string {
 }
 
 type insufficientDevVestingBalanceError struct {
-	ActualBalance         sdk.Int
-	AttemptedDistribution sdk.Int
+	ActualBalance         math.Int
+	AttemptedDistribution math.Int
 }
 
 func (e insufficientDevVestingBalanceError) Error() string {
@@ -45,9 +48,9 @@ const emptyAddressReceiver = ""
 
 // NewKeeper creates a new mint Keeper instance.
 func NewKeeper(
-	cdc codec.BinaryCodec, key sdk.StoreKey, paramSpace paramtypes.Subspace,
-	ak types.AccountKeeper, bk types.BankKeeper, ck types.CommunityPoolKeeper,
-	feeCollectorName string,
+	cdc codec.BinaryCodec, key storetypes.StoreKey, paramSpace paramtypes.Subspace,
+	ak types.AccountKeeper, bk types.BankKeeper, sk types.StakingKeeper,
+	ck types.CommunityPoolKeeper, feeCollectorName string,
 ) Keeper {
 	// ensure mint module account is set
 	if addr := ak.GetModuleAddress(types.ModuleName); addr == nil {
@@ -65,6 +68,7 @@ func NewKeeper(
 		paramSpace:          paramSpace,
 		accountKeeper:       ak,
 		bankKeeper:          bk,
+		stakingKeeper:       sk,
 		communityPoolKeeper: ck,
 		feeCollectorName:    feeCollectorName,
 	}

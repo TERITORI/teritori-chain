@@ -58,7 +58,7 @@ func NewMsgSubmitTx(sdkMsg sdk.Msg, connectionID, owner string) (*MsgSubmitTx, e
 	return &MsgSubmitTx{
 		ConnectionId: connectionID,
 		Owner:        owner,
-		Msg:          any,
+		Msgs:         []*codectypes.Any{any},
 	}, nil
 }
 
@@ -79,21 +79,34 @@ func PackTxMsgAny(sdkMsg sdk.Msg) (*codectypes.Any, error) {
 
 // UnpackInterfaces implements codectypes.UnpackInterfacesMessage
 func (msg MsgSubmitTx) UnpackInterfaces(unpacker codectypes.AnyUnpacker) error {
-	var (
-		sdkMsg sdk.Msg
-	)
+	var sdkMsg []sdk.Msg
+	for _, any := range msg.Msgs {
+		var msg sdk.Msg
+		err := unpacker.UnpackAny(any, &msg)
+		if err != nil {
+			return err
+		}
 
-	return unpacker.UnpackAny(msg.Msg, &sdkMsg)
+		sdkMsg = append(sdkMsg, msg)
+	}
+
+	return nil
 }
 
 // GetTxMsg fetches the cached any message
-func (msg *MsgSubmitTx) GetTxMsg() sdk.Msg {
-	sdkMsg, ok := msg.Msg.GetCachedValue().(sdk.Msg)
-	if !ok {
-		return nil
+func (msg *MsgSubmitTx) GetTxMsg() []sdk.Msg {
+	var sdkMsgs []sdk.Msg
+	for _, any := range msg.Msgs {
+		sdkMsg, ok := any.GetCachedValue().(sdk.Msg)
+		if sdkMsg != nil {
+			sdkMsgs = append(sdkMsgs, sdkMsg)
+		}
+		if !ok {
+			return nil
+		}
 	}
 
-	return sdkMsg
+	return sdkMsgs
 }
 
 // GetSigners implements sdk.Msg

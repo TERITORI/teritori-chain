@@ -97,4 +97,12 @@ message Params {
   string team_reserve_address = 9;
   // start block to distribute minting rewards
   int64 minting_rewards_distribution_start_block = 10;
+  // expected blocks per year
+  uint64 blocks_per_year = 11;
+  // burnt amount total
+  repeated string total_burnt_amount = 12 [
+    (gogoproto.moretags) = "yaml:\"total_burnt_amount\"",
+    (gogoproto.customtype) = "github.com/cosmos/cosmos-sdk/types.Coin",
+    (gogoproto.nullable) = false
+  ];
 }

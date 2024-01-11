@@ -1,9 +1,10 @@
 package keeper_test
 
 import (
+	"cosmossdk.io/math"
 	"github.com/TERITORI/teritori-chain/x/mint/types"
+	"github.com/cometbft/cometbft/crypto/ed25519"
 	sdk "github.com/cosmos/cosmos-sdk/types"
-	"github.com/tendermint/tendermint/crypto/ed25519"
 )
 
 func (suite *KeeperTestSuite) TestParamsGetSet() {
@@ -25,13 +26,15 @@ func (suite *KeeperTestSuite) TestParamsGetSet() {
 		WeightedDeveloperRewardsReceivers: []types.MonthlyVestingAddress{
 			{
 				Address:        "",
-				MonthlyAmounts: []sdk.Int{sdk.NewInt(7000), sdk.NewInt(7000), sdk.NewInt(7000)},
+				MonthlyAmounts: []math.Int{sdk.NewInt(7000), sdk.NewInt(7000), sdk.NewInt(7000)},
 			},
 		},
 		UsageIncentiveAddress:                addr.String(),
 		GrantsProgramAddress:                 addr.String(),
 		TeamReserveAddress:                   addr.String(),
 		MintingRewardsDistributionStartBlock: 1,
+		BlocksPerYear:                        5733818,
+		TotalBurntAmount:                     sdk.Coins(nil),
 	}
 
 	suite.app.MintKeeper.SetParams(suite.ctx, params)

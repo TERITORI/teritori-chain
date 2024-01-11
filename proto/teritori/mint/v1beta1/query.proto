@@ -19,6 +19,16 @@ service Query {
       returns (QueryBlockProvisionsResponse) {
     option (google.api.http).get = "/teritori/mint/v1beta1/block_provisions";
   }
+
+  // Inflation returns the current minting inflation value.
+  rpc Inflation(QueryInflationRequest) returns (QueryInflationResponse) {
+    option (google.api.http).get = "/teritori/mint/v1beta1/inflation";
+  }
+
+  // StakingAPR returns the current staking APR value.
+  rpc StakingAPR(QueryStakingAPRRequest) returns (QueryStakingAPRResponse) {
+    option (google.api.http).get = "/teritori/mint/v1beta1/staking_apr";
+  }
 }
 
 // QueryParamsRequest is the request type for the Query/Params RPC method.
@@ -39,6 +49,32 @@ message QueryBlockProvisionsRequest {}
 message QueryBlockProvisionsResponse {
   // block_provisions is the current minting per epoch provisions value.
   bytes block_provisions = 1 [
+    (gogoproto.customtype) = "github.com/cosmos/cosmos-sdk/types.Dec",
+    (gogoproto.nullable) = false
+  ];
+}
+
+// QueryInflationRequest is the request type for the Query/Inflation RPC method.
+message QueryInflationRequest {}
+
+// QueryInflationResponse is the response type for the Query/Inflation RPC
+// method.
+message QueryInflationResponse {
+  // inflation is the current minting inflation value.
+  bytes inflation = 1 [
+    (gogoproto.customtype) = "github.com/cosmos/cosmos-sdk/types.Dec",
+    (gogoproto.nullable) = false
+  ];
+}
+
+// QueryStakingAPRRequest is the request type for the Query/StakingAPR RPC
+// method.
+message QueryStakingAPRRequest {}
+
+// QueryStakingAPRResponse is the response type for the Query/StakingAPR RPC
+// method.
+message QueryStakingAPRResponse {
+  bytes apr = 1 [
     (gogoproto.customtype) = "github.com/cosmos/cosmos-sdk/types.Dec",
     (gogoproto.nullable) = false
   ];
