@@ -1,66 +1,48 @@
-# syntax=docker/dockerfile:1
+# docker build . -t rg.nl-ams.scw.cloud/teritori/teritorid:latest
+# docker run --rm -it rg.nl-ams.scw.cloud/teritori/teritorid:latest /bin/sh
+FROM golang:1.21-alpine3.17 AS go-builder
+ARG arch=x86_64
 
-ARG GO_VERSION="1.19"
-ARG RUNNER_IMAGE="gcr.io/distroless/static"
+# this comes from standard alpine nightly file
+#  https://github.com/rust-lang/docker-rust-nightly/blob/master/alpine3.12/Dockerfile
+# with some changes to support our toolchain, etc
+RUN set -eux; apk add --no-cache ca-certificates build-base;
 
-# --------------------------------------------------------
-# Builder
-# --------------------------------------------------------
+RUN apk add git
+# NOTE: add these to run with LEDGER_ENABLED=true
+# RUN apk add libusb-dev linux-headers
 
-FROM golang:${GO_VERSION}-alpine as builder
+WORKDIR /code
+COPY . /code/
+# See https://github.com/CosmWasm/wasmvm/releases
+ADD https://github.com/CosmWasm/wasmvm/releases/download/v1.5.1/libwasmvm_muslc.aarch64.a /lib/libwasmvm_muslc.aarch64.a
+ADD https://github.com/CosmWasm/wasmvm/releases/download/v1.5.1/libwasmvm_muslc.x86_64.a /lib/libwasmvm_muslc.x86_64.a
+RUN sha256sum /lib/libwasmvm_muslc.aarch64.a | grep b89c242ffe2c867267621a6469f07ab70fc204091809d9c6f482c3fdf9293830
+RUN sha256sum /lib/libwasmvm_muslc.x86_64.a | grep c0f4614d0835be78ac8f3d647a70ccd7ed9f48632bc1374db04e4df2245cb467
 
-RUN set -eux; apk add --no-cache ca-certificates build-base; apk add git linux-headers
+# Copy the library you want to the final location that will be found by the linker flag `-lwasmvm_muslc`
+RUN cp /lib/libwasmvm_muslc.${arch}.a /lib/libwasmvm_muslc.a
 
-# Download go dependencies
-WORKDIR /teritori
-COPY go.* ./
-RUN --mount=type=cache,target=/root/.cache/go-build \
-    --mount=type=cache,target=/root/go/pkg/mod \
-    go mod download
-
-# Cosmwasm - download correct libwasmvm version
-RUN WASMVM_VERSION=$(go list -m github.com/CosmWasm/wasmvm | cut -d ' ' -f 2) && \
-    wget https://github.com/CosmWasm/wasmvm/releases/download/$WASMVM_VERSION/libwasmvm_muslc.$(uname -m).a \
-    -O /lib/libwasmvm_muslc.a
-
-# Cosmwasm - verify checksum
-RUN wget https://github.com/CosmWasm/wasmvm/releases/download/v1.0.0/checksums.txt -O /tmp/checksums.txt && \
-    sha256sum /lib/libwasmvm_muslc.a | grep $(cat /tmp/checksums.txt | grep $(uname -m) | cut -d ' ' -f 1)
-
-# Copy the remaining files
-COPY . .
-
-# Build teritorid binary
-RUN --mount=type=cache,target=/root/.cache/go-build \
-    --mount=type=cache,target=/root/go/pkg/mod \
-    VERSION=$(echo $(git describe --tags) | sed 's/^v//') && \
-    COMMIT=$(git log -1 --format='%H') && \
-    go build \
-    -mod=readonly \
-    -tags "netgo,ledger,muslc" \
-    -ldflags "-X github.com/cosmos/cosmos-sdk/version.Name="teritori" \
-    -X github.com/cosmos/cosmos-sdk/version.AppName="teritorid" \
-    -X github.com/cosmos/cosmos-sdk/version.Version=$VERSION \
-    -X github.com/cosmos/cosmos-sdk/version.Commit=$COMMIT \
-    -X github.com/cosmos/cosmos-sdk/version.BuildTags='netgo,ledger,muslc' \
-    -w -s -linkmode=external -extldflags '-Wl,-z,muldefs -static'" \
-    -trimpath \
-    -o /teritori/build/ \
-    ./...
+# force it to use static lib (from above) not standard libgo_cosmwasm.so file
+RUN LEDGER_ENABLED=false BUILD_TAGS=muslc LINK_STATICALLY=true make build
+RUN echo "Ensuring binary is statically linked ..." \
+    && (file /code/build/teritorid | grep "statically linked")
 
 # --------------------------------------------------------
-# Runner
-# --------------------------------------------------------
+FROM alpine:3.17
 
-FROM ${RUNNER_IMAGE}
+COPY --from=go-builder /code/build/teritorid /usr/bin/teritorid
 
-COPY --from=builder /teritori/build/teritorid /bin/teritorid
+#COPY docker/* /opt/
+#RUN chmod +x /opt/*.sh
 
-ENV HOME /teritori
-WORKDIR $HOME
+WORKDIR /opt
 
-EXPOSE 26656
-EXPOSE 26657
+# rest server
 EXPOSE 1317
+# tendermint p2p
+EXPOSE 26656
+# tendermint rpc
+EXPOSE 26657
 
-ENTRYPOINT ["teritorid"]
+CMD ["/usr/bin/teritorid", "version"]
