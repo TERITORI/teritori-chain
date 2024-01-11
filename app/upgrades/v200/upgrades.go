@@ -62,7 +62,7 @@ func CreateUpgradeHandler(
 		// Mint module params update
 		params := minttypes.Params{}
 		params.BlocksPerYear = 5733818
-		params.TotalBurntAmount = []sdk.Coin{sdk.NewInt64Coin("utori", 118550_000000)}
+		params.TotalBurntAmount = []sdk.Coin{sdk.NewInt64Coin("utori", 118_547_020000)}
 		subspace, ok := keepers.ParamsKeeper.GetSubspace(minttypes.ModuleName)
 		if !ok {
 			panic("invalid mint module subspace")
