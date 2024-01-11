@@ -1,6 +1,7 @@
 package teritori
 
 import (
+	"cosmossdk.io/math"
 	wasmkeeper "github.com/CosmWasm/wasmd/x/wasm/keeper"
 	wasmTypes "github.com/CosmWasm/wasmd/x/wasm/types"
 	airdropkeeper "github.com/TERITORI/teritori-chain/x/airdrop/keeper"
@@ -160,7 +161,7 @@ func (min MinCommissionDecorator) getValidator(ctx sdk.Context, bech32ValAddr st
 	return val, nil
 }
 
-func (min MinCommissionDecorator) getTotalDelegatedTokens(ctx sdk.Context) sdk.Int {
+func (min MinCommissionDecorator) getTotalDelegatedTokens(ctx sdk.Context) math.Int {
 	bondDenom := min.sk.BondDenom(ctx)
 	bondedPool := min.sk.GetBondedPool(ctx)
 	notBondedPool := min.sk.GetNotBondedPool(ctx)

@@ -8,6 +8,7 @@ import (
 	"os"
 	"sort"
 
+	"cosmossdk.io/math"
 	"github.com/cosmos/cosmos-sdk/client"
 	"github.com/cosmos/cosmos-sdk/client/flags"
 	"github.com/cosmos/cosmos-sdk/server"
@@ -45,9 +46,9 @@ type AppState struct {
 // SnapshotAccount provide fields of snapshot per account
 type SnapshotAccount struct {
 	Address       string
-	Balance       sdk.Int
-	StakedBalance sdk.Int
-	TotalBalance  sdk.Int
+	Balance       math.Int
+	StakedBalance math.Int
+	TotalBalance  math.Int
 }
 
 // ExportRichestSnapshotCmd generates a snapshot.csv from a provided chain genesis export.

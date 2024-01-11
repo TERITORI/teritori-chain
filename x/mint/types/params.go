@@ -6,6 +6,7 @@ import (
 	"fmt"
 	"strings"
 
+	"cosmossdk.io/math"
 	yaml "gopkg.in/yaml.v2"
 
 	sdk "github.com/cosmos/cosmos-sdk/types"
@@ -102,7 +103,7 @@ func parseMonthlyVesting() []MonthlyVestingAddress {
 	for _, addr := range records[0] {
 		vAddrs = append(vAddrs, MonthlyVestingAddress{
 			Address:        addressMap[addr],
-			MonthlyAmounts: []sdk.Int{},
+			MonthlyAmounts: []math.Int{},
 		})
 	}
 

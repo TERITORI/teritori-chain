@@ -5,6 +5,7 @@ package simulation
 import (
 	"math/rand"
 
+	"cosmossdk.io/math"
 	"github.com/TERITORI/teritori-chain/x/mint/types"
 
 	sdk "github.com/cosmos/cosmos-sdk/types"
@@ -33,15 +34,15 @@ var (
 	weightedDevRewardReceivers = []types.MonthlyVestingAddress{
 		{
 			Address:        "tori1g2escsu26508tgrpv865d80d62pvmw69je2ztn",
-			MonthlyAmounts: []sdk.Int{sdk.NewInt(7000), sdk.NewInt(7000), sdk.NewInt(7000)},
+			MonthlyAmounts: []math.Int{sdk.NewInt(7000), sdk.NewInt(7000), sdk.NewInt(7000)},
 		},
 		{
 			Address:        "tori1g2escsu26508tgrpv865d80d62pvmw69je2ztn",
-			MonthlyAmounts: []sdk.Int{sdk.NewInt(2000), sdk.NewInt(2000), sdk.NewInt(2000)},
+			MonthlyAmounts: []math.Int{sdk.NewInt(2000), sdk.NewInt(2000), sdk.NewInt(2000)},
 		},
 		{
 			Address:        "tori1g2escsu26508tgrpv865d80d62pvmw69je2ztn",
-			MonthlyAmounts: []sdk.Int{sdk.NewInt(1000), sdk.NewInt(1000), sdk.NewInt(1000)},
+			MonthlyAmounts: []math.Int{sdk.NewInt(1000), sdk.NewInt(1000), sdk.NewInt(1000)},
 		},
 	}
 )

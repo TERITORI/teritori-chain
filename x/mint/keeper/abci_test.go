@@ -1,6 +1,7 @@
 package keeper_test
 
 import (
+	"cosmossdk.io/math"
 	"github.com/TERITORI/teritori-chain/x/mint/types"
 	"github.com/cometbft/cometbft/crypto/ed25519"
 	sdk "github.com/cosmos/cosmos-sdk/types"
@@ -29,17 +30,19 @@ func (suite *KeeperTestSuite) TestEndBlocker() {
 		WeightedDeveloperRewardsReceivers: []types.MonthlyVestingAddress{
 			{
 				Address:        dev1Addr.String(),
-				MonthlyAmounts: []sdk.Int{sdk.NewInt(6000), sdk.NewInt(6000), sdk.NewInt(6000)},
+				MonthlyAmounts: []math.Int{sdk.NewInt(6000), sdk.NewInt(6000), sdk.NewInt(6000)},
 			},
 			{
 				Address:        dev2Addr.String(),
-				MonthlyAmounts: []sdk.Int{sdk.NewInt(4000), sdk.NewInt(4000), sdk.NewInt(4000)},
+				MonthlyAmounts: []math.Int{sdk.NewInt(4000), sdk.NewInt(4000), sdk.NewInt(4000)},
 			},
 		},
 		UsageIncentiveAddress:                usageIncentiveAddr.String(),
 		GrantsProgramAddress:                 grantsAddr.String(),
 		TeamReserveAddress:                   teamReserveAddr.String(),
 		MintingRewardsDistributionStartBlock: 10,
+		BlocksPerYear:                        5733818,
+		TotalBurntAmount:                     sdk.Coins{},
 	}
 
 	suite.SetupTest()
@@ -157,11 +160,11 @@ func (suite *KeeperTestSuite) TestEndBlocker90MonthsCheck() {
 	params.WeightedDeveloperRewardsReceivers = []types.MonthlyVestingAddress{
 		{
 			Address:        dev1Addr.String(),
-			MonthlyAmounts: []sdk.Int{sdk.NewInt(6000), sdk.NewInt(6000), sdk.NewInt(6000)},
+			MonthlyAmounts: []math.Int{sdk.NewInt(6000), sdk.NewInt(6000), sdk.NewInt(6000)},
 		},
 		{
 			Address:        dev2Addr.String(),
-			MonthlyAmounts: []sdk.Int{sdk.NewInt(4000), sdk.NewInt(4000), sdk.NewInt(4000)},
+			MonthlyAmounts: []math.Int{sdk.NewInt(4000), sdk.NewInt(4000), sdk.NewInt(4000)},
 		},
 	}
 	suite.app.MintKeeper.SetParams(suite.ctx, params)

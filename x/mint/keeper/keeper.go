@@ -3,6 +3,7 @@ package keeper
 import (
 	"fmt"
 
+	"cosmossdk.io/math"
 	"github.com/cometbft/cometbft/libs/log"
 
 	"github.com/TERITORI/teritori-chain/x/mint/types"
@@ -35,8 +36,8 @@ func (e invalidRatioError) Error() string {
 }
 
 type insufficientDevVestingBalanceError struct {
-	ActualBalance         sdk.Int
-	AttemptedDistribution sdk.Int
+	ActualBalance         math.Int
+	AttemptedDistribution math.Int
 }
 
 func (e insufficientDevVestingBalanceError) Error() string {
