@@ -2,9 +2,9 @@
 The `mint` module is responsible for creating tokens in a
 flexible way to reward validators, incentivize providing pool
 liquidity, provide funds for governance, and pay developers to maintain.
- - Denom minting; reduction and reserve ratio settings
- - Token distribution proportions
- - Endblocker distribution settings
+  - Denom minting; reduction and reserve ratio settings
+  - Token distribution proportions
+  - Endblocker distribution settings
 */
 package mint
 
@@ -177,7 +177,7 @@ func (AppModule) GenerateGenesisState(simState *module.SimulationState) {
 }
 
 // ProposalContents doesn't return any content functions for governance proposals.
-func (AppModule) ProposalContents(simState module.SimulationState) []simtypes.WeightedProposalContent {
+func (AppModule) ProposalContents(simState module.SimulationState) []simtypes.WeightedProposalMsg {
 	return nil
 }
 
