@@ -80,7 +80,6 @@ import (
 	govclient "github.com/cosmos/cosmos-sdk/x/gov/client"
 	govkeeper "github.com/cosmos/cosmos-sdk/x/gov/keeper"
 	govtypes "github.com/cosmos/cosmos-sdk/x/gov/types"
-	govv1 "github.com/cosmos/cosmos-sdk/x/gov/types/v1"
 	govv1beta1 "github.com/cosmos/cosmos-sdk/x/gov/types/v1beta1"
 	"github.com/cosmos/cosmos-sdk/x/group"
 	groupkeeper "github.com/cosmos/cosmos-sdk/x/group/keeper"
@@ -159,23 +158,23 @@ var (
 
 // GetEnabledProposals parses the ProposalsEnabled / EnableSpecificProposals values to
 // produce a list of enabled proposals to pass into wasmd app.
-func GetEnabledProposals() []wasm.ProposalType {
+func GetEnabledProposals() []wasmtypes.ProposalType {
 	if EnableSpecificProposals == "" {
 		if ProposalsEnabled == "true" {
-			return wasm.EnableAllProposals
+			return wasmtypes.EnableAllProposals
 		}
-		return wasm.DisableAllProposals
+		return wasmtypes.DisableAllProposals
 	}
 	chunks := strings.Split(EnableSpecificProposals, ",")
-	proposals, err := wasm.ConvertToProposals(chunks)
+	proposals, err := wasmtypes.ConvertToProposals(chunks)
 	if err != nil {
 		panic(err)
 	}
 	return proposals
 }
 
-func GetWasmOpts(appOpts servertypes.AppOptions) []wasm.Option {
-	var wasmOpts []wasm.Option
+func GetWasmOpts(appOpts servertypes.AppOptions) []wasmkeeper.Option {
+	var wasmOpts []wasmkeeper.Option
 	if cast.ToBool(appOpts.Get("telemetry.enabled")) {
 		wasmOpts = append(wasmOpts, wasmkeeper.WithVMCacheMetrics(prometheus.DefaultRegisterer))
 	}
@@ -323,7 +322,7 @@ func NewTeritoriApp(
 		ibcfeetypes.StoreKey,
 		icahosttypes.StoreKey,
 		airdroptypes.StoreKey,
-		wasm.StoreKey,
+		wasmtypes.StoreKey,
 		consensusparamtypes.StoreKey,
 		intertxtypes.StoreKey,
 		crisistypes.StoreKey,
@@ -363,7 +362,7 @@ func NewTeritoriApp(
 	scopedICAHostKeeper := app.CapabilityKeeper.ScopeToModule(icahosttypes.SubModuleName)
 	scopedICAControllerKeeper := app.CapabilityKeeper.ScopeToModule(icacontrollertypes.SubModuleName)
 
-	scopedWasmKeeper := app.CapabilityKeeper.ScopeToModule(wasm.ModuleName)
+	scopedWasmKeeper := app.CapabilityKeeper.ScopeToModule(wasmtypes.ModuleName)
 
 	// add keepers
 	app.AccountKeeper = authkeeper.NewAccountKeeper(
@@ -574,9 +573,9 @@ func NewTeritoriApp(
 	// if we want to allow any custom callbacks
 	availableCapabilities := "iterator,staking,stargate,cosmwasm_1_1,cosmwasm_1_2"
 	wasmOpts := GetWasmOpts(appOpts)
-	app.WasmKeeper = wasm.NewKeeper(
+	app.WasmKeeper = wasmkeeper.NewKeeper(
 		appCodec,
-		keys[wasm.StoreKey],
+		keys[wasmtypes.StoreKey],
 		app.AccountKeeper,
 		app.BankKeeper,
 		app.StakingKeeper,
@@ -598,8 +597,10 @@ func NewTeritoriApp(
 	// register wasm gov proposal types
 	enabledProposals := GetEnabledProposals()
 	if len(enabledProposals) != 0 {
-		govRouter.AddRoute(wasm.RouterKey, wasm.NewWasmProposalHandler(app.WasmKeeper, enabledProposals))
+		govRouter.AddRoute(wasmtypes.RouterKey, wasmkeeper.NewWasmProposalHandler(app.WasmKeeper, enabledProposals)) //nolint:staticcheck
 	}
+	// Set legacy router for backwards compatibility with gov v1beta1
+	app.GovKeeper.SetLegacyRouter(govRouter)
 
 	var wasmStack ibcporttypes.IBCModule
 	wasmStack = wasm.NewIBCHandler(app.WasmKeeper, app.IBCKeeper.ChannelKeeper, app.IBCFeeKeeper)
@@ -611,7 +612,7 @@ func NewTeritoriApp(
 		AddRoute(icahosttypes.SubModuleName, icaHostIBCModule).
 		AddRoute(ibctransfertypes.ModuleName, transferIBCModule).
 		AddRoute(intertxtypes.ModuleName, icaControllerStack).
-		AddRoute(wasm.ModuleName, wasmStack)
+		AddRoute(wasmtypes.ModuleName, wasmStack)
 	app.IBCKeeper.SetRouter(ibcRouter)
 
 	app.GovKeeper = *govKeeper.SetHooks(
@@ -650,7 +651,7 @@ func NewTeritoriApp(
 		groupmodule.NewAppModule(appCodec, app.GroupKeeper, app.AccountKeeper, app.BankKeeper, app.interfaceRegistry),
 		transferModule,
 		icaModule,
-		wasm.NewAppModule(appCodec, &app.WasmKeeper, app.StakingKeeper, app.AccountKeeper, app.BankKeeper, app.MsgServiceRouter(), app.GetSubspace(wasm.ModuleName)),
+		wasm.NewAppModule(appCodec, &app.WasmKeeper, app.StakingKeeper, app.AccountKeeper, app.BankKeeper, app.MsgServiceRouter(), app.GetSubspace(wasmtypes.ModuleName)),
 		consensus.NewAppModule(appCodec, app.ConsensusParamsKeeper),
 		packetforwardModule,
 		interTxModule,
@@ -684,7 +685,7 @@ func NewTeritoriApp(
 		icatypes.ModuleName,
 		packetforwardtypes.ModuleName,
 		airdroptypes.ModuleName,
-		wasm.ModuleName,
+		wasmtypes.ModuleName,
 		intertxtypes.ModuleName,
 	)
 	app.mm.SetOrderEndBlockers(
@@ -711,7 +712,7 @@ func NewTeritoriApp(
 		feegrant.ModuleName,
 		authz.ModuleName,
 		airdroptypes.ModuleName,
-		wasm.ModuleName,
+		wasmtypes.ModuleName,
 		intertxtypes.ModuleName,
 	)
 
@@ -744,7 +745,7 @@ func NewTeritoriApp(
 		authz.ModuleName,
 		packetforwardtypes.ModuleName,
 		airdroptypes.ModuleName,
-		wasm.ModuleName,
+		wasmtypes.ModuleName,
 		intertxtypes.ModuleName,
 	)
 
@@ -784,7 +785,7 @@ func NewTeritoriApp(
 			BankKeeper:        app.BankKeeper,
 			AirdropKeeper:     &app.AirdropKeeper,
 			IBCKeeper:         app.IBCKeeper,
-			TxCounterStoreKey: keys[wasm.StoreKey],
+			TxCounterStoreKey: keys[wasmtypes.StoreKey],
 			WasmConfig:        wasmConfig,
 			Cdc:               appCodec,
 		},
@@ -1027,11 +1028,11 @@ func initParamsKeeper(appCodec codec.BinaryCodec, legacyAmino *codec.LegacyAmino
 	paramsKeeper.Subspace(minttypes.ModuleName)
 	paramsKeeper.Subspace(distrtypes.ModuleName)
 	paramsKeeper.Subspace(slashingtypes.ModuleName)
-	paramsKeeper.Subspace(govtypes.ModuleName).WithKeyTable(govv1.ParamKeyTable())
+	paramsKeeper.Subspace(govtypes.ModuleName)
 	paramsKeeper.Subspace(crisistypes.ModuleName)
 	paramsKeeper.Subspace(ibctransfertypes.ModuleName)
 	paramsKeeper.Subspace(ibcexported.ModuleName)
-	paramsKeeper.Subspace(wasm.ModuleName)
+	paramsKeeper.Subspace(wasmtypes.ModuleName)
 	paramsKeeper.Subspace(packetforwardtypes.ModuleName).WithKeyTable(packetforwardtypes.ParamKeyTable())
 	paramsKeeper.Subspace(icahosttypes.SubModuleName)
 	paramsKeeper.Subspace(icacontrollertypes.SubModuleName)

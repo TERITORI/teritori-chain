@@ -1,6 +1,7 @@
 package teritori
 
 import (
+	"cosmossdk.io/errors"
 	"cosmossdk.io/math"
 	wasmkeeper "github.com/CosmWasm/wasmd/x/wasm/keeper"
 	wasmTypes "github.com/CosmWasm/wasmd/x/wasm/types"
@@ -62,7 +63,7 @@ func (min MinCommissionDecorator) AnteHandle(
 			// commission set below 5%
 			c := msg.Commission
 			if c.Rate.LT(minCommissionRate) {
-				return sdkerrors.Wrap(sdkerrors.ErrUnauthorized, "commission can't be lower than 5%")
+				return errors.Wrap(sdkerrors.ErrUnauthorized, "commission can't be lower than 5%")
 			}
 		case *stakingtypes.MsgEditValidator:
 			// if commission rate is nil, it means only
@@ -71,7 +72,7 @@ func (min MinCommissionDecorator) AnteHandle(
 				break
 			}
 			if msg.CommissionRate.LT(minCommissionRate) {
-				return sdkerrors.Wrap(sdkerrors.ErrUnauthorized, "commission can't be lower than 5%")
+				return errors.Wrap(sdkerrors.ErrUnauthorized, "commission can't be lower than 5%")
 			}
 		case *stakingtypes.MsgDelegate:
 			val, err := min.getValidator(ctx, msg.ValidatorAddress)
@@ -81,7 +82,7 @@ func (min MinCommissionDecorator) AnteHandle(
 
 			projectedVotingPower := min.CalculateDelegateProjectedVotingPower(ctx, val, sdk.NewDecFromInt(msg.Amount.Amount))
 			if projectedVotingPower.GTE(maxVotingPower) {
-				return sdkerrors.Wrapf(
+				return errors.Wrapf(
 					sdkerrors.ErrInvalidRequest,
 					"This validator has a voting power of %s%%. Delegations not allowed to a validator whose post-delegation voting power is more than %s%%. Please delegate to a validator with less bonded tokens", projectedVotingPower, maxVotingPower)
 			}
@@ -102,7 +103,7 @@ func (min MinCommissionDecorator) AnteHandle(
 
 			projectedVotingPower := min.CalculateRedelegateProjectedVotingPower(ctx, dstVal, delegateAmount)
 			if projectedVotingPower.GTE(maxVotingPower) {
-				return sdkerrors.Wrapf(
+				return errors.Wrapf(
 					sdkerrors.ErrInvalidRequest,
 					"This validator has a voting power of %s%%. Delegations not allowed to a validator whose post-delegation voting power is more than %s%%. Please redelegate to a validator with less bonded tokens", projectedVotingPower, maxVotingPower)
 			}
@@ -116,7 +117,7 @@ func (min MinCommissionDecorator) AnteHandle(
 			var innerMsg sdk.Msg
 			err := min.cdc.UnpackAny(v, &innerMsg)
 			if err != nil {
-				return sdkerrors.Wrapf(sdkerrors.ErrUnauthorized, "cannot unmarshal authz exec msgs")
+				return errors.Wrapf(sdkerrors.ErrUnauthorized, "cannot unmarshal authz exec msgs")
 			}
 
 			err = validMsg(innerMsg)
@@ -150,7 +151,7 @@ func (min MinCommissionDecorator) AnteHandle(
 func (min MinCommissionDecorator) getValidator(ctx sdk.Context, bech32ValAddr string) (stakingtypes.Validator, error) {
 	valAddr, err := sdk.ValAddressFromBech32(bech32ValAddr)
 	if err != nil {
-		return stakingtypes.Validator{}, sdkerrors.Wrap(sdkerrors.ErrInvalidAddress, bech32ValAddr)
+		return stakingtypes.Validator{}, errors.Wrap(sdkerrors.ErrInvalidAddress, bech32ValAddr)
 	}
 
 	val, found := min.sk.GetValidator(ctx, valAddr)
@@ -198,15 +199,15 @@ func (min MinCommissionDecorator) CalculateRedelegateProjectedVotingPower(ctx sd
 // signer.
 func NewAnteHandler(options HandlerOptions) (sdk.AnteHandler, error) {
 	if options.AccountKeeper == nil {
-		return nil, sdkerrors.Wrap(sdkerrors.ErrLogic, "account keeper is required for ante builder")
+		return nil, errors.Wrap(sdkerrors.ErrLogic, "account keeper is required for ante builder")
 	}
 
 	if options.BankKeeper == nil {
-		return nil, sdkerrors.Wrap(sdkerrors.ErrLogic, "bank keeper is required for ante builder")
+		return nil, errors.Wrap(sdkerrors.ErrLogic, "bank keeper is required for ante builder")
 	}
 
 	if options.SignModeHandler == nil {
-		return nil, sdkerrors.Wrap(sdkerrors.ErrLogic, "sign mode handler is required for ante builder")
+		return nil, errors.Wrap(sdkerrors.ErrLogic, "sign mode handler is required for ante builder")
 	}
 
 	var sigGasConsumer = options.SigGasConsumer

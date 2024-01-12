@@ -3,7 +3,6 @@ package v200
 import (
 	"reflect"
 
-	"github.com/CosmWasm/wasmd/x/wasm"
 	wasmtypes "github.com/CosmWasm/wasmd/x/wasm/types"
 	"github.com/TERITORI/teritori-chain/app/keepers"
 	minttypes "github.com/TERITORI/teritori-chain/x/mint/types"
@@ -21,6 +20,7 @@ import (
 	upgradetypes "github.com/cosmos/cosmos-sdk/x/upgrade/types"
 )
 
+//nolint:all
 func CreateUpgradeHandler(
 	mm *module.Manager,
 	configurator module.Configurator,
@@ -48,7 +48,7 @@ func CreateUpgradeHandler(
 				keyTable = govv1.ParamKeyTable()
 			case distrtypes.ModuleName:
 				keyTable = distrtypes.ParamKeyTable()
-			case wasm.ModuleName:
+			case wasmtypes.ModuleName:
 				keyTable = wasmtypes.ParamKeyTable()
 			case minttypes.ModuleName:
 				keyTable = minttypes.ParamKeyTable()

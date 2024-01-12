@@ -9,12 +9,9 @@ import (
 	"github.com/cosmos/cosmos-sdk/codec"
 	cosmostypes "github.com/cosmos/cosmos-sdk/codec/types"
 	sdk "github.com/cosmos/cosmos-sdk/types"
-	sdkerrors "github.com/cosmos/cosmos-sdk/types/errors"
 	icacontrollerkeeper "github.com/cosmos/ibc-go/v7/modules/apps/27-interchain-accounts/controller/keeper"
 	icacontrollertypes "github.com/cosmos/ibc-go/v7/modules/apps/27-interchain-accounts/controller/types"
 	icatypes "github.com/cosmos/ibc-go/v7/modules/apps/27-interchain-accounts/types"
-	channeltypes "github.com/cosmos/ibc-go/v7/modules/core/04-channel/types"
-	host "github.com/cosmos/ibc-go/v7/modules/core/24-host"
 )
 
 var _ types.MsgServer = msgServer{}
@@ -48,20 +45,6 @@ func (k msgServer) RegisterAccount(goCtx context.Context, msg *types.MsgRegister
 func (k msgServer) SubmitTx(goCtx context.Context, msg *types.MsgSubmitTx) (*types.MsgSubmitTxResponse, error) {
 	ctx := sdk.UnwrapSDKContext(goCtx)
 
-	portID, err := icatypes.NewControllerPortID(msg.Owner)
-	if err != nil {
-		return nil, err
-	}
-
-	channelID, found := k.icaControllerKeeper.GetActiveChannelID(ctx, msg.ConnectionId, portID)
-	if !found {
-		return nil, sdkerrors.Wrapf(icatypes.ErrActiveChannelNotFound, "failed to retrieve active channel for port %s", portID)
-	}
-
-	chanCap, found := k.scopedKeeper.GetCapability(ctx, host.ChannelCapabilityPath(portID, channelID))
-	if !found {
-		return nil, sdkerrors.Wrap(channeltypes.ErrChannelCapabilityNotFound, "module does not own channel capability")
-	}
 	data, err := SerializeCosmosTx(k.Keeper.cdc, msg.Msgs)
 	if err != nil {
 		return nil, err
@@ -75,7 +58,8 @@ func (k msgServer) SubmitTx(goCtx context.Context, msg *types.MsgSubmitTx) (*typ
 	// timeoutTimestamp set to max value with the unsigned bit shifted to sastisfy hermes timestamp conversion
 	// it is the responsibility of the auth module developer to ensure an appropriate timeout timestamp
 	timeoutTimestamp := ctx.BlockTime().Add(time.Minute).UnixNano()
-	_, err = k.icaControllerKeeper.SendTx(ctx, chanCap, msg.ConnectionId, portID, packetData, uint64(timeoutTimestamp))
+	msgServer := icacontrollerkeeper.NewMsgServerImpl(&k.icaControllerKeeper)
+	_, err = msgServer.SendTx(ctx, icacontrollertypes.NewMsgSendTx(msg.Owner, msg.ConnectionId, uint64(timeoutTimestamp), packetData))
 	if err != nil {
 		return nil, err
 	}
