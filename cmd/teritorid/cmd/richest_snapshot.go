@@ -4,7 +4,7 @@ import (
 	"encoding/csv"
 	"encoding/json"
 	"fmt"
-	"io/ioutil"
+	"io"
 	"os"
 	"sort"
 
@@ -94,7 +94,7 @@ Example:
 			}
 			defer genesisJson.Close()
 
-			byteValue, _ := ioutil.ReadAll(genesisJson)
+			byteValue, _ := io.ReadAll(genesisJson)
 
 			var genState GenesisState
 
