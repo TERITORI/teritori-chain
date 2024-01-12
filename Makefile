@@ -168,7 +168,7 @@ format-tools:
 	go install github.com/daixiang0/gci@v0.11.2
 
 lint: format-tools
-	golangci-lint run --tests=false --timeout=3m
+	golangci-lint run --tests=false --timeout=180s
 	find . -name '*.go' -type f -not -path "./vendor*" -not -path "./tests/system/vendor*" -not -path "*.git*" -not -path "*_test.go" | xargs gofumpt -d
 
 format: format-tools
