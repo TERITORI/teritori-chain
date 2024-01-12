@@ -12,13 +12,13 @@ Teritori is a Cosmos SDK based blockchain here to enhance Web3 individuals, comm
 # Testnet
 
 ## All the testnet chains:
-[*DEPRECATED*] - [teritori-testnet-v1](https://github.com/TERITORI/teritori-chain/tree/main/testnet/teritori-testnet-v1)
-[*DEPRECATED*] - [teritori-testnet-v2](https://github.com/TERITORI/teritori-chain/tree/main/testnet/teritori-testnet-v2)
-[*DEPRECATED*] - [teritori-testnet-v3](https://github.com/TERITORI/teritori-chain/tree/main/testnet/teritori-testnet-v3)
-[*DEPRECATED*] - [teritori-test-4](https://github.com/TERITORI/teritori-chain/tree/main/testnet/teritori-test-4)
-[__ACTIVE__] - [teritori-test-5](https://github.com/TERITORI/teritori-chain/tree/main/testnet/teritori-test-5)
+[*DEPRECATED*] - [teritori-testnet-v1](https://github.com/TERITORI/teritori-chain/tree/main/testnet/teritori-testnet-v1)    
+[*DEPRECATED*] - [teritori-testnet-v2](https://github.com/TERITORI/teritori-chain/tree/main/testnet/teritori-testnet-v2)    
+[*DEPRECATED*] - [teritori-testnet-v3](https://github.com/TERITORI/teritori-chain/tree/main/testnet/teritori-testnet-v3)    
+[*DEPRECATED*] - [teritori-test-4](https://github.com/TERITORI/teritori-chain/tree/main/testnet/teritori-test-4)    
+[__ACTIVE__] - [teritori-test-5](https://github.com/TERITORI/teritori-chain/tree/main/testnet/teritori-test-5)    
 
 # Mainnet
 
 ## All the mainnet chains:
-[__ACTIVE__] - [teritori-1](https://github.com/TERITORI/teritori-chain/tree/main/mainnet/teritori-1)
+[__ACTIVE__] - [teritori-1](https://github.com/TERITORI/teritori-chain/tree/main/mainnet/teritori-1)    
