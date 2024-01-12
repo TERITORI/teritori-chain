@@ -3,7 +3,6 @@ package keeper
 import (
 	"fmt"
 
-	"cosmossdk.io/math"
 	"github.com/cometbft/cometbft/libs/log"
 
 	"github.com/TERITORI/teritori-chain/x/mint/types"
@@ -33,15 +32,6 @@ type invalidRatioError struct {
 
 func (e invalidRatioError) Error() string {
 	return fmt.Sprintf("mint allocation ratio (%s) is greater than 1", e.ActualRatio)
-}
-
-type insufficientDevVestingBalanceError struct {
-	ActualBalance         math.Int
-	AttemptedDistribution math.Int
-}
-
-func (e insufficientDevVestingBalanceError) Error() string {
-	return fmt.Sprintf("developer vesting balance (%s) is smaller than requested distribution of (%s)", e.ActualBalance, e.AttemptedDistribution)
 }
 
 const emptyAddressReceiver = ""

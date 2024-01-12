@@ -68,9 +68,8 @@ func (dfd DeductFeeDecorator) AnteHandle(ctx sdk.Context, tx sdk.Tx, simulate bo
 	msgs := tx.GetMsgs()
 	if len(msgs) == 1 {
 		msg := msgs[0]
-		switch msg.(type) {
+		switch msg := msg.(type) {
 		case *airdroptypes.MsgClaimAllocation:
-			msg := msg.(*airdroptypes.MsgClaimAllocation)
 			signer := msg.GetSigners()[0]
 			cacheCtx, _ := ctx.CacheContext()
 			if acc := dfd.ak.GetAccount(ctx, signer); acc == nil {
