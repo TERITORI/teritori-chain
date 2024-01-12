@@ -141,7 +141,7 @@ Example:
 
 			for _, delegation := range stakingGen.Delegations {
 				address := delegation.DelegatorAddress
-				if excludeAddrs[address] == true {
+				if excludeAddrs[address] {
 					continue
 				}
 
