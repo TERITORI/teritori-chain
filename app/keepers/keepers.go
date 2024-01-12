@@ -1,6 +1,7 @@
 package keepers
 
 import (
+	wasmkeeper "github.com/CosmWasm/wasmd/x/wasm/keeper"
 	airdropkeeper "github.com/TERITORI/teritori-chain/x/airdrop/keeper"
 	intertxkeeper "github.com/TERITORI/teritori-chain/x/intertx/keeper"
 	mintkeeper "github.com/TERITORI/teritori-chain/x/mint/keeper"
@@ -25,8 +26,6 @@ import (
 	ibcfeekeeper "github.com/cosmos/ibc-go/v7/modules/apps/29-fee/keeper"
 	ibctransferkeeper "github.com/cosmos/ibc-go/v7/modules/apps/transfer/keeper"
 	ibckeeper "github.com/cosmos/ibc-go/v7/modules/core/keeper"
-
-	"github.com/CosmWasm/wasmd/x/wasm"
 
 	// unnamed import of statik for swagger UI support
 	_ "github.com/cosmos/cosmos-sdk/client/docs/statik"
@@ -67,6 +66,6 @@ type AppKeepers struct {
 	ScopedICAControllerKeeper capabilitykeeper.ScopedKeeper
 	ScopedInterTxKeeper       capabilitykeeper.ScopedKeeper
 
-	WasmKeeper       wasm.Keeper
+	WasmKeeper       wasmkeeper.Keeper
 	ScopedWasmKeeper capabilitykeeper.ScopedKeeper
 }

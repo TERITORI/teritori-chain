@@ -410,8 +410,6 @@ func PrepareGenesis(clientCtx client.Context, appState map[string]json.RawMessag
 	// distribution module genesis
 	distributionGenState := distributiontypes.DefaultGenesisState()
 	distributionGenState.Params = distributiontypes.DefaultParams()
-	distributionGenState.Params.BaseProposerReward = sdk.ZeroDec()
-	distributionGenState.Params.BonusProposerReward = sdk.ZeroDec()
 	distributionGenState.FeePool.CommunityPool = sdk.NewDecCoinsFromCoins(communityPoolCoins...)
 	distributionGenStateBz, err := cdc.MarshalJSON(distributionGenState)
 	if err != nil {
@@ -421,9 +419,9 @@ func PrepareGenesis(clientCtx client.Context, appState map[string]json.RawMessag
 
 	// gov module genesis
 	govGenState := govv1.DefaultGenesisState()
-	govGenState.DepositParams.MinDeposit = sdk.Coins{sdk.NewInt64Coin(appparams.BaseCoinUnit, 500_000_000)} // 500 TORI
+	govGenState.Params.MinDeposit = sdk.Coins{sdk.NewInt64Coin(appparams.BaseCoinUnit, 500_000_000)} // 500 TORI
 	duration := time.Hour * 24 * 2
-	govGenState.VotingParams.VotingPeriod = &duration // 2 days
+	govGenState.Params.VotingPeriod = &duration // 2 days
 	govGenStateBz, err := cdc.MarshalJSON(govGenState)
 	if err != nil {
 		return nil, nil, fmt.Errorf("failed to marshal gov genesis state: %w", err)

@@ -5,12 +5,9 @@ import (
 
 	errorsmod "cosmossdk.io/errors"
 
-	proto "github.com/gogo/protobuf/proto"
-
 	"github.com/TERITORI/teritori-chain/x/intertx/keeper"
 	sdk "github.com/cosmos/cosmos-sdk/types"
 	sdkerrors "github.com/cosmos/cosmos-sdk/types/errors"
-	banktypes "github.com/cosmos/cosmos-sdk/x/bank/types"
 	capabilitytypes "github.com/cosmos/cosmos-sdk/x/capability/types"
 
 	channeltypes "github.com/cosmos/ibc-go/v7/modules/core/04-channel/types"
@@ -121,26 +118,7 @@ func (im IBCModule) OnAcknowledgementPacket(
 		return errorsmod.Wrapf(sdkerrors.ErrUnknownRequest, "cannot unmarshal ICS-27 packet acknowledgement: %v", err)
 	}
 
-	txMsgData := &sdk.TxMsgData{}
-	if err := proto.Unmarshal(ack.GetResult(), txMsgData); err != nil {
-		return errorsmod.Wrapf(sdkerrors.ErrUnknownRequest, "cannot unmarshal ICS-27 tx message data: %v", err)
-	}
-
-	switch len(txMsgData.Data) {
-	case 0:
-		// TODO: handle for sdk 0.46.x
-		return nil
-	default:
-		for _, msgData := range txMsgData.Data {
-			response, err := handleMsgData(ctx, msgData)
-			if err != nil {
-				return err
-			}
-
-			im.keeper.Logger(ctx).Info("message response in ICS-27 packet response", "response", response)
-		}
-		return nil
-	}
+	return nil
 }
 
 // OnTimeoutPacket implements the IBCModule interface.
@@ -162,21 +140,4 @@ func (im IBCModule) NegotiateAppVersion(
 	proposedVersion string,
 ) (string, error) {
 	return "", nil
-}
-
-func handleMsgData(ctx sdk.Context, msgData *sdk.MsgData) (string, error) {
-	switch msgData.MsgType {
-	case sdk.MsgTypeURL(&banktypes.MsgSend{}):
-		msgResponse := &banktypes.MsgSendResponse{}
-		if err := proto.Unmarshal(msgData.Data, msgResponse); err != nil {
-			return "", errorsmod.Wrapf(sdkerrors.ErrJSONUnmarshal, "cannot unmarshal send response message: %s", err.Error())
-		}
-
-		return msgResponse.String(), nil
-
-	// TODO: handle other messages
-
-	default:
-		return "", nil
-	}
 }
