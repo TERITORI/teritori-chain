@@ -36,6 +36,9 @@ func GetTxBurnTokensCmd() *cobra.Command {
 		Args:  cobra.ExactArgs(1),
 		RunE: func(cmd *cobra.Command, args []string) error {
 			clientCtx, err := client.GetClientTxContext(cmd)
+			if err != nil {
+				return err
+			}
 
 			amount, err := sdk.ParseCoinsNormalized(args[0])
 			if err != nil {
