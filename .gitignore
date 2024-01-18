@@ -5,3 +5,5 @@ testnetv2
 data
 *.txt
 .idea
+
+/teritori-dapp/
