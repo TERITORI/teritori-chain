@@ -3,11 +3,13 @@ set -euo pipefail
 IFS=$'\n\t'
 set -x
 
+commit=1366a1f06d43e9d1cd53e3dd022df3b4ee47c8d3
+
 if [[ -z "${TERITORI_DAPP_REPO:-}" ]]; then
     rm -fr teritori-dapp
     git clone https://github.com/TERITORI/teritori-dapp.git
     cd teritori-dapp
-    git checkout ac44e4e6ee0965d38da5c9736945c9ce08370ea6
+    git checkout $commit
 else
     cd $TERITORI_DAPP_REPO
 fi
