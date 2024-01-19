@@ -3,6 +3,7 @@ package cli
 import (
 	"context"
 	"fmt"
+	"strings"
 
 	"github.com/spf13/cobra"
 
@@ -10,6 +11,8 @@ import (
 
 	"github.com/cosmos/cosmos-sdk/client"
 	"github.com/cosmos/cosmos-sdk/client/flags"
+	"github.com/cosmos/cosmos-sdk/version"
+	consensustypes "github.com/cosmos/cosmos-sdk/x/consensus/types"
 )
 
 // GetQueryCmd returns the cli query commands for the minting module.
@@ -27,6 +30,7 @@ func GetQueryCmd() *cobra.Command {
 		GetCmdQueryBlockProvisions(),
 		GetCmdQueryInflation(),
 		GetCmdQueryStakingAPR(),
+		GetConsensusParamsCmd(),
 	)
 
 	return mintingQueryCmd
@@ -141,5 +145,45 @@ func GetCmdQueryStakingAPR() *cobra.Command {
 	}
 
 	flags.AddQueryFlagsToCmd(cmd)
+	return cmd
+}
+
+func GetConsensusParamsCmd() *cobra.Command {
+	cmd := &cobra.Command{
+		Use:   "consensus-params",
+		Short: "Query consensus params",
+		Long: strings.TrimSpace(
+			fmt.Sprintf(`Query the total balance of an account or of a specific denomination.
+
+Example:
+  $ %s query %s consensus-params
+`,
+				version.AppName, types.ModuleName,
+			),
+		),
+		Args: cobra.ExactArgs(0),
+		RunE: func(cmd *cobra.Command, args []string) error {
+			clientCtx, err := client.GetClientQueryContext(cmd)
+			if err != nil {
+				return err
+			}
+
+			queryClient := consensustypes.NewQueryClient(clientCtx)
+
+			ctx := cmd.Context()
+
+			params := consensustypes.QueryParamsRequest{}
+
+			res, err := queryClient.Params(ctx, &params)
+			if err != nil {
+				return err
+			}
+
+			return clientCtx.PrintProto(res)
+		},
+	}
+
+	flags.AddQueryFlagsToCmd(cmd)
+
 	return cmd
 }
