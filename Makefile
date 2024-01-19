@@ -215,5 +215,5 @@ docker.publish:
 	docker push $(IMAGE_TAG)
 
 .PHONY: integration-test
-integration-test:
+integration-tests:
 	./integration-test/run.sh

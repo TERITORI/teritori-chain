@@ -20,5 +20,5 @@ jobs:
         with:
           node-version: 18
 
-      - name: Run integration test
-        run: make integration-test
+      - name: Run integration tests
+        run: make integration-tests
