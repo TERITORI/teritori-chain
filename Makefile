@@ -214,6 +214,6 @@ docker.publish:
 	docker build . --platform linux/amd64 -t $(IMAGE_TAG)
 	docker push $(IMAGE_TAG)
 
-.PHONY: integration-test
-integration-test:
+.PHONY: integration-tests
+integration-tests:
 	./integration-test/run.sh
