@@ -30,9 +30,9 @@ Install few packages:
 apt install build-essential git curl gcc make jq -y
 ```
 
-Install Go 1.18+:  
+Install Go 1.19+:  
 ```shell
-wget -c https://go.dev/dl/go1.18.3.linux-amd64.tar.gz && rm -rf /usr/local/go && tar -C /usr/local -xzf go1.18.3.linux-amd64.tar.gz && rm -rf go1.18.3.linux-amd64.tar.gz
+wget -c https://go.dev/dl/go1.19.13.linux-amd64.tar.gz && rm -rf /usr/local/go && tar -C /usr/local -xzf go1.19.13.linux-amd64.tar.gz && rm -rf go1.19.13.linux-amd64.tar.gz
 ``` 
 
 Setup your environnement (you can skip this part if you already had go installed before):  
@@ -46,12 +46,12 @@ echo 'export PATH=$PATH:/usr/local/go/bin:$HOME/go/bin' >> $HOME/.bash_profile &
 Verify the installation:  
 ```shell
 go version
-#Should return go version go1.18.3 linux/amd64
+#Should return go version go1.19.13 linux/amd64
 ``` 
 
 ## Setup the chain  
 
-Clone the Teritori repository and install the v2 of testnet:  
+Clone the Teritori repository and install teritorid:  
 ```shell
 git clone https://github.com/TERITORI/teritori-chain && cd teritori-chain && git checkout v1.4.2 && make install
 ```  
