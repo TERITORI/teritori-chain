@@ -3,7 +3,7 @@ set -euo pipefail
 IFS=$'\n\t'
 set -x
 
-commit=bd009d1f49f0d82b3fcf81f741892af23acb5b1f
+commit=d6790a316833e9022158b12aa83e5ddd4dc82429
 
 if [[ -z "${TERITORI_DAPP_REPO:-}" ]]; then
     rm -fr teritori-dapp
