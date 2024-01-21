@@ -8,9 +8,17 @@ on:
 
 jobs:
   test:
+    # teritorid hangs on ubuntu runner
     runs-on: macos-latest
     steps:
-      - uses: actions/checkout@v3
+      - uses: actions/checkout@v4
+
+      - name: Checkout teritori-dapp repo
+        uses: actions/checkout@v4
+        with:
+          repository: TERITORI/teritori-dapp
+          path: teritori-dapp
+          ref: 8630979356205f87e9c1e43e4dd1fdf6a0280273
 
       - uses: actions/setup-go@v3
         with:
@@ -18,12 +26,11 @@ jobs:
 
       - uses: actions/setup-node@v3
         with:
-          node-version: 16
-
-      - name: Setup yarn
-        run: npm install -g yarn
+          node-version: 18
+          cache: "yarn"
+          cache-dependency-path: "teritori-dapp/yarn.lock"
 
       - name: Run integration tests
         run: make integration-tests
         env:
-          TMPDIR: "${{ runner.temp }}"
+          TERITORI_DAPP_REPO: teritori-dapp

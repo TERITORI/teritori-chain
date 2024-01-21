@@ -16,4 +16,6 @@ fi
 
 yarn
 
+npx tsx packages/scripts/integration-testing/simpleTest ..
 npx tsx packages/scripts/integration-testing/upgradeTest142toDir ..
+npx tsx packages/scripts/integration-testing/upgradeTest120toDir ..
