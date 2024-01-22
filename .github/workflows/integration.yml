@@ -18,7 +18,7 @@ jobs:
         with:
           repository: TERITORI/teritori-dapp
           path: teritori-dapp
-          ref: 66134e9580135a07aba64e00b68af9f30f8fdb93
+          ref: 3a01c9753a19f39f5b399b9985f3a1d44ec81d23
 
       - uses: actions/setup-go@v3
         with:
