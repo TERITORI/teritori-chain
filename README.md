@@ -16,7 +16,8 @@ Teritori is a Cosmos SDK based blockchain here to enhance Web3 individuals, comm
 [*DEPRECATED*] - [teritori-testnet-v2](https://github.com/TERITORI/teritori-chain/tree/main/testnet/teritori-testnet-v2)    
 [*DEPRECATED*] - [teritori-testnet-v3](https://github.com/TERITORI/teritori-chain/tree/main/testnet/teritori-testnet-v3)    
 [*DEPRECATED*] - [teritori-test-4](https://github.com/TERITORI/teritori-chain/tree/main/testnet/teritori-test-4)    
-[__ACTIVE__] - [teritori-test-5](https://github.com/TERITORI/teritori-chain/tree/main/testnet/teritori-test-5)    
+[*DEPRECATED*] - [teritori-test-5](https://github.com/TERITORI/teritori-chain/tree/main/testnet/teritori-test-5)    
+[__ACTIVE__] - [teritori-test-6](https://github.com/TERITORI/teritori-chain/tree/main/testnet/teritori-test-6)    
 
 # Mainnet
 
