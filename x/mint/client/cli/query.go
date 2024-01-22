@@ -153,7 +153,7 @@ func GetConsensusParamsCmd() *cobra.Command {
 		Use:   "consensus-params",
 		Short: "Query consensus params",
 		Long: strings.TrimSpace(
-			fmt.Sprintf(`Query the total balance of an account or of a specific denomination.
+			fmt.Sprintf(`Query consensus params.
 
 Example:
   $ %s query %s consensus-params
