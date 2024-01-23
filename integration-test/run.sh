@@ -3,9 +3,8 @@ set -euo pipefail
 IFS=$'\n\t'
 set -x
 
-commit=3a01c9753a19f39f5b399b9985f3a1d44ec81d23
-
 if [[ -z "${TERITORI_DAPP_REPO:-}" ]]; then
+    commit=7e968801a0a03f47f59dd7683f1653935222ea88
     rm -fr teritori-dapp
     git clone https://github.com/TERITORI/teritori-dapp.git
     cd teritori-dapp
@@ -17,5 +16,4 @@ fi
 yarn
 
 npx tsx packages/scripts/integration-testing/simpleTest ..
-npx tsx packages/scripts/integration-testing/upgradeTest142toDir ..
-npx tsx packages/scripts/integration-testing/upgradeTest120toDir ..
+npx tsx packages/scripts/integration-testing/upgradeTest ..
