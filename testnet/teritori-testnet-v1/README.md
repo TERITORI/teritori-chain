@@ -1,4 +1,4 @@
-# [DEPRECIATED]
+# [DEPRECATED]
 
 ## Setup your machine
 
