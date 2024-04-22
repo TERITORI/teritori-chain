@@ -1,4 +1,4 @@
-# [DEPRECATED]
+# [ACTIVE]
 
 ## Server Configuration 
 
@@ -53,37 +53,37 @@ go version
 
 Clone the Teritori repository and install teritorid:  
 ```shell
-git clone https://github.com/TERITORI/teritori-chain && cd teritori-chain && git checkout v1.4.2 && make install
+git clone https://github.com/TERITORI/teritori-chain && cd teritori-chain && git checkout v2.0.6 && make install
 ```  
 
-Verify the installation:  
+Verify the installation:
 ```shell
 teritorid version
-#Should return v1.4.2
+#Should return v2.0.6
 ```  
 
 Init the chain:
 ```shell
-teritorid init <YOUR_MONIKER> --chain-id teritori-test-5
+teritorid init <YOUR_MONIKER> --chain-id teritori-test-7
 ```  
 
 Add peers in the config file:
 ```shell
-sed -i.bak 's/persistent_peers =.*/persistent_peers = "0d3cebbae24d9362334b0ed6b1910d6ec106ac4f@51.159.14.164:26656"/' $HOME/.teritorid/config/config.toml
+sed -i.bak 's/persistent_peers =.*/persistent_peers = "aac7d29d953792b323adfb5d50b44107639d1ca7@51.158.203.11:26656"/' $HOME/.teritorid/config/config.toml
 ```  
 
 Download the genesis file:  
 ```shell
-wget -O ~/.teritorid/config/genesis.json https://raw.githubusercontent.com/TERITORI/teritori-chain/main/testnet/teritori-test-5/genesis.json
+wget -O ~/.teritorid/config/genesis.json https://raw.githubusercontent.com/TERITORI/teritori-chain/main/testnet/teritori-test-7/genesis.json
 ```  
 
 
 ## Launch the node  
 
 You have multiple choice for launching the chain, choose the one that you prefer in the below list:
-- [Manual](https://github.com/TERITORI/teritori-chain/tree/main/testnet/teritori-test-5#Manual)
-- [Systemctl](https://github.com/TERITORI/teritori-chain/tree/main/testnet/teritori-test-5#Systemctl)
-- [Cosmovisor](https://github.com/TERITORI/teritori-chain/tree/main/testnet/teritori-test-5#Cosmovisor)
+- [Manual](https://github.com/TERITORI/teritori-chain/tree/main/testnet/teritori-test-7#Manual)
+- [Systemctl](https://github.com/TERITORI/teritori-chain/tree/main/testnet/teritori-test-7#Systemctl)
+- [Cosmovisor](https://github.com/TERITORI/teritori-chain/tree/main/testnet/teritori-test-7#Cosmovisor)
 
 ### __Manual__  
 - Create a screen and setup limit of files
@@ -213,7 +213,7 @@ $request <YOUR_TERITORI_ADDRESS>
 
 You can check if you have received fund once your node will be synched using this CLI command:
 ```shell
-teritorid query bank balances <YOUR_TERITORI_ADDRESS> --chain-id teritori-test-5
+teritorid query bank balances <YOUR_TERITORI_ADDRESS> --chain-id teritori-test-7
 ```  
 
 Once the fund are received and chain is synchronized you can create your validator:   
@@ -225,7 +225,7 @@ teritorid tx staking create-validator \
  --amount 1000000utori \
  --pubkey=$(teritorid tendermint show-validator) \
  --moniker=<YOUR_MONIKER> \
- --chain-id=teritori-test-5 \
+ --chain-id=teritori-test-7 \
  --details="<DESCRIPTION_OF_YOUR_VALIDATOR>" \
  --security-contact="<YOUR_EMAIL_ADDRESS" \
  --website="<YOUR_WEBSITE>" \
@@ -237,4 +237,4 @@ teritorid tx staking create-validator \
 
 FAQ: Coming soon.
 
-Join us on [Discord](https://discord.gg/teritori) for Testnet 5 discussions.
+Join us on [Discord](https://discord.gg/teritori) for Testnet 6 discussions.
