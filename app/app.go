@@ -11,6 +11,7 @@ import (
 
 	wasmtypes "github.com/CosmWasm/wasmd/x/wasm/types"
 	"github.com/TERITORI/teritori-chain/app/keepers"
+	toriparams "github.com/TERITORI/teritori-chain/app/params"
 	"github.com/TERITORI/teritori-chain/app/upgrades"
 	v130 "github.com/TERITORI/teritori-chain/app/upgrades/v130"
 	v131 "github.com/TERITORI/teritori-chain/app/upgrades/v131"
@@ -370,7 +371,7 @@ func NewTeritoriApp(
 		keys[authtypes.StoreKey],
 		authtypes.ProtoBaseAccount,
 		maccPerms,
-		sdk.Bech32PrefixAccAddr,
+		toriparams.Bech32PrefixAccAddr,
 		authtypes.NewModuleAddress(govtypes.ModuleName).String(),
 	)
 	app.BankKeeper = bankkeeper.NewBaseKeeper(
