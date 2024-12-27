@@ -17,6 +17,8 @@ BUF_IMAGE=bufbuild/buf@sha256:3cb1f8a4b48bd5ad8f09168f10f607ddc318af202f5c057d52
 DOCKER_BUF := $(DOCKER) run --rm -v $(CURDIR):/workspace --workdir /workspace $(BUF_IMAGE)
 HTTPS_GIT := https://github.com/TERITORI/teritorid.git
 
+PACKAGES_E2E=$(shell cd tests/e2e && go list ./... | grep '/e2e')
+
 export GO111MODULE = on
 
 # process build tags
@@ -158,6 +160,10 @@ test-sim-deterministic: runsim
 test-system: install
 	$(MAKE) -C tests/system/ test
 
+test-e2e:
+	@go test -mod=readonly $(PACKAGES_E2E) -v
+
+.PHONY: test-e2e
 ###############################################################################
 ###                                Linting                                  ###
 ###############################################################################
@@ -209,9 +215,14 @@ proto-check-breaking:
 	test-sim-import-export build-windows-client \
 	test-system
 
-.PHONY: docker.publish
-docker.publish:
-	docker build . --platform linux/amd64 -t $(IMAGE_TAG)
+.PHONY: docker.build
+docker.build.e2e:
+	docker build . --platform linux/amd64 -t teritori/teritorid-e2e:latest
+
+docker.build.hermes:
+	@cd tests/e2e/docker; docker build -t ghcr.io/cosmos/hermes-e2e:1.0.0 -f hermes.Dockerfile .
+.PHONY: docker.publish docker.build.hermes
+docker.publish: docker.build
 	docker push $(IMAGE_TAG)
 
 .PHONY: integration-tests

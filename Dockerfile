@@ -1,6 +1,6 @@
 # docker build . -t rg.nl-ams.scw.cloud/teritori/teritorid:latest
 # docker run --rm -it rg.nl-ams.scw.cloud/teritori/teritorid:latest /bin/sh
-FROM golang:1.21-alpine3.17 AS go-builder
+FROM golang:1.22-alpine3.18 AS go-builder
 ARG arch=x86_64
 
 # this comes from standard alpine nightly file
