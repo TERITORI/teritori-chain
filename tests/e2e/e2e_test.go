@@ -18,12 +18,12 @@ var (
 	runTxExtensionsTest           = true
 )
 
-// func (s *IntegrationTestSuite) TestRestInterfaces() {
-// 	if !runRestInterfacesTest {
-// 		s.T().Skip()
-// 	}
-// 	s.testRestInterfaces()
-// }
+func (s *IntegrationTestSuite) TestRestInterfaces() {
+	if !runRestInterfacesTest {
+		s.T().Skip()
+	}
+	s.testRestInterfaces()
+}
 
 func (s *IntegrationTestSuite) TestBank() {
 	if !runBankTest {
