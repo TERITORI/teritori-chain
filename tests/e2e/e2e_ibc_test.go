@@ -75,7 +75,8 @@ func (s *IntegrationTestSuite) hermesClearPacket(configPath, chainID, portID, ch
 		fmt.Sprintf("--port=%s", portID),
 	}
 
-	if _, err := s.executeHermesCommand(ctx, hermesCmd); err != nil {
+	_, err := s.executeHermesCommand(ctx, hermesCmd)
+	if err != nil {
 		s.T().Logf("failed to clear packets: %s", err)
 		return false
 	}
@@ -214,7 +215,7 @@ func (s *IntegrationTestSuite) completeChannelHandshakeFromTry(
 }
 
 func (s *IntegrationTestSuite) testIBCTokenTransfer() {
-	s.Run("send_uatom_to_chainB", func() {
+	s.Run("send_utori_to_chainB", func() {
 		// require the recipient account receives the IBC tokens (IBC packets ACKd)
 		var (
 			balances      sdk.Coins
@@ -248,7 +249,7 @@ func (s *IntegrationTestSuite) testIBCTokenTransfer() {
 		}
 
 		tokenAmt := 3300000000
-		s.sendIBC(s.chainA, 0, sender, recipient, strconv.Itoa(tokenAmt)+uatomDenom, standardFees.String(), "", false)
+		s.sendIBC(s.chainA, 0, sender, recipient, strconv.Itoa(tokenAmt)+utoriDenom, standardFees.String(), "", false)
 
 		pass := s.hermesClearPacket(hermesConfigWithGasPrices, s.chainA.id, transferPort, transferChannel)
 		s.Require().True(pass)
@@ -289,7 +290,7 @@ Steps:
 func (s *IntegrationTestSuite) testMultihopIBCTokenTransfer() {
 	time.Sleep(30 * time.Second)
 
-	s.Run("send_successful_multihop_uatom_to_chainA_from_chainA", func() {
+	s.Run("send_successful_multihop_utori_to_chainA_from_chainA", func() {
 		// require the recipient account receives the IBC tokens (IBC packets ACKd)
 		var (
 			err error
@@ -318,10 +319,10 @@ func (s *IntegrationTestSuite) testMultihopIBCTokenTransfer() {
 
 		s.Require().Eventually(
 			func() bool {
-				beforeSenderUAtomBalance, err = getSpecificBalance(chainAAPIEndpoint, sender, uatomDenom)
+				beforeSenderUAtomBalance, err = getSpecificBalance(chainAAPIEndpoint, sender, utoriDenom)
 				s.Require().NoError(err)
 
-				beforeRecipientUAtomBalance, err = getSpecificBalance(chainAAPIEndpoint, recipient, uatomDenom)
+				beforeRecipientUAtomBalance, err = getSpecificBalance(chainAAPIEndpoint, recipient, utoriDenom)
 				s.Require().NoError(err)
 
 				return beforeSenderUAtomBalance.IsValid() && beforeRecipientUAtomBalance.IsValid()
@@ -341,22 +342,21 @@ func (s *IntegrationTestSuite) testMultihopIBCTokenTransfer() {
 		memo, err := json.Marshal(firstHopMetadata)
 		s.Require().NoError(err)
 
-		s.sendIBC(s.chainA, 0, sender, middlehop, strconv.Itoa(tokenAmt)+uatomDenom, standardFees.String(), string(memo), false)
+		s.sendIBC(s.chainA, 0, sender, middlehop, strconv.Itoa(tokenAmt)+utoriDenom, standardFees.String(), string(memo), false)
 
 		pass := s.hermesClearPacket(hermesConfigWithGasPrices, s.chainA.id, transferPort, transferChannel)
 		s.Require().True(pass)
 
 		s.Require().Eventually(
 			func() bool {
-				afterSenderUAtomBalance, err := getSpecificBalance(chainAAPIEndpoint, sender, uatomDenom)
+				afterSenderUAtomBalance, err := getSpecificBalance(chainAAPIEndpoint, sender, utoriDenom)
 				s.Require().NoError(err)
 
-				afterRecipientUAtomBalance, err := getSpecificBalance(chainAAPIEndpoint, recipient, uatomDenom)
+				afterRecipientUAtomBalance, err := getSpecificBalance(chainAAPIEndpoint, recipient, utoriDenom)
 				s.Require().NoError(err)
 
 				decremented := beforeSenderUAtomBalance.Sub(tokenAmount).Sub(standardFees).IsEqual(afterSenderUAtomBalance)
 				incremented := beforeRecipientUAtomBalance.Add(tokenAmount).IsEqual(afterRecipientUAtomBalance)
-
 				return decremented && incremented
 			},
 			1*time.Minute,
@@ -372,7 +372,7 @@ Middleware will send the tokens back to the original account after failing.
 func (s *IntegrationTestSuite) testFailedMultihopIBCTokenTransfer() {
 	time.Sleep(30 * time.Second)
 
-	s.Run("send_failed_multihop_uatom_to_chainA_from_chainA", func() {
+	s.Run("send_failed_multihop_utori_to_chainA_from_chainA", func() {
 		address, _ := s.chainA.validators[0].keyInfo.GetAddress()
 		sender := address.String()
 
@@ -380,7 +380,7 @@ func (s *IntegrationTestSuite) testFailedMultihopIBCTokenTransfer() {
 		middlehop := address.String()
 
 		address, _ = s.chainA.validators[1].keyInfo.GetAddress()
-		recipient := strings.Replace(address.String(), "cosmos", "foobar", 1) // this should be an invalid recipient to force the tx to fail
+		recipient := strings.Replace(address.String(), "tori", "foobar", 1) // this should be an invalid recipient to force the tx to fail
 
 		forwardPort := "transfer"
 		forwardChannel := "channel-0"
@@ -396,7 +396,7 @@ func (s *IntegrationTestSuite) testFailedMultihopIBCTokenTransfer() {
 
 		s.Require().Eventually(
 			func() bool {
-				beforeSenderUAtomBalance, err = getSpecificBalance(chainAAPIEndpoint, sender, uatomDenom)
+				beforeSenderUAtomBalance, err = getSpecificBalance(chainAAPIEndpoint, sender, utoriDenom)
 				s.Require().NoError(err)
 
 				return beforeSenderUAtomBalance.IsValid()
@@ -416,12 +416,12 @@ func (s *IntegrationTestSuite) testFailedMultihopIBCTokenTransfer() {
 		memo, err := json.Marshal(firstHopMetadata)
 		s.Require().NoError(err)
 
-		s.sendIBC(s.chainA, 0, sender, middlehop, strconv.Itoa(tokenAmt)+uatomDenom, standardFees.String(), string(memo), false)
+		s.sendIBC(s.chainA, 0, sender, middlehop, strconv.Itoa(tokenAmt)+utoriDenom, standardFees.String(), string(memo), false)
 
 		// Sender account should be initially decremented the full amount
 		s.Require().Eventually(
 			func() bool {
-				afterSenderUAtomBalance, err := getSpecificBalance(chainAAPIEndpoint, sender, uatomDenom)
+				afterSenderUAtomBalance, err := getSpecificBalance(chainAAPIEndpoint, sender, utoriDenom)
 				s.Require().NoError(err)
 
 				returned := beforeSenderUAtomBalance.Sub(tokenAmount).Sub(standardFees).IsEqual(afterSenderUAtomBalance)
@@ -438,7 +438,7 @@ func (s *IntegrationTestSuite) testFailedMultihopIBCTokenTransfer() {
 				pass := s.hermesClearPacket(hermesConfigWithGasPrices, s.chainA.id, transferPort, transferChannel)
 				s.Require().True(pass)
 
-				afterSenderUAtomBalance, err := getSpecificBalance(chainAAPIEndpoint, sender, uatomDenom)
+				afterSenderUAtomBalance, err := getSpecificBalance(chainAAPIEndpoint, sender, utoriDenom)
 				s.Require().NoError(err)
 				returned := beforeSenderUAtomBalance.Sub(standardFees).IsEqual(afterSenderUAtomBalance)
 				return returned

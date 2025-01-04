@@ -50,9 +50,9 @@ const (
 	keysCommand      = "keys"
 	teritoriHomePath = "/root/.teritorid"
 	photonDenom      = "photon"
-	uatomDenom       = "uatom"
+	utoriDenom       = "utori"
 	stakeDenom       = "stake"
-	initBalanceStr   = "110000000000stake,100000000000000000photon,100000000000000000uatom"
+	initBalanceStr   = "110000000000stake,100000000000000000photon,100000000000000000utori"
 	minGasPrice      = "0.005"
 	// the test basefee in genesis is the same as minGasPrice
 	// global fee lower/higher than min_gas_price
@@ -79,16 +79,16 @@ const (
 	transferPort              = "transfer"
 	transferChannel           = "channel-0"
 
-	govAuthority = "cosmos10d07y265gmmuvt4z0w9aw880jnsr700j6zn9kn"
+	govAuthority = "tori10d07y265gmmuvt4z0w9aw880jnsr700jckyvdr"
 )
 
 var (
 	teritoriConfigPath = filepath.Join(teritoriHomePath, "config")
 	stakingAmount      = sdk.NewInt(100000000000)
-	stakingAmountCoin  = sdk.NewCoin(uatomDenom, stakingAmount)
-	tokenAmount        = sdk.NewCoin(uatomDenom, sdk.NewInt(3300000000)) // 3,300uatom
-	standardFees       = sdk.NewCoin(uatomDenom, sdk.NewInt(330000))     // 0.33uatom
-	depositAmount      = sdk.NewCoin(uatomDenom, sdk.NewInt(330000000))  // 3,300uatom
+	stakingAmountCoin  = sdk.NewCoin(utoriDenom, stakingAmount)
+	tokenAmount        = sdk.NewCoin(utoriDenom, sdk.NewInt(3300000000)) // 3,300utori
+	standardFees       = sdk.NewCoin(utoriDenom, sdk.NewInt(330000))     // 0.33utori
+	depositAmount      = sdk.NewCoin(utoriDenom, sdk.NewInt(330000000))  // 3,300utori
 	distModuleAddress  = authtypes.NewModuleAddress(distrtypes.ModuleName).String()
 	govModuleAddress   = authtypes.NewModuleAddress(govtypes.ModuleName).String()
 	proposalCounter    = 0
@@ -220,7 +220,7 @@ func (s *IntegrationTestSuite) initNodes(c *chain) {
 	}
 
 	s.Require().NoError(
-		modifyGenesis(val0ConfigDir, "", initBalanceStr, addrAll, initialBaseFeeAmt, uatomDenom),
+		modifyGenesis(val0ConfigDir, "", initBalanceStr, addrAll, initialBaseFeeAmt, utoriDenom),
 	)
 	// copy the genesis file to the remaining validators
 	for _, val := range c.validators[1:] {
@@ -359,7 +359,7 @@ func (s *IntegrationTestSuite) addGenesisVestingAndJailedAccounts(
 	}
 	stakingModuleBalances := banktypes.Balance{
 		Address: authtypes.NewModuleAddress(stakingtypes.NotBondedPoolName).String(),
-		Coins:   sdk.NewCoins(sdk.NewCoin(uatomDenom, sdk.NewInt(slashingShares))),
+		Coins:   sdk.NewCoins(sdk.NewCoin(utoriDenom, sdk.NewInt(slashingShares))),
 	}
 	bankGenState.Balances = append(
 		bankGenState.Balances,
@@ -373,13 +373,13 @@ func (s *IntegrationTestSuite) addGenesisVestingAndJailedAccounts(
 	// update the denom metadata for the bank module
 	bankGenState.DenomMetadata = append(bankGenState.DenomMetadata, banktypes.Metadata{
 		Description: "An example stable token",
-		Display:     uatomDenom,
-		Base:        uatomDenom,
-		Symbol:      uatomDenom,
-		Name:        uatomDenom,
+		Display:     utoriDenom,
+		Base:        utoriDenom,
+		Symbol:      utoriDenom,
+		Name:        utoriDenom,
 		DenomUnits: []*banktypes.DenomUnit{
 			{
-				Denom:    uatomDenom,
+				Denom:    utoriDenom,
 				Exponent: 0,
 			},
 		},
@@ -523,7 +523,7 @@ func (s *IntegrationTestSuite) initValidatorConfigs(c *chain) {
 		appConfig := srvconfig.DefaultConfig()
 		appConfig.API.Enable = true
 		appConfig.API.Address = "tcp://0.0.0.0:1317"
-		appConfig.MinGasPrices = fmt.Sprintf("%s%s", minGasPrice, uatomDenom)
+		appConfig.MinGasPrices = fmt.Sprintf("%s%s", minGasPrice, utoriDenom)
 		appConfig.GRPC.Address = "0.0.0.0:9090"
 		srvconfig.SetConfigTemplate(srvconfig.DefaultConfigTemplate)
 		srvconfig.WriteConfigFile(appCfgPath, appConfig)
@@ -685,7 +685,7 @@ func (s *IntegrationTestSuite) writeGovCommunitySpendProposal(c *chain, amount s
 			}]
 		  }
 		],
-		"deposit": "100uatom",
+		"deposit": "100utori",
 		"proposer": "Proposing validator address",
 		"metadata": "Community Pool Spend",
 		"title": "Fund Team!",
@@ -733,7 +733,7 @@ func (s *IntegrationTestSuite) writeLiquidStakingParamsUpdateProposal(c *chain, 
 		 }
 		],
 		"metadata": "ipfs://CID",
-		"deposit": "100uatom",
+		"deposit": "100utori",
 		"title": "Update LSM Params",
 		"summary": "e2e-test updating LSM staking params",
 		"expedited": false
@@ -776,7 +776,7 @@ func (s *IntegrationTestSuite) writeGovParamChangeProposalBlocksPerEpoch(c *chai
 			}
 		  }
 		],
-		"deposit": "100uatom",
+		"deposit": "100utori",
 		"proposer": "sample proposer",
 		"metadata": "sample metadata",
 		"title": "blocks per epoch title",
@@ -814,7 +814,7 @@ func (s *IntegrationTestSuite) writeFailingExpeditedProposal(c *chain, blocksPer
 			}
 		  }
 		],
-		"deposit": "100uatom",
+		"deposit": "100utori",
 		"proposer": "sample proposer",
 		"metadata": "sample metadata",
 		"title": "blocks per epoch title",
@@ -838,7 +838,7 @@ func (s *IntegrationTestSuite) writeExpeditedSoftwareUpgradeProp(c *chain) {
  "messages": [
   {
    "@type": "/cosmos.upgrade.v1beta1.MsgSoftwareUpgrade",
-   "authority": "cosmos10d07y265gmmuvt4z0w9aw880jnsr700j6zn9kn",
+   "authority": "tori10d07y265gmmuvt4z0w9aw880jnsr700jckyvdr",
    "plan": {
     "name": "test-expedited-upgrade",
     "height": "123456789",
@@ -848,7 +848,7 @@ func (s *IntegrationTestSuite) writeExpeditedSoftwareUpgradeProp(c *chain) {
   }
  ],
  "metadata": "ipfs://CID",
- "deposit": "100uatom",
+ "deposit": "100utori",
  "title": "title",
  "summary": "test",
  "expedited": true

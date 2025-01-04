@@ -404,7 +404,7 @@ func (s *IntegrationTestSuite) runGovExec(c *chain, valIdx int, submitterAddr, g
 // 		if err := json.Unmarshal(stdErr, &addrRecord); err != nil {
 // 			return false
 // 		}
-// 		return strings.Contains(addrRecord.Address, "cosmos")
+// 		return strings.Contains(addrRecord.Address, "tori")
 // 	})
 // 	return addrRecord.Address
 // }
@@ -557,7 +557,6 @@ func (s *IntegrationTestSuite) getLatestBlockHeight(c *chain, valIdx int) int {
 			err   error
 			block syncInfo
 		)
-		println("executeTeritoriTxCommand", "out", string(stdOut), "error", string(stdErr))
 		s.Require().NoError(json.Unmarshal(stdErr, &block))
 		currentHeight, err = strconv.Atoi(block.SyncInfo.LatestHeight)
 		s.Require().NoError(err)
@@ -569,7 +568,7 @@ func (s *IntegrationTestSuite) getLatestBlockHeight(c *chain, valIdx int) int {
 // func (s *IntegrationTestSuite) verifyBalanceChange(endpoint string, expectedAmount sdk.Coin, recipientAddress string) {
 // 	s.Require().Eventually(
 // 		func() bool {
-// 			afterAtomBalance, err := getSpecificBalance(endpoint, recipientAddress, uatomDenom)
+// 			afterAtomBalance, err := getSpecificBalance(endpoint, recipientAddress, utoriDenom)
 // 			s.Require().NoError(err)
 
 // 			return afterAtomBalance.IsEqual(expectedAmount)
@@ -628,7 +627,7 @@ func (s *IntegrationTestSuite) execWithdrawReward(
 		"withdraw-rewards",
 		validatorAddress,
 		fmt.Sprintf("--%s=%s", flags.FlagFrom, delegatorAddress),
-		fmt.Sprintf("--%s=%s", flags.FlagGasPrices, "300uatom"),
+		fmt.Sprintf("--%s=%s", flags.FlagGasPrices, "300utori"),
 		fmt.Sprintf("--%s=%s", flags.FlagGas, "auto"),
 		fmt.Sprintf("--%s=%s", flags.FlagGasAdjustment, "1.5"),
 		fmt.Sprintf("--%s=%s", flags.FlagChainID, c.id),

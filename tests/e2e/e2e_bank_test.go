@@ -34,13 +34,13 @@ func (s *IntegrationTestSuite) testBankTokenTransfer() {
 		// get balances of sender and recipient accounts
 		s.Require().Eventually(
 			func() bool {
-				beforeAliceUAtomBalance, err = getSpecificBalance(chainEndpoint, alice.String(), uatomDenom)
+				beforeAliceUAtomBalance, err = getSpecificBalance(chainEndpoint, alice.String(), utoriDenom)
 				s.Require().NoError(err)
 
-				beforeBobUAtomBalance, err = getSpecificBalance(chainEndpoint, bob.String(), uatomDenom)
+				beforeBobUAtomBalance, err = getSpecificBalance(chainEndpoint, bob.String(), utoriDenom)
 				s.Require().NoError(err)
 
-				beforeCharlieUAtomBalance, err = getSpecificBalance(chainEndpoint, charlie.String(), uatomDenom)
+				beforeCharlieUAtomBalance, err = getSpecificBalance(chainEndpoint, charlie.String(), utoriDenom)
 				s.Require().NoError(err)
 
 				return beforeAliceUAtomBalance.IsValid() && beforeBobUAtomBalance.IsValid() && beforeCharlieUAtomBalance.IsValid()
@@ -55,10 +55,10 @@ func (s *IntegrationTestSuite) testBankTokenTransfer() {
 		// check that the transfer was successful
 		s.Require().Eventually(
 			func() bool {
-				afterAliceUAtomBalance, err = getSpecificBalance(chainEndpoint, alice.String(), uatomDenom)
+				afterAliceUAtomBalance, err = getSpecificBalance(chainEndpoint, alice.String(), utoriDenom)
 				s.Require().NoError(err)
 
-				afterBobUAtomBalance, err = getSpecificBalance(chainEndpoint, bob.String(), uatomDenom)
+				afterBobUAtomBalance, err = getSpecificBalance(chainEndpoint, bob.String(), utoriDenom)
 				s.Require().NoError(err)
 
 				decremented := beforeAliceUAtomBalance.Sub(tokenAmount).Sub(standardFees).IsEqual(afterAliceUAtomBalance)
@@ -78,13 +78,13 @@ func (s *IntegrationTestSuite) testBankTokenTransfer() {
 
 		s.Require().Eventually(
 			func() bool {
-				afterAliceUAtomBalance, err = getSpecificBalance(chainEndpoint, alice.String(), uatomDenom)
+				afterAliceUAtomBalance, err = getSpecificBalance(chainEndpoint, alice.String(), utoriDenom)
 				s.Require().NoError(err)
 
-				afterBobUAtomBalance, err = getSpecificBalance(chainEndpoint, bob.String(), uatomDenom)
+				afterBobUAtomBalance, err = getSpecificBalance(chainEndpoint, bob.String(), utoriDenom)
 				s.Require().NoError(err)
 
-				afterCharlieUAtomBalance, err = getSpecificBalance(chainEndpoint, charlie.String(), uatomDenom)
+				afterCharlieUAtomBalance, err = getSpecificBalance(chainEndpoint, charlie.String(), utoriDenom)
 				s.Require().NoError(err)
 
 				decremented := beforeAliceUAtomBalance.Sub(tokenAmount).Sub(tokenAmount).Sub(standardFees).IsEqual(afterAliceUAtomBalance)
@@ -108,7 +108,7 @@ func (s *IntegrationTestSuite) failedBankSendWithNonCriticalExtensionOptions() {
 		submitterAccount := c.genesisAccounts[1]
 		submitterAddress, err := submitterAccount.keyInfo.GetAddress()
 		s.Require().NoError(err)
-		sendMsg := banktypes.NewMsgSend(submitterAddress, submitterAddress, sdk.NewCoins(sdk.NewCoin(uatomDenom, sdk.NewInt(100))))
+		sendMsg := banktypes.NewMsgSend(submitterAddress, submitterAddress, sdk.NewCoins(sdk.NewCoin(utoriDenom, sdk.NewInt(100))))
 
 		// the message does not matter, as long as it is in the interface registry
 		ext := &banktypes.MsgMultiSend{}

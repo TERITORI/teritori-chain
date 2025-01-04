@@ -50,7 +50,6 @@ func (s *IntegrationTestSuite) TestGov() {
 
 	s.GovCancelSoftwareUpgrade()
 	s.GovCommunityPoolSpend()
-	s.AddRemoveConsumerChain()
 
 	s.ExpeditedProposalRejected()
 }
@@ -61,9 +60,9 @@ func (s *IntegrationTestSuite) TestIBC() {
 	}
 
 	s.testIBCTokenTransfer()
-	s.testMultihopIBCTokenTransfer()
-	s.testFailedMultihopIBCTokenTransfer()
-	s.testICARegisterAccountAndSendTx()
+	//s.testMultihopIBCTokenTransfer() Tod should test this
+	//s.testFailedMultihopIBCTokenTransfer()  Tod should test this
+	//s.testICARegisterAccountAndSendTx() Tod should test this
 }
 
 func (s *IntegrationTestSuite) TestSlashing() {

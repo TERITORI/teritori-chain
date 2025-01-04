@@ -53,7 +53,7 @@ account_prefix = 'tori'
 key_name = 'rly01-teritori-a'
 store_prefix = 'ibc'
 max_gas = 6000000
-gas_price = { price = 0.005, denom = 'uatom' }
+gas_price = { price = 0.005, denom = 'utori' }
 gas_multiplier = 1.5
 clock_drift = '1m' # to accommodate docker containers
 trusting_period = '14days'
@@ -71,7 +71,7 @@ account_prefix = 'tori'
 key_name = 'rly01-teritori-b'
 store_prefix = 'ibc'
 max_gas =  6000000
-gas_price = { price = 0.005, denom = 'uatom' }
+gas_price = { price = 0.005, denom = 'utori' }
 gas_multiplier = 1.5
 clock_drift = '1m' # to accommodate docker containers
 trusting_period = '14days'
@@ -123,7 +123,7 @@ account_prefix = 'tori'
 key_name = 'rly01-teritori-a'
 store_prefix = 'ibc'
 max_gas = 6000000
-gas_price = { price = 0, denom = 'uatom' }
+gas_price = { price = 0, denom = 'utori' }
 gas_multiplier = 1.5
 clock_drift = '1m' # to accommodate docker containers
 trusting_period = '14days'
@@ -141,7 +141,7 @@ account_prefix = 'tori'
 key_name = 'rly01-teritori-b'
 store_prefix = 'ibc'
 max_gas =  6000000
-gas_price = { price = 0, denom = 'uatom' }
+gas_price = { price = 0, denom = 'utori' }
 gas_multiplier = 1.5
 clock_drift = '1m' # to accommodate docker containers
 trusting_period = '14days'

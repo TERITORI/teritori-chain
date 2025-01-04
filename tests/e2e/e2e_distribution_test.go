@@ -18,12 +18,12 @@ func (s *IntegrationTestSuite) testDistribution() {
 	delegatorAddress, _ := s.chainA.genesisAccounts[2].keyInfo.GetAddress()
 
 	newWithdrawalAddress, _ := s.chainA.genesisAccounts[3].keyInfo.GetAddress()
-	fees := sdk.NewCoin(uatomDenom, sdk.NewInt(1000))
+	fees := sdk.NewCoin(utoriDenom, sdk.NewInt(1000))
 
-	beforeBalance, err := getSpecificBalance(chainEndpoint, newWithdrawalAddress.String(), uatomDenom)
+	beforeBalance, err := getSpecificBalance(chainEndpoint, newWithdrawalAddress.String(), utoriDenom)
 	s.Require().NoError(err)
 	if beforeBalance.IsNil() {
-		beforeBalance = sdk.NewCoin(uatomDenom, sdk.NewInt(0))
+		beforeBalance = sdk.NewCoin(utoriDenom, sdk.NewInt(0))
 	}
 
 	s.execSetWithdrawAddress(s.chainA, 0, fees.String(), delegatorAddress.String(), newWithdrawalAddress.String(), teritoriHomePath)
@@ -43,7 +43,7 @@ func (s *IntegrationTestSuite) testDistribution() {
 	s.execWithdrawReward(s.chainA, 0, delegatorAddress.String(), valOperAddressA, teritoriHomePath)
 	s.Require().Eventually(
 		func() bool {
-			afterBalance, err := getSpecificBalance(chainEndpoint, newWithdrawalAddress.String(), uatomDenom)
+			afterBalance, err := getSpecificBalance(chainEndpoint, newWithdrawalAddress.String(), utoriDenom)
 			s.Require().NoError(err)
 
 			return afterBalance.IsGTE(beforeBalance)
@@ -67,7 +67,7 @@ func (s *IntegrationTestSuite) fundCommunityPool() {
 	beforeDistUatomBalance, _ := getSpecificBalance(chainAAPIEndpoint, distModuleAddress, tokenAmount.Denom)
 	if beforeDistUatomBalance.IsNil() {
 		// Set balance to 0 if previous balance does not exist
-		beforeDistUatomBalance = sdk.NewInt64Coin(uatomDenom, 0)
+		beforeDistUatomBalance = sdk.NewInt64Coin(utoriDenom, 0)
 	}
 
 	s.execDistributionFundCommunityPool(s.chainA, 0, sender.String(), tokenAmount.String(), standardFees.String())
@@ -80,7 +80,7 @@ func (s *IntegrationTestSuite) fundCommunityPool() {
 			// check if the balance is increased by the tokenAmount and at least some portion of
 			// the fees (some amount of the fees will be given to the proposer)
 			return beforeDistUatomBalance.Add(tokenAmount).IsLT(afterDistUatomBalance) &&
-				afterDistUatomBalance.IsLT(beforeDistUatomBalance.Add(tokenAmount).Add(standardFees))
+				afterDistUatomBalance.IsEqual(beforeDistUatomBalance.Add(tokenAmount).Add(standardFees))
 		},
 		15*time.Second,
 		5*time.Second,
