@@ -649,7 +649,7 @@ func (s *IntegrationTestSuite) runIBCRelayer() {
 				fmt.Sprintf("TERITORI_A_E2E_VAL_HOST=%s", s.valResources[s.chainA.id][0].Container.Name[1:]),
 				fmt.Sprintf("TERITORI_B_E2E_VAL_HOST=%s", s.valResources[s.chainB.id][0].Container.Name[1:]),
 			},
-			User: "root",
+			//User: "root",
 			Entrypoint: []string{
 				"sh",
 				"-c",
