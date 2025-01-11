@@ -34,3 +34,17 @@ jobs:
         run: make integration-tests
         env:
           TERITORI_DAPP_REPO: teritori-dapp
+  test-e2e:
+    runs-on: ubuntu-latest
+    timeout-minutes: 45
+    steps:
+      - uses: actions/setup-go@v5
+        with:
+          go-version: 1.21.x
+      - uses: actions/checkout@v4
+      - name: Build Teritori Docker Image
+        run: make docker.build.e2e
+      - name: Build Hermes Docker Image
+        run: make docker.build.hermes
+      - name: Test E2E
+        run: make test-e2e

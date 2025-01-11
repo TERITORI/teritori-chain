@@ -17,6 +17,9 @@ BUF_IMAGE=bufbuild/buf@sha256:3cb1f8a4b48bd5ad8f09168f10f607ddc318af202f5c057d52
 DOCKER_BUF := $(DOCKER) run --rm -v $(CURDIR):/workspace --workdir /workspace $(BUF_IMAGE)
 HTTPS_GIT := https://github.com/TERITORI/teritorid.git
 
+PACKAGES_E2E=$(shell cd tests/e2e && go list ./... | grep '/e2e')
+PACKAGES_UNIT=$(shell go list ./... | grep -v -e '/tests/e2e')
+
 export GO111MODULE = on
 
 # process build tags
@@ -132,16 +135,16 @@ test: test-unit
 test-all: test-race test-cover test-system
 
 test-unit:
-	@VERSION=$(VERSION) go test -mod=readonly -tags='ledger test_ledger_mock' ./...
+	@VERSION=$(VERSION) go test -mod=readonly $(PACKAGES_UNIT) -tags='ledger test_ledger_mock' ./...
 
 test-race:
-	@VERSION=$(VERSION) go test -mod=readonly -race -tags='ledger test_ledger_mock' ./...
+	@VERSION=$(VERSION) go test -mod=readonly $(PACKAGES_UNIT) -race -tags='ledger test_ledger_mock' ./...
 
 test-cover:
-	@go test -mod=readonly -timeout 30m -race -coverprofile=coverage.txt -covermode=atomic -tags='ledger test_ledger_mock' ./...
+	@go test -mod=readonly $(PACKAGES_UNIT) -timeout 30m -race -coverprofile=coverage.txt -covermode=atomic -tags='ledger test_ledger_mock' ./...
 
 benchmark:
-	@go test -mod=readonly -bench=. ./...
+	@go test -mod=readonly $(PACKAGES_UNIT) -bench=. ./...
 
 test-sim-import-export: runsim
 	@echo "Running application import/export simulation. This may take several minutes..."
@@ -158,6 +161,10 @@ test-sim-deterministic: runsim
 test-system: install
 	$(MAKE) -C tests/system/ test
 
+test-e2e:
+	@go test -mod=readonly $(PACKAGES_E2E) -v
+
+.PHONY: test-e2e
 ###############################################################################
 ###                                Linting                                  ###
 ###############################################################################
@@ -168,7 +175,7 @@ format-tools:
 	go install github.com/daixiang0/gci@v0.11.2
 
 lint: format-tools
-	golangci-lint run --tests=false --timeout=180s
+	golangci-lint run --tests=false --timeout=180s --exclude-dirs tests/
 	find . -name '*.go' -type f -not -path "./vendor*" -not -path "./tests/system/vendor*" -not -path "*.git*" -not -path "*_test.go" | xargs gofumpt -d
 
 format: format-tools
@@ -209,9 +216,14 @@ proto-check-breaking:
 	test-sim-import-export build-windows-client \
 	test-system
 
-.PHONY: docker.publish
-docker.publish:
-	docker build . --platform linux/amd64 -t $(IMAGE_TAG)
+.PHONY: docker.build
+docker.build.e2e:
+	docker build . --platform linux/amd64 -t teritori/teritorid-e2e:latest
+
+docker.build.hermes:
+	@cd tests/e2e/docker; docker build -t ghcr.io/cosmos/hermes-e2e:1.0.0 -f hermes.Dockerfile .
+.PHONY: docker.publish docker.build.hermes
+docker.publish: docker.build
 	docker push $(IMAGE_TAG)
 
 .PHONY: integration-tests
