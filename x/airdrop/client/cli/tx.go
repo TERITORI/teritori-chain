@@ -28,6 +28,7 @@ func GetTxCmd() *cobra.Command {
 		AllocateFurtherAirdropCmd(),
 		FetchAndRemoveAirdropCmd(),
 		AllocateStarsAirdropCmd(),
+		NewBatchSendCmd(),
 	)
 
 	return txCmd
