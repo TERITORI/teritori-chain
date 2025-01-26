@@ -162,7 +162,7 @@ test-system: install
 	$(MAKE) -C tests/system/ test
 
 test-e2e:
-	@go test -mod=readonly $(PACKAGES_E2E) -v
+	@go test -mod=readonly $(PACKAGES_E2E) -v -timeout 20m
 
 .PHONY: test-e2e
 ###############################################################################

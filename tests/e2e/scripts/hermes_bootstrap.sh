@@ -74,7 +74,7 @@ max_gas =  6000000
 gas_price = { price = 0.005, denom = 'utori' }
 gas_multiplier = 1.5
 clock_drift = '1m' # to accommodate docker containers
-trusting_period = '14days'
+trusting_period = '5m'
 trust_threshold = { numerator = '1', denominator = '3' }
 dynamic_gas_price = { enabled = true, multiplier = 1.3, max = 0.05 }
 EOF
@@ -126,7 +126,7 @@ max_gas = 6000000
 gas_price = { price = 0, denom = 'utori' }
 gas_multiplier = 1.5
 clock_drift = '1m' # to accommodate docker containers
-trusting_period = '14days'
+trusting_period = '5m'
 trust_threshold = { numerator = '1', denominator = '3' }
 dynamic_gas_price = { enabled = true, multiplier = 1.3, max = 0.05 }
 
@@ -144,7 +144,7 @@ max_gas =  6000000
 gas_price = { price = 0, denom = 'utori' }
 gas_multiplier = 1.5
 clock_drift = '1m' # to accommodate docker containers
-trusting_period = '14days'
+trusting_period = '5m'
 trust_threshold = { numerator = '1', denominator = '3' }
 dynamic_gas_price = { enabled = true, multiplier = 1.3, max = 0.05 }
 EOF

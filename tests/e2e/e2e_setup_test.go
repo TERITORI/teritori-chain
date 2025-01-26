@@ -63,12 +63,14 @@ const (
 	numberOfEvidences               = 10
 	slashingShares            int64 = 10000
 
-	proposalMaxTotalBypassFilename   = "proposal_max_total_bypass.json"
-	proposalCommunitySpendFilename   = "proposal_community_spend.json"
-	proposalLSMParamUpdateFilename   = "proposal_lsm_param_update.json"
-	proposalBlocksPerEpochFilename   = "proposal_blocks_per_epoch.json"
-	proposalFailExpedited            = "proposal_fail_expedited.json"
-	proposalExpeditedSoftwareUpgrade = "proposal_expedited_software_upgrade.json"
+	proposalMaxTotalBypassFilename       = "proposal_max_total_bypass.json"
+	proposalCommunitySpendFilename       = "proposal_community_spend.json"
+	proposalLSMParamUpdateFilename       = "proposal_lsm_param_update.json"
+	proposalBlocksPerEpochFilename       = "proposal_blocks_per_epoch.json"
+	proposalFailExpedited                = "proposal_fail_expedited.json"
+	proposalExpeditedSoftwareUpgrade     = "proposal_expedited_software_upgrade.json"
+	proposalTendermintClientUpdate       = "proposal_tendermint_client_update.json"
+	proposalTendermintClientMisbehaviour = "proposal_tendermint_client_misbehaviour.json"
 
 	// proposalAddConsumerChainFilename    = "proposal_add_consumer.json"
 	// proposalRemoveConsumerChainFilename = "proposal_remove_consumer.json"
@@ -861,4 +863,59 @@ func (s *IntegrationTestSuite) writeExpeditedSoftwareUpgradeProp(c *chain) {
 func configFile(filename string) string {
 	filepath := filepath.Join(teritoriConfigPath, filename)
 	return filepath
+}
+
+func (s *IntegrationTestSuite) writeGovClientUpdateProposal(c *chain, subjectClientID, substituteClientID string) {
+	body := `{
+"messages": [
+  {
+    "@type": "/cosmos.gov.v1.MsgExecLegacyContent",
+    "content": {
+      "@type": "/ibc.core.client.v1.ClientUpdateProposal",
+      "title": "client update proposal",
+      "description": "This proposal is about udating the IBC Tendermint client %s, which references",
+      "subject_client_id": "%s",
+      "substitute_client_id": "%s"
+    },
+    "authority": "tori10d07y265gmmuvt4z0w9aw880jnsr700jckyvdr"
+  }
+],
+ "deposit": "100utori",
+"proposer": "sample proposer",
+"metadata": "sample metadata",
+"title": "client update proposal",
+"summary": "client update proposal"
+}`
+
+	body = fmt.Sprintf(body, subjectClientID, subjectClientID, substituteClientID)
+
+	err := writeFile(filepath.Join(c.validators[0].configDir(), "config", proposalTendermintClientUpdate), []byte(body))
+	s.Require().NoError(err)
+}
+
+func (s *IntegrationTestSuite) writeGovClientMisbehaviourProposal(c *chain, clientID string) {
+	body := `{
+"messages": [
+  {
+    "@type": "/cosmos.gov.v1.MsgExecLegacyContent",
+    "content": {
+      "@type": "/ibc.core.client.v1.MsgSubmitMisbehaviour",
+      "title": "client misbehaviour proposal",
+      "description": "This proposal is about submitting misbehaviour for the IBC Tendermint client %s",
+      "client_id": "%s"
+    },
+    "authority": "tori10d07y265gmmuvt4z0w9aw880jnsr700jckyvdr"
+  }
+],
+ "deposit": "100utori",
+"proposer": "sample proposer",
+"metadata": "sample metadata",
+"title": "client misbehaviour proposal",
+"summary": "client misbehaviour proposal"
+}`
+
+	body = fmt.Sprintf(body, clientID, clientID)
+
+	err := writeFile(filepath.Join(c.validators[0].configDir(), "config", proposalTendermintClientMisbehaviour), []byte(body))
+	s.Require().NoError(err)
 }

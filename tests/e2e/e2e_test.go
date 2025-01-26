@@ -86,3 +86,7 @@ func (s *IntegrationTestSuite) TestVesting() {
 	s.testContinuousVestingAccount(chainAAPI)
 	// s.testPeriodicVestingAccount(chainAAPI) TODO: add back when v0.45 adds the missing CLI command.
 }
+func (s *IntegrationTestSuite) TestIBCClientUpgrade() {
+	s.testIBCClientUpgrade()
+	s.testIBCTokenTransfer()
+}

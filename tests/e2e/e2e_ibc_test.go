@@ -143,6 +143,27 @@ func (s *IntegrationTestSuite) createChannel() {
 	s.T().Logf("IBC transfer channel created between chains %s and %s", s.chainA.id, s.chainB.id)
 }
 
+func (s *IntegrationTestSuite) createClient(hostChain, referenceChain *chain) {
+	s.T().Logf("creating IBC Client between chains %s and %s", s.chainA.id, s.chainB.id)
+
+	ctx, cancel := context.WithTimeout(context.Background(), time.Minute)
+	defer cancel()
+	hermesCmd := []string{
+		hermesBinary,
+		"--json",
+		"create",
+		"client",
+		"--host-chain", hostChain.id,
+		"--reference-chain", referenceChain.id,
+	}
+
+	fmt.Printf("hermesCmd %+v", hermesCmd)
+	_, err := s.executeHermesCommand(ctx, hermesCmd)
+	s.Require().NoError(err, "failed to create IBC client between chains: %s", err)
+
+	s.T().Logf("IBC Client created between chains %s and %s", s.chainA.id, s.chainB.id)
+}
+
 // This function will complete the channel handshake in cases when ChanOpenInit was initiated
 // by some transaction that was previously executed on the chain. For example,
 // ICA MsgRegisterInterchainAccount will perform ChanOpenInit during its execution.
@@ -272,6 +293,24 @@ func (s *IntegrationTestSuite) testIBCTokenTransfer() {
 		}
 
 		s.Require().NotEmpty(ibcStakeDenom)
+	})
+}
+
+func (s *IntegrationTestSuite) testIBCClientUpgrade() {
+	s.Run("upgrade_client_chainA", func() {
+		senderAddress, _ := s.chainA.validators[0].keyInfo.GetAddress()
+		sender := senderAddress.String()
+		chainAAPIEndpoint := fmt.Sprintf("http://%s", s.valResources[s.chainA.id][0].GetHostPort("1317/tcp"))
+
+		time.Sleep(4 * time.Minute)
+		s.createClient(s.chainA, s.chainB)
+		time.Sleep(1 * time.Minute)
+
+		proposalCounter++
+		submitGovFlags := []string{"update-client", "07-tendermint-0", "07-tendermint-1", "--title", "IBCClientUpgrade", "--description", "IBC Client Upgrade", "--deposit", depositAmount.String()}
+		depositGovFlags := []string{strconv.Itoa(proposalCounter), depositAmount.String()}
+		voteGovFlags := []string{strconv.Itoa(proposalCounter), "yes"}
+		s.submitLegacyGovProposal(chainAAPIEndpoint, sender, proposalCounter, "IBCClientUpgrade", submitGovFlags, depositGovFlags, voteGovFlags, "vote", true)
 	})
 }
 

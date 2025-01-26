@@ -20,6 +20,7 @@ import (
 	paramsproptypes "github.com/cosmos/cosmos-sdk/x/params/types/proposal"
 	stakingtypes "github.com/cosmos/cosmos-sdk/x/staking/types"
 	upgradetypes "github.com/cosmos/cosmos-sdk/x/upgrade/types"
+	ibctypes "github.com/cosmos/ibc-go/v7/modules/core/types"
 
 	teritoriparams "github.com/TERITORI/teritori-chain/app/params"
 )
@@ -45,6 +46,7 @@ func init() {
 	cryptocodec.RegisterInterfaces(encodingConfig.InterfaceRegistry)
 	govv1types.RegisterInterfaces(encodingConfig.InterfaceRegistry)
 	govv1beta1types.RegisterInterfaces(encodingConfig.InterfaceRegistry)
+	ibctypes.RegisterInterfaces(encodingConfig.InterfaceRegistry)
 	paramsproptypes.RegisterInterfaces(encodingConfig.InterfaceRegistry)
 	paramsproptypes.RegisterLegacyAminoCodec(encodingConfig.Amino)
 
