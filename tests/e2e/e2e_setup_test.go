@@ -831,7 +831,7 @@ func (s *IntegrationTestSuite) writeFailingExpeditedProposal(c *chain, blocksPer
 	s.Require().NoError(err)
 }
 
-// MsgSoftwareUpgrade can be expedited but it can only be submitted using "tx gov submit-proposal" command.
+// writeExpeditedSoftwareUpgradeProp can be expedited but it can only be submitted using "tx gov submit-proposal" command.
 // Messages submitted using "tx gov submit-legacy-proposal" command cannot be expedited.
 func (s *IntegrationTestSuite) writeExpeditedSoftwareUpgradeProp(c *chain) {
 	body := `{

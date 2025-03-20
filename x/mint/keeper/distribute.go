@@ -59,7 +59,7 @@ func (k Keeper) DistributeMintedCoin(ctx sdk.Context, mintedCoin sdk.Coin) error
 	return err
 }
 
-// distributeToModule distributes mintedCoin multiplied by proportion to the recepient account.
+// distributeToAddress distributes mintedCoin multiplied by proportion to the recepient account.
 func (k Keeper) distributeToAddress(ctx sdk.Context, recipientAddr string, mintedCoin sdk.Coin, proportion sdk.Dec) (math.Int, error) {
 	distributionCoin, err := getProportions(mintedCoin, proportion)
 	if err != nil {
